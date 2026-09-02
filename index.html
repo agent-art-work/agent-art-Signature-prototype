@@ -1,0 +1,3319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Text Seeded Bezier Line</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Text Seeded Bezier Line" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Text Seeded Bezier Line&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 14px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: var(--border-radius-lg, 12.5px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: superellipse(1.5);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget &gt; :not(.card, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress {
+  display: flex;
+  height: 6px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 6px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: superellipse(1.5);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed=&quot;true&quot;],
+  [aria-selected=&quot;true&quot;],
+  .is-selected
+) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .btn,
+  .form-control,
+  .form-select {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control,
+  .form-select {
+    font-size: max(16px, var(--font-size-normal));
+  }
+
+  .form-control[type=&quot;file&quot;]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type=&quot;color&quot;] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;week&quot;]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: &quot;&quot;;
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+
+  .form-range::-webkit-slider-runnable-track {
+    height: 44px;
+  }
+
+  .form-range::-moz-range-track {
+    height: 44px;
+  }
+
+  .form-range::-webkit-slider-thumb {
+    margin-top: 12px;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: 16px !important;
+  height: 16px !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;text-seeded-bezier-loop-presets&quot;&gt;
+  &lt;style&gt;
+    #text-seeded-bezier-loop-presets { color: var(--foreground); width: 100%; }
+    #text-seeded-bezier-loop-presets * { box-sizing: border-box; }
+    #text-seeded-bezier-loop-presets h2 { margin: 0 0 .45rem; }
+    #text-seeded-bezier-loop-presets .tsbl-controls { display: grid; gap: .35rem .75rem; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: .45rem; }
+    #text-seeded-bezier-loop-presets .tsbl-text-control { grid-column: 1 / -1; }
+    #text-seeded-bezier-loop-presets .tsbl-serial-controls { display: grid; gap: .35rem .75rem; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    #text-seeded-bezier-loop-presets .tsbl-style-controls { display: grid; gap: .35rem .75rem; grid-column: 1 / -1; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    #text-seeded-bezier-loop-presets .tsbl-control { display: grid; gap: .12rem; grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); width: 100%; }
+    #text-seeded-bezier-loop-presets .tsbl-control-head { align-items: baseline; display: flex; gap: .75rem; justify-content: space-between; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-range { --range-start: 0%; --range-end: 100%; --range-mid: 50%; display: block; height: 1.45rem; position: relative; width: 100%; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-range::before { background: linear-gradient(to right, var(--border) 0 var(--range-start), var(--foreground) var(--range-start) var(--range-end), var(--border) var(--range-end) 100%); content: &quot;&quot;; height: 2px; left: 0; position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+    #text-seeded-bezier-loop-presets .tsbl-dual-input { background: transparent; inset: 0; margin: 0; position: absolute; width: 100%; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-min { clip-path: inset(0 calc(100% - var(--range-mid)) 0 0); z-index: 2; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-max { clip-path: inset(0 0 0 var(--range-mid)); z-index: 3; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-input::-webkit-slider-runnable-track { background: transparent; box-shadow: none; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-input::-webkit-slider-thumb { pointer-events: all; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-input::-moz-range-track { background: transparent; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-input::-moz-range-thumb { pointer-events: all; }
+    #text-seeded-bezier-loop-presets output { color: var(--foreground); text-align: end; }
+    #text-seeded-bezier-loop-presets .tsbl-state { border-top: 1px solid var(--border); color: var(--muted-foreground); margin-bottom: .4rem; padding-top: .35rem; }
+    #text-seeded-bezier-loop-presets .tsbl-grid { display: grid; gap: .55rem; grid-template-columns: 1fr 1fr; }
+    #text-seeded-bezier-loop-presets figure { margin: 0; min-width: 0; }
+    #text-seeded-bezier-loop-presets figcaption { align-items: baseline; border-top: 1px solid var(--border); display: flex; gap: .4rem; justify-content: space-between; margin-bottom: .2rem; padding-top: .35rem; }
+    #text-seeded-bezier-loop-presets figcaption span { color: var(--muted-foreground); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #text-seeded-bezier-loop-presets .tsbl-svg { display: block; height: auto; width: 100%; }
+    #text-seeded-bezier-loop-presets .tsbl-egg { fill: #f2ead6; }
+    #text-seeded-bezier-loop-presets .tsbl-variable { fill: #11110f; stroke: none; }
+    #text-seeded-bezier-loop-presets .tsbl-pure { fill: none; stroke: #11110f; stroke-linecap: round; stroke-linejoin: round; }
+    #text-seeded-bezier-loop-presets .tsbl-canvas-text { fill: #11110f; text-anchor: middle; }
+    #text-seeded-bezier-loop-presets .tsbl-empty { fill: #11110f; font-size: 12px; text-anchor: middle; }
+    #text-seeded-bezier-loop-presets .tsbl-actions { display: grid; gap: .35rem; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: .4rem; }
+    @media (max-width: 700px) {
+      #text-seeded-bezier-loop-presets .tsbl-controls { grid-template-columns: 1fr; }
+      #text-seeded-bezier-loop-presets .tsbl-text-control { grid-column: auto; }
+      #text-seeded-bezier-loop-presets .tsbl-serial-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #text-seeded-bezier-loop-presets .tsbl-style-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #text-seeded-bezier-loop-presets .tsbl-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  &lt;/style&gt;
+
+  &lt;section aria-label=&quot;Interactive text-seeded Bezier line&quot;&gt;
+    &lt;h2&gt;Text / Seeded Bezier Line&lt;/h2&gt;
+
+    &lt;div class=&quot;tsbl-controls viz-controls&quot;&gt;
+      &lt;label class=&quot;tsbl-control tsbl-text-control form-label&quot; for=&quot;tsbl-text&quot;&gt;
+        &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Canvas 01 text&lt;/span&gt;&lt;output id=&quot;tsbl-text-value&quot;&gt;14 characters&lt;/output&gt;&lt;/span&gt;
+        &lt;input class=&quot;form-control&quot; id=&quot;tsbl-text&quot; type=&quot;text&quot; minlength=&quot;1&quot; maxlength=&quot;15&quot; pattern=&quot;^[A-Za-z0-9_]{1,15}$&quot; value=&quot;Personal_Field&quot; aria-describedby=&quot;tsbl-text-error&quot; required spellcheck=&quot;false&quot;&gt;
+        &lt;span class=&quot;text-small text-destructive&quot; id=&quot;tsbl-text-error&quot; role=&quot;alert&quot; hidden&gt;Use 1–15 letters, numbers, or underscores. Do not include @.&lt;/span&gt;
+      &lt;/label&gt;
+      &lt;div class=&quot;tsbl-control&quot;&gt;
+        &lt;span&gt;Random point distribution&lt;/span&gt;
+        &lt;button class=&quot;btn btn-block&quot; id=&quot;tsbl-distribution-toggle&quot; type=&quot;button&quot; aria-label=&quot;Random point distribution&quot; aria-pressed=&quot;true&quot;&gt;On&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;tsbl-control&quot;&gt;
+        &lt;span&gt;Random point height&lt;/span&gt;
+        &lt;button class=&quot;btn btn-block&quot; id=&quot;tsbl-height-toggle&quot; type=&quot;button&quot; aria-label=&quot;Random point height&quot; aria-pressed=&quot;true&quot;&gt;On&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-path-mode&quot;&gt;
+        &lt;span&gt;Path mode&lt;/span&gt;
+        &lt;select class=&quot;form-control&quot; id=&quot;tsbl-path-mode&quot;&gt;
+          &lt;option value=&quot;outline-bezier&quot;&gt;Variable outline · Bézier C&lt;/option&gt;
+          &lt;option value=&quot;pure-bezier&quot;&gt;Pure cubic Bézier stroke&lt;/option&gt;
+          &lt;option value=&quot;outline-sampled&quot;&gt;Variable outline · sampled L&lt;/option&gt;
+        &lt;/select&gt;
+      &lt;/label&gt;
+      &lt;label class=&quot;tsbl-control form-label&quot;&gt;
+        &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Handle rotation range&lt;/span&gt;&lt;output id=&quot;tsbl-angle-value&quot;&gt;−28° — 28°&lt;/output&gt;&lt;/span&gt;
+        &lt;span class=&quot;tsbl-dual-range&quot; id=&quot;tsbl-angle-range&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-angle-min&quot; type=&quot;range&quot; min=&quot;-360&quot; max=&quot;360&quot; step=&quot;1&quot; value=&quot;-28&quot; aria-label=&quot;Minimum handle rotation&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-angle-max&quot; type=&quot;range&quot; min=&quot;-360&quot; max=&quot;360&quot; step=&quot;1&quot; value=&quot;28&quot; aria-label=&quot;Maximum handle rotation&quot;&gt;
+        &lt;/span&gt;
+      &lt;/label&gt;
+      &lt;label class=&quot;tsbl-control form-label&quot;&gt;
+        &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Handle length range&lt;/span&gt;&lt;output id=&quot;tsbl-handle-length-value&quot;&gt;0 — 45 px&lt;/output&gt;&lt;/span&gt;
+        &lt;span class=&quot;tsbl-dual-range&quot; id=&quot;tsbl-handle-length-range&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-handle-length-min&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;120&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;Minimum handle length&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-handle-length-max&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;120&quot; step=&quot;1&quot; value=&quot;45&quot; aria-label=&quot;Maximum handle length&quot;&gt;
+        &lt;/span&gt;
+      &lt;/label&gt;
+      &lt;label class=&quot;tsbl-control form-label&quot;&gt;
+        &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Point Y shift range&lt;/span&gt;&lt;output id=&quot;tsbl-y-shift-value&quot;&gt;−40 — 10 px&lt;/output&gt;&lt;/span&gt;
+        &lt;span class=&quot;tsbl-dual-range&quot; id=&quot;tsbl-y-shift-range&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-y-shift-min&quot; type=&quot;range&quot; min=&quot;-160&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;-40&quot; aria-label=&quot;Minimum point Y shift&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-y-shift-max&quot; type=&quot;range&quot; min=&quot;-160&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;10&quot; aria-label=&quot;Maximum point Y shift&quot;&gt;
+        &lt;/span&gt;
+      &lt;/label&gt;
+      &lt;div class=&quot;tsbl-serial-controls&quot;&gt;
+        &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-serial-max-height&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial pulse maximum height&lt;/span&gt;&lt;output id=&quot;tsbl-serial-max-height-value&quot;&gt;72 px&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-serial-max-height&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;72&quot;&gt;
+        &lt;/label&gt;
+        &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-serial-baseline-y&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial baseline Y&lt;/span&gt;&lt;output id=&quot;tsbl-serial-baseline-y-value&quot;&gt;250&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-serial-baseline-y&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;420&quot; step=&quot;1&quot; value=&quot;250&quot;&gt;
+        &lt;/label&gt;
+        &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-serial-spacing&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial spacing&lt;/span&gt;&lt;output id=&quot;tsbl-serial-spacing-value&quot;&gt;24 px&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-serial-spacing&quot; type=&quot;range&quot; min=&quot;8&quot; max=&quot;60&quot; step=&quot;1&quot; value=&quot;24&quot;&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;tsbl-style-controls&quot;&gt;
+        &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-uppercase-weight&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Uppercase extra weight&lt;/span&gt;&lt;output id=&quot;tsbl-uppercase-weight-value&quot;&gt;8 px&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-uppercase-weight&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;50&quot; step=&quot;1&quot; value=&quot;8&quot;&gt;
+        &lt;/label&gt;
+        &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-text-size&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Canvas text size&lt;/span&gt;&lt;output id=&quot;tsbl-text-size-value&quot;&gt;10 px&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-text-size&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;72&quot; step=&quot;1&quot; value=&quot;10&quot;&gt;
+        &lt;/label&gt;
+        &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-text-weight&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Canvas text weight&lt;/span&gt;&lt;output id=&quot;tsbl-text-weight-value&quot;&gt;200&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-text-weight&quot; type=&quot;range&quot; min=&quot;100&quot; max=&quot;900&quot; step=&quot;100&quot; value=&quot;200&quot;&gt;
+        &lt;/label&gt;
+        &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-weight&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Curve stroke weight&lt;/span&gt;&lt;output id=&quot;tsbl-weight-value&quot;&gt;2.0 px&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-weight&quot; type=&quot;range&quot; min=&quot;0.5&quot; max=&quot;50&quot; step=&quot;0.5&quot; value=&quot;2&quot;&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;tsbl-state text-small&quot; id=&quot;tsbl-state&quot; aria-live=&quot;polite&quot;&gt;14 characters / 14 anchors / 14 curves&lt;/div&gt;
+
+    &lt;div class=&quot;tsbl-grid&quot;&gt;
+      &lt;figure&gt;
+        &lt;figcaption&gt;&lt;strong&gt;01 / Final line&lt;/strong&gt;&lt;span class=&quot;text-small&quot; id=&quot;tsbl-caption-0&quot;&gt;@Personal_Field&lt;/span&gt;&lt;/figcaption&gt;
+        &lt;svg class=&quot;tsbl-svg tsbl-final&quot; id=&quot;tsbl-final-0&quot; viewBox=&quot;0 0 420 420&quot; role=&quot;img&quot; aria-label=&quot;First black text-seeded open Bezier line on an eggshell background&quot;&gt;&lt;/svg&gt;
+      &lt;/figure&gt;
+      &lt;figure&gt;
+        &lt;figcaption&gt;&lt;strong&gt;02 / Final line&lt;/strong&gt;&lt;span class=&quot;text-small&quot; id=&quot;tsbl-caption-1&quot;&gt;@grok&lt;/span&gt;&lt;/figcaption&gt;
+        &lt;svg class=&quot;tsbl-svg tsbl-final&quot; id=&quot;tsbl-final-1&quot; viewBox=&quot;0 0 420 420&quot; role=&quot;img&quot; aria-label=&quot;Second black text-seeded open Bezier line on an eggshell background&quot;&gt;&lt;/svg&gt;
+      &lt;/figure&gt;
+      &lt;figure&gt;
+        &lt;figcaption&gt;&lt;strong&gt;03 / Final line&lt;/strong&gt;&lt;span class=&quot;text-small&quot; id=&quot;tsbl-caption-2&quot;&gt;@erikswahn&lt;/span&gt;&lt;/figcaption&gt;
+        &lt;svg class=&quot;tsbl-svg tsbl-final&quot; id=&quot;tsbl-final-2&quot; viewBox=&quot;0 0 420 420&quot; role=&quot;img&quot; aria-label=&quot;Third black text-seeded open Bezier line on an eggshell background&quot;&gt;&lt;/svg&gt;
+      &lt;/figure&gt;
+      &lt;figure&gt;
+        &lt;figcaption&gt;&lt;strong&gt;04 / Final line&lt;/strong&gt;&lt;span class=&quot;text-small&quot; id=&quot;tsbl-caption-3&quot;&gt;@yanlucasmigone&lt;/span&gt;&lt;/figcaption&gt;
+        &lt;svg class=&quot;tsbl-svg tsbl-final&quot; id=&quot;tsbl-final-3&quot; viewBox=&quot;0 0 420 420&quot; role=&quot;img&quot; aria-label=&quot;Fourth black text-seeded open Bezier line on an eggshell background&quot;&gt;&lt;/svg&gt;
+      &lt;/figure&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;tsbl-actions&quot;&gt;
+      &lt;button class=&quot;btn btn-block tsbl-switch&quot; id=&quot;tsbl-switch&quot; type=&quot;button&quot; aria-label=&quot;Switch to the next four quick-test presets&quot;&gt;Switch 4 presets&lt;/button&gt;
+      &lt;button class=&quot;btn btn-primary btn-block tsbl-copy&quot; id=&quot;tsbl-copy-svg&quot; type=&quot;button&quot;&gt;Copy 01 SVG code&lt;/button&gt;
+      &lt;button class=&quot;btn btn-block tsbl-copy&quot; id=&quot;tsbl-copy-generator&quot; type=&quot;button&quot;&gt;Copy Python art spec&lt;/button&gt;
+      &lt;button class=&quot;btn btn-block tsbl-copy&quot; id=&quot;tsbl-copy-nocode&quot; type=&quot;button&quot;&gt;Copy no-code spec&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;script id=&quot;tsbl-python-template&quot; type=&quot;text/plain&quot;&gt;
+import hashlib
+import json
+import math
+import re
+from decimal import Decimal, ROUND_HALF_UP
+
+INPUT_TEXT = &quot;&quot;
+OUTPUT_FILE = &quot;signature.svg&quot;
+SETTINGS = json.loads(r&#x27;&#x27;&#x27;__SETTINGS_JSON__&#x27;&#x27;&#x27;)
+
+
+def canonical_json(value):
+    return json.dumps(value, sort_keys=True, separators=(&quot;,&quot;, &quot;:&quot;), ensure_ascii=False)
+
+
+def hash_to_unit_float(scope, parameter):
+    payload = canonical_json({
+        &quot;namespace&quot;: SETTINGS[&quot;random_namespace&quot;],
+        &quot;parameter&quot;: parameter,
+        &quot;scheme&quot;: SETTINGS[&quot;random_scheme&quot;],
+        &quot;scope&quot;: scope,
+    }).encode(&quot;utf-8&quot;)
+    digest = hashlib.sha256(payload).digest()
+    first_53_bits = int.from_bytes(digest[:8], &quot;big&quot;) &gt;&gt; 11
+    return first_53_bits / 9007199254740992
+
+
+def map_range(unit_value, minimum, maximum):
+    return minimum + unit_value * (maximum - minimum)
+
+
+def seeded_values(characters):
+    rotation_min, rotation_max = SETTINGS[&quot;handle_rotation_degrees&quot;]
+    length_min, length_max = SETTINGS[&quot;handle_length_px&quot;]
+# @block random-height
+    y_min, y_max = SETTINGS[&quot;point_y_shift_px&quot;]
+# @endblock random-height
+    values = []
+    for character in characters:
+        scope = {&quot;kind&quot;: &quot;character&quot;, &quot;value&quot;: character}
+        values.append({
+            &quot;angle&quot;: map_range(hash_to_unit_float(scope, &quot;handle-angle&quot;), rotation_min, rotation_max) * math.pi / 180,
+            &quot;incoming_length&quot;: map_range(hash_to_unit_float(scope, &quot;incoming-handle-length&quot;), length_min, length_max),
+            &quot;outgoing_length&quot;: map_range(hash_to_unit_float(scope, &quot;outgoing-handle-length&quot;), length_min, length_max),
+# @block random-height
+            &quot;y_shift&quot;: map_range(hash_to_unit_float(scope, &quot;point-y-shift&quot;), y_min, y_max),
+# @endblock random-height
+        })
+    return values
+
+
+# @block random-distribution
+def pair_gap_weight(left_character, right_character):
+    minimum, maximum = SETTINGS[&quot;gap_weight_range&quot;]
+    scope = {
+        &quot;kind&quot;: &quot;ordered-character-pair&quot;,
+        &quot;left&quot;: {&quot;kind&quot;: &quot;character&quot;, &quot;value&quot;: left_character},
+        &quot;right&quot;: {&quot;kind&quot;: &quot;character&quot;, &quot;value&quot;: right_character},
+    }
+    return map_range(hash_to_unit_float(scope, &quot;point-gap-weight&quot;), minimum, maximum)
+# @endblock random-distribution
+
+
+def smooth_handle_angles(raw):
+    count = len(raw)
+    result = []
+    for index, value in enumerate(raw):
+        previous = raw[max(0, index - 1)][&quot;angle&quot;]
+        following = raw[min(count - 1, index + 1)][&quot;angle&quot;]
+        result.append((previous + 2 * value[&quot;angle&quot;] + following) / 4)
+    return result
+
+
+def is_uppercase(character):
+    return &quot;A&quot; &lt;= character &lt;= &quot;Z&quot;
+
+
+def is_serial_digit(character):
+    return &quot;0&quot; &lt;= character &lt;= &quot;9&quot;
+
+
+def shifted_point(point, shift_x):
+    return {
+        **point,
+        &quot;anchor&quot;: [point[&quot;anchor&quot;][0] + shift_x, point[&quot;anchor&quot;][1]],
+        &quot;incoming&quot;: [point[&quot;incoming&quot;][0] + shift_x, point[&quot;incoming&quot;][1]],
+        &quot;outgoing&quot;: [point[&quot;outgoing&quot;][0] + shift_x, point[&quot;outgoing&quot;][1]],
+    }
+
+
+def center_geometry(points):
+    x_values = []
+    for point in points:
+        x_values.extend((point[&quot;anchor&quot;][0], point[&quot;incoming&quot;][0], point[&quot;outgoing&quot;][0]))
+    shift_x = SETTINGS[&quot;canvas_size&quot;] / 2 - (min(x_values) + max(x_values)) / 2
+    return [shifted_point(point, shift_x) for point in points]
+
+
+def geometry_for(characters):
+    count = len(characters)
+    if count == 0:
+        return []
+    center = SETTINGS[&quot;canvas_size&quot;] / 2
+    raw = seeded_values(characters)
+    smoothed_angles = smooth_handle_angles(raw)
+    serial_flags = [is_serial_digit(character) for character in characters]
+    serial_digit_count = sum(serial_flags)
+    line_span = SETTINGS[&quot;line_end_x&quot;] - SETTINGS[&quot;line_start_x&quot;]
+    target_span = line_span * count / SETTINGS[&quot;short_text_span_denominator&quot;] if count &lt;= 3 else line_span
+    target_start = center - target_span / 2
+    target_end = center + target_span / 2
+
+    def identity_point(character, index, x):
+# @block random-height
+        y_shift = raw[index][&quot;y_shift&quot;]
+# @endblock random-height
+# @block flat-height
+        y_shift = 0
+# @endblock flat-height
+        anchor = [x, center + y_shift]
+        angle = smoothed_angles[index]
+        direction = [math.cos(angle), math.sin(angle)]
+        return {
+            &quot;character&quot;: character,
+            &quot;uppercase&quot;: is_uppercase(character),
+            &quot;serial_tail&quot;: False,
+            &quot;anchor&quot;: anchor,
+            &quot;incoming&quot;: [
+                anchor[0] - direction[0] * raw[index][&quot;incoming_length&quot;],
+                anchor[1] - direction[1] * raw[index][&quot;incoming_length&quot;],
+            ],
+            &quot;outgoing&quot;: [
+                anchor[0] + direction[0] * raw[index][&quot;outgoing_length&quot;],
+                anchor[1] + direction[1] * raw[index][&quot;outgoing_length&quot;],
+            ],
+        }
+
+    if serial_digit_count == 0:
+        if count == 1:
+            return center_geometry([
+                identity_point(characters[0], 0, target_start),
+                identity_point(characters[0], 0, target_end),
+            ])
+# @block average-distribution
+        gap_weights = [1 for _ in range(count - 1)]
+# @endblock average-distribution
+# @block random-distribution
+        gap_weights = [pair_gap_weight(characters[index], characters[index + 1]) for index in range(count - 1)]
+# @endblock random-distribution
+        gap_total = sum(gap_weights)
+        gaps = [target_span * value / gap_total for value in gap_weights]
+        positions = [target_start]
+        for gap in gaps:
+            positions.append(positions[-1] + gap)
+        return center_geometry([identity_point(character, index, positions[index]) for index, character in enumerate(characters)])
+
+    serial_spacing = SETTINGS[&quot;serial_spacing_px&quot;]
+    pulse_handle = serial_spacing * SETTINGS[&quot;pulse_handle_spacing_factor&quot;]
+    y_min, y_max = SETTINGS[&quot;point_y_shift_px&quot;]
+    point_y_span = y_max - y_min
+    point_y_midpoint = (y_min + y_max) / 2
+    serial_y_scale = point_y_span / SETTINGS[&quot;point_y_reference_span_px&quot;]
+    scaled_serial_baseline_y = (
+        center
+        + point_y_midpoint
+        + (SETTINGS[&quot;serial_baseline_y&quot;] - center - SETTINGS[&quot;point_y_reference_midpoint_px&quot;]) * serial_y_scale
+    )
+
+    def serial_point(character, x, y):
+        return {
+            &quot;character&quot;: character,
+            &quot;uppercase&quot;: False,
+            &quot;serial_tail&quot;: True,
+            &quot;anchor&quot;: [x, y],
+            &quot;incoming&quot;: [x - pulse_handle, y],
+            &quot;outgoing&quot;: [x + pulse_handle, y],
+        }
+
+    connector_gap = min(SETTINGS[&quot;connector_gap_max_px&quot;], serial_spacing * SETTINGS[&quot;connector_spacing_factor&quot;])
+    flexible_boundaries = []
+    transition_count = 0
+    for index in range(count - 1):
+        if serial_flags[index] != serial_flags[index + 1]:
+            transition_count += 1
+        if not serial_flags[index] and not serial_flags[index + 1]:
+            flexible_boundaries.append(index)
+
+    fixed_width = serial_digit_count * serial_spacing + transition_count * connector_gap
+    flexible_span = max(0, target_span - fixed_width)
+# @block average-distribution
+    flexible_weights = [1 for _ in flexible_boundaries]
+# @endblock average-distribution
+# @block random-distribution
+    flexible_weights = [pair_gap_weight(characters[index], characters[index + 1]) for index in flexible_boundaries]
+# @endblock random-distribution
+    flexible_total = sum(flexible_weights)
+    flexible_advance = {
+        boundary: flexible_span * flexible_weights[weight_index] / flexible_total if flexible_total &gt; 0 else 0
+        for weight_index, boundary in enumerate(flexible_boundaries)
+    }
+    used_width = fixed_width + (flexible_span if flexible_boundaries else 0)
+    cursor_x = center - used_width / 2
+    points = []
+
+    for index, character in enumerate(characters):
+        if serial_flags[index]:
+            if index == 0 or not serial_flags[index - 1]:
+                points.append(serial_point(character, cursor_x, scaled_serial_baseline_y))
+            base_height = int(character) / 9 * SETTINGS[&quot;serial_maximum_pulse_height_px&quot;]
+            scaled_height = base_height * serial_y_scale
+            points.append(serial_point(character, cursor_x + serial_spacing / 2, scaled_serial_baseline_y - scaled_height))
+            cursor_x += serial_spacing
+            points.append(serial_point(character, cursor_x, scaled_serial_baseline_y))
+            if index &lt; count - 1 and not serial_flags[index + 1]:
+                cursor_x += connector_gap
+        else:
+            points.append(identity_point(character, index, cursor_x))
+            if index &lt; count - 1:
+                cursor_x += connector_gap if serial_flags[index + 1] else flexible_advance.get(index, 0)
+
+    return center_geometry(points)
+
+
+def cubic_point(p0, p1, p2, p3, t):
+    u = 1 - t
+    a = u * u * u
+    b = 3 * u * u * t
+    c = 3 * u * t * t
+    d = t * t * t
+    return [
+        a * p0[0] + b * p1[0] + c * p2[0] + d * p3[0],
+        a * p0[1] + b * p1[1] + c * p2[1] + d * p3[1],
+    ]
+
+
+# @block variable-outline
+def cubic_derivative(p0, p1, p2, p3, t):
+    u = 1 - t
+    return [
+        3 * u * u * (p1[0] - p0[0]) + 6 * u * t * (p2[0] - p1[0]) + 3 * t * t * (p3[0] - p2[0]),
+        3 * u * u * (p1[1] - p0[1]) + 6 * u * t * (p2[1] - p1[1]) + 3 * t * t * (p3[1] - p2[1]),
+    ]
+
+
+def smoothstep(t):
+    return t * t * (3 - 2 * t)
+
+
+def weight_at(point):
+    base_weight = SETTINGS[&quot;base_weight_px&quot;]
+    if point[&quot;serial_tail&quot;]:
+        return base_weight
+    if point[&quot;character&quot;] == &quot;_&quot;:
+        return min(base_weight, SETTINGS[&quot;underscore_max_weight_px&quot;])
+    return base_weight + (SETTINGS[&quot;uppercase_extra_weight_px&quot;] if point[&quot;uppercase&quot;] else 0)
+
+
+def width_between(current, following, t):
+    return weight_at(current) + (weight_at(following) - weight_at(current)) * smoothstep(t)
+
+
+def offset_point(current, following, t, side):
+    position = cubic_point(current[&quot;anchor&quot;], current[&quot;outgoing&quot;], following[&quot;incoming&quot;], following[&quot;anchor&quot;], t)
+    derivative = cubic_derivative(current[&quot;anchor&quot;], current[&quot;outgoing&quot;], following[&quot;incoming&quot;], following[&quot;anchor&quot;], t)
+    length = math.hypot(derivative[0], derivative[1]) or 1
+    normal = [-derivative[1] / length, derivative[0] / length]
+    half_width = width_between(current, following, t) / 2
+    return [position[0] + normal[0] * half_width * side, position[1] + normal[1] * half_width * side]
+
+
+def center_points_for_outline(points):
+    if len(points) &lt; 2:
+        return points
+    minimum_x = math.inf
+    maximum_x = -math.inf
+    for index in range(len(points) - 1):
+        current = points[index]
+        following = points[index + 1]
+        for sample in range(SETTINGS[&quot;centering_samples_per_segment&quot;] + 1):
+            t = sample / SETTINGS[&quot;centering_samples_per_segment&quot;]
+            outer = offset_point(current, following, t, 1)
+            inner = offset_point(current, following, t, -1)
+            minimum_x = min(minimum_x, outer[0], inner[0])
+            maximum_x = max(maximum_x, outer[0], inner[0])
+    shift_x = SETTINGS[&quot;canvas_size&quot;] / 2 - (minimum_x + maximum_x) / 2
+    return [shifted_point(point, shift_x) for point in points]
+# @endblock variable-outline
+
+
+# @block pure-bezier
+def center_points_for_centerline(points):
+    if len(points) &lt; 2:
+        return points
+    minimum_x = math.inf
+    maximum_x = -math.inf
+    for index in range(len(points) - 1):
+        current = points[index]
+        following = points[index + 1]
+        for sample in range(SETTINGS[&quot;centering_samples_per_segment&quot;] + 1):
+            position = cubic_point(
+                current[&quot;anchor&quot;], current[&quot;outgoing&quot;], following[&quot;incoming&quot;], following[&quot;anchor&quot;],
+                sample / SETTINGS[&quot;centering_samples_per_segment&quot;],
+            )
+            minimum_x = min(minimum_x, position[0])
+            maximum_x = max(maximum_x, position[0])
+    shift_x = SETTINGS[&quot;canvas_size&quot;] / 2 - (minimum_x + maximum_x) / 2
+    return [shifted_point(point, shift_x) for point in points]
+# @endblock pure-bezier
+
+
+def fixed_2(value):
+    if abs(value) &lt; 0.005:
+        value = 0.0
+    sign = &quot;-&quot; if value &lt; 0 else &quot;&quot;
+    rounded = Decimal.from_float(abs(value)).quantize(Decimal(&quot;0.01&quot;), rounding=ROUND_HALF_UP)
+    return sign + format(rounded, &quot;.2f&quot;)
+
+
+def pair(point):
+    return f&quot;{fixed_2(point[0])},{fixed_2(point[1])}&quot;
+
+
+# @block outline-sampled
+def sampled_variable_width_path(points):
+    if len(points) &lt; 2:
+        return &quot;&quot;
+    outer = []
+    inner = []
+    samples_per_segment = max(
+        SETTINGS[&quot;sampled_outline_min_samples_per_segment&quot;],
+        min(SETTINGS[&quot;sampled_outline_max_samples_per_segment&quot;], math.ceil(SETTINGS[&quot;sampled_outline_target_samples&quot;] / len(points))),
+    )
+
+    def sample_segment(current, following, t):
+        position = cubic_point(current[&quot;anchor&quot;], current[&quot;outgoing&quot;], following[&quot;incoming&quot;], following[&quot;anchor&quot;], t)
+        derivative = cubic_derivative(current[&quot;anchor&quot;], current[&quot;outgoing&quot;], following[&quot;incoming&quot;], following[&quot;anchor&quot;], t)
+        length = math.hypot(derivative[0], derivative[1]) or 1
+        normal = [-derivative[1] / length, derivative[0] / length]
+        width = width_between(current, following, t)
+        half = width / 2
+        outer.append([position[0] + normal[0] * half, position[1] + normal[1] * half])
+        inner.append([position[0] - normal[0] * half, position[1] - normal[1] * half])
+
+    for index in range(len(points) - 1):
+        current = points[index]
+        following = points[index + 1]
+        for sample in range(samples_per_segment):
+            sample_segment(current, following, sample / samples_per_segment)
+    sample_segment(points[-2], points[-1], 1)
+    return &quot;M&quot; + &quot;L&quot;.join(map(pair, outer)) + &quot;L&quot; + &quot;L&quot;.join(map(pair, reversed(inner))) + &quot;Z&quot;
+# @endblock outline-sampled
+
+
+# @block outline-bezier
+def cubic_through_thirds(start, one_third, two_thirds, end):
+    first = [27 * one_third[0] - 8 * start[0] - end[0], 27 * one_third[1] - 8 * start[1] - end[1]]
+    second = [27 * two_thirds[0] - start[0] - 8 * end[0], 27 * two_thirds[1] - start[1] - 8 * end[1]]
+    return {
+        &quot;control1&quot;: [(2 * first[0] - second[0]) / 18, (2 * first[1] - second[1]) / 18],
+        &quot;control2&quot;: [(2 * second[0] - first[0]) / 18, (2 * second[1] - first[1]) / 18],
+    }
+
+
+def bezier_variable_width_path(points):
+    if len(points) &lt; 2:
+        return &quot;&quot;
+    last_segment = len(points) - 2
+    path = &quot;M&quot; + pair(offset_point(points[0], points[1], 0, 1))
+    for index in range(last_segment + 1):
+        current = points[index]
+        following = points[index + 1]
+        start = offset_point(current, following, 0, 1)
+        one_third = offset_point(current, following, 1 / 3, 1)
+        two_thirds = offset_point(current, following, 2 / 3, 1)
+        end = offset_point(current, following, 1, 1)
+        controls = cubic_through_thirds(start, one_third, two_thirds, end)
+        path += &quot;C&quot; + pair(controls[&quot;control1&quot;]) + &quot; &quot; + pair(controls[&quot;control2&quot;]) + &quot; &quot; + pair(end)
+    path += &quot;L&quot; + pair(offset_point(points[last_segment], points[last_segment + 1], 1, -1))
+    for index in range(last_segment, -1, -1):
+        current = points[index]
+        following = points[index + 1]
+        start = offset_point(current, following, 0, -1)
+        one_third = offset_point(current, following, 1 / 3, -1)
+        two_thirds = offset_point(current, following, 2 / 3, -1)
+        end = offset_point(current, following, 1, -1)
+        controls = cubic_through_thirds(start, one_third, two_thirds, end)
+        path += &quot;C&quot; + pair(controls[&quot;control2&quot;]) + &quot; &quot; + pair(controls[&quot;control1&quot;]) + &quot; &quot; + pair(start)
+    return path + &quot;Z&quot;
+# @endblock outline-bezier
+
+
+# @block pure-bezier
+def pure_bezier_path(points):
+    if len(points) &lt; 2:
+        return &quot;&quot;
+    path = &quot;M&quot; + pair(points[0][&quot;anchor&quot;])
+    for index in range(len(points) - 1):
+        current = points[index]
+        following = points[index + 1]
+        path += &quot;C&quot; + pair(current[&quot;outgoing&quot;]) + &quot; &quot; + pair(following[&quot;incoming&quot;]) + &quot; &quot; + pair(following[&quot;anchor&quot;])
+    return path
+# @endblock pure-bezier
+
+
+def xml_number(value):
+    number = float(value)
+    return str(int(number)) if number == int(number) else str(number)
+
+
+def generate_svg(source_text):
+    if not re.fullmatch(SETTINGS[&quot;input_pattern&quot;], source_text):
+        raise ValueError(&quot;input must match &quot; + SETTINGS[&quot;input_pattern&quot;])
+    points = geometry_for(list(source_text))
+# @block pure-bezier
+    centered_points = center_points_for_centerline(points)
+    path_element = (
+        f&#x27;&lt;path d=&quot;{pure_bezier_path(centered_points)}&quot; fill=&quot;none&quot; stroke=&quot;{SETTINGS[&quot;ink&quot;]}&quot; &#x27;
+        f&#x27;stroke-width=&quot;{xml_number(SETTINGS[&quot;base_weight_px&quot;])}&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/&gt;&#x27;
+    )
+# @endblock pure-bezier
+# @block outline-bezier
+    centered_points = center_points_for_outline(points)
+    path_data = bezier_variable_width_path(centered_points)
+    path_element = f&#x27;&lt;path d=&quot;{path_data}&quot; fill=&quot;{SETTINGS[&quot;ink&quot;]}&quot; stroke=&quot;none&quot;/&gt;&#x27;
+# @endblock outline-bezier
+# @block outline-sampled
+    centered_points = center_points_for_outline(points)
+    path_data = sampled_variable_width_path(centered_points)
+    path_element = f&#x27;&lt;path d=&quot;{path_data}&quot; fill=&quot;{SETTINGS[&quot;ink&quot;]}&quot; stroke=&quot;none&quot;/&gt;&#x27;
+# @endblock outline-sampled
+    displayed_handle = SETTINGS[&quot;display_prefix&quot;] + source_text
+    font_family = SETTINGS[&quot;font_family&quot;]
+    text_element = (
+        f&#x27;&lt;text x=&quot;{xml_number(SETTINGS[&quot;canvas_text_x&quot;])}&quot; y=&quot;{xml_number(SETTINGS[&quot;canvas_text_y&quot;])}&quot; &#x27;
+        f&#x27;font-size=&quot;{xml_number(SETTINGS[&quot;canvas_text_size_px&quot;])}&quot; font-weight=&quot;{xml_number(SETTINGS[&quot;canvas_text_weight&quot;])}&quot; &#x27;
+        f&#x27;dominant-baseline=&quot;middle&quot; fill=&quot;{SETTINGS[&quot;ink&quot;]}&quot; text-anchor=&quot;middle&quot; font-family=&quot;{font_family}&quot;&gt;&#x27;
+        f&#x27;{displayed_handle}&lt;/text&gt;&#x27;
+    )
+    size = xml_number(SETTINGS[&quot;canvas_size&quot;])
+    svg_namespace = &quot;http:&quot; + chr(47) * 2 + &quot;www&quot; + &quot;.w3&quot; + &quot;.org/2000/svg&quot;
+    return (
+        f&#x27;&lt;svg viewBox=&quot;0 0 {size} {size}&quot; xmlns=&quot;{svg_namespace}&quot; width=&quot;{size}&quot; height=&quot;{size}&quot;&gt;&#x27;
+        f&#x27;&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;{size}&quot; height=&quot;{size}&quot; fill=&quot;{SETTINGS[&quot;background&quot;]}&quot;/&gt;&#x27;
+        f&#x27;{path_element}{text_element}&lt;/svg&gt;&#x27;
+    )
+
+
+input_text = INPUT_TEXT.strip()
+if not input_text:
+    input_text = input(&quot;X handle without @: &quot;).strip()
+
+svg_source = generate_svg(input_text)
+with open(OUTPUT_FILE, &quot;w&quot;, encoding=&quot;utf-8&quot;) as output_file:
+    output_file.write(svg_source)
+
+print(svg_source)
+  &lt;/script&gt;
+
+  &lt;script&gt;
+    (() =&gt; {
+      const root = document.getElementById(&#x27;text-seeded-bezier-loop-presets&#x27;);
+      const textInput = root.querySelector(&#x27;#tsbl-text&#x27;);
+      const textError = root.querySelector(&#x27;#tsbl-text-error&#x27;);
+      const distributionToggleButton = root.querySelector(&#x27;#tsbl-distribution-toggle&#x27;);
+      const pathModeSelect = root.querySelector(&#x27;#tsbl-path-mode&#x27;);
+      const weightInput = root.querySelector(&#x27;#tsbl-weight&#x27;);
+      const angleMinInput = root.querySelector(&#x27;#tsbl-angle-min&#x27;);
+      const angleMaxInput = root.querySelector(&#x27;#tsbl-angle-max&#x27;);
+      const handleLengthMinInput = root.querySelector(&#x27;#tsbl-handle-length-min&#x27;);
+      const handleLengthMaxInput = root.querySelector(&#x27;#tsbl-handle-length-max&#x27;);
+      const yShiftMinInput = root.querySelector(&#x27;#tsbl-y-shift-min&#x27;);
+      const yShiftMaxInput = root.querySelector(&#x27;#tsbl-y-shift-max&#x27;);
+      const serialMaxHeightInput = root.querySelector(&#x27;#tsbl-serial-max-height&#x27;);
+      const serialBaselineYInput = root.querySelector(&#x27;#tsbl-serial-baseline-y&#x27;);
+      const serialSpacingInput = root.querySelector(&#x27;#tsbl-serial-spacing&#x27;);
+      const angleRange = root.querySelector(&#x27;#tsbl-angle-range&#x27;);
+      const handleLengthRange = root.querySelector(&#x27;#tsbl-handle-length-range&#x27;);
+      const yShiftRange = root.querySelector(&#x27;#tsbl-y-shift-range&#x27;);
+      const uppercaseWeightInput = root.querySelector(&#x27;#tsbl-uppercase-weight&#x27;);
+      const textSizeInput = root.querySelector(&#x27;#tsbl-text-size&#x27;);
+      const textWeightInput = root.querySelector(&#x27;#tsbl-text-weight&#x27;);
+      const heightToggleButton = root.querySelector(&#x27;#tsbl-height-toggle&#x27;);
+      const switchButton = root.querySelector(&#x27;#tsbl-switch&#x27;);
+      const copySvgButton = root.querySelector(&#x27;#tsbl-copy-svg&#x27;);
+      const copyGeneratorButton = root.querySelector(&#x27;#tsbl-copy-generator&#x27;);
+      const copyNoCodeButton = root.querySelector(&#x27;#tsbl-copy-nocode&#x27;);
+      const pythonTemplate = root.querySelector(&#x27;#tsbl-python-template&#x27;);
+      const textOutput = root.querySelector(&#x27;#tsbl-text-value&#x27;);
+      const weightOutput = root.querySelector(&#x27;#tsbl-weight-value&#x27;);
+      const angleOutput = root.querySelector(&#x27;#tsbl-angle-value&#x27;);
+      const handleLengthOutput = root.querySelector(&#x27;#tsbl-handle-length-value&#x27;);
+      const yShiftOutput = root.querySelector(&#x27;#tsbl-y-shift-value&#x27;);
+      const serialMaxHeightOutput = root.querySelector(&#x27;#tsbl-serial-max-height-value&#x27;);
+      const serialBaselineYOutput = root.querySelector(&#x27;#tsbl-serial-baseline-y-value&#x27;);
+      const serialSpacingOutput = root.querySelector(&#x27;#tsbl-serial-spacing-value&#x27;);
+      const uppercaseWeightOutput = root.querySelector(&#x27;#tsbl-uppercase-weight-value&#x27;);
+      const textSizeOutput = root.querySelector(&#x27;#tsbl-text-size-value&#x27;);
+      const textWeightOutput = root.querySelector(&#x27;#tsbl-text-weight-value&#x27;);
+      const stateOutput = root.querySelector(&#x27;#tsbl-state&#x27;);
+      const finalSvgs = Array.from(root.querySelectorAll(&#x27;.tsbl-final&#x27;));
+      const captions = Array.from({ length: 4 }, (_, index) =&gt; root.querySelector(`#tsbl-caption-${index}`));
+      const SVG_NS = &#x27;http://www.w3.org/2000/svg&#x27;;
+      const canvasSize = 420;
+      const center = canvasSize / 2;
+      const canvasTextX = center;
+      const canvasTextY = canvasSize * (1 - .05);
+      const handlePattern = /^[A-Za-z0-9_]{1,15}$/;
+      const specificationVersion = &#x27;1.0.0&#x27;;
+      const specificationHashPlaceholder = &#x27;&lt;SPEC_HASH_PLACEHOLDER&gt;&#x27;;
+      const noCodeSpecificationHashPlaceholder = &#x27;&lt;NO_CODE_SPEC_HASH_PLACEHOLDER&gt;&#x27;;
+      const randomScheme = &#x27;sha256-labeled-u53&#x27;;
+      const randomNamespace = &#x27;personal-field&#x27;;
+      const presets = [
+        &#x27;grok&#x27;, &#x27;erikswahn&#x27;, &#x27;yanlucasmigone&#x27;, &#x27;philmo_mu&#x27;, &#x27;MegaDeFi&#x27;, &#x27;starlight_ai&#x27;, &#x27;alexgrama&#x27;, &#x27;nptacek&#x27;,
+        &#x27;Naminami89493534&#x27;, &#x27;RikOostenbroek&#x27;, &#x27;solisolsoli&#x27;, &#x27;menteprompt&#x27;, &#x27;TheChuckTone&#x27;, &#x27;tuukzs&#x27;, &#x27;arstechnoid&#x27;, &#x27;migumo27&#x27;,
+        &#x27;jackbutcher&#x27;, &#x27;92digitalArt&#x27;, &#x27;Otter805&#x27;, &#x27;tylerxhobbs&#x27;, &#x27;UnseenAspect&#x27;, &#x27;goodside&#x27;, &#x27;chilltulpa&#x27;, &#x27;gurbakshchahal&#x27;,
+        &#x27;thesilvershed&#x27;, &#x27;Synth_Taxon&#x27;, &#x27;enigmatriz&#x27;, &#x27;musicalnetta&#x27;, &#x27;ALCrego_&#x27;, &#x27;whoslord&#x27;, &#x27;robottraphouse&#x27;, &#x27;Flexi23&#x27;,
+        &#x27;unstonio&#x27;, &#x27;AlphaVerse&#x27;, &#x27;Zangetsu_Soul&#x27;, &#x27;Sneha_9090&#x27;, &#x27;Danielomo_&#x27;, &#x27;LodMbeki&#x27;, &#x27;CoinsH97044&#x27;, &#x27;Angel4u_786&#x27;,
+        &#x27;Omme_82&#x27;, &#x27;laidoungleon&#x27;, &#x27;biology_toper&#x27;, &#x27;teorikeslesme&#x27;, &#x27;larsdegrauw&#x27;, &#x27;Tworun44&#x27;, &#x27;HUMU0Rn&#x27;, &#x27;leizhang48284509&#x27;,
+        &#x27;iliyaskhanu&#x27;, &#x27;0xCryptoWizzy&#x27;, &#x27;jeffersszn&#x27;, &#x27;Corpstoryhq&#x27;, &#x27;Ahmad_lambo&#x27;, &#x27;Aristide_REGAL&#x27;, &#x27;bitbull112&#x27;, &#x27;konkatouyaji&#x27;,
+        &#x27;MinishibaKaiser&#x27;, &#x27;goxkingsley_&#x27;, &#x27;aa200063&#x27;, &#x27;bloomifyyy&#x27;, &#x27;flowersplanettt&#x27;, &#x27;WildTravele&#x27;, &#x27;Robinvg11&#x27;, &#x27;Sentient_Lumina&#x27;,
+        &#x27;Damivox_&#x27;, &#x27;MdRifat298138&#x27;, &#x27;Lasgfix&#x27;, &#x27;IsraelMath88300&#x27;, &#x27;GistHubz&#x27;, &#x27;Mayadamjr&#x27;, &#x27;urhelen0&#x27;, &#x27;spenxer_sw&#x27;,
+        &#x27;0xRiker&#x27;, &#x27;Cynics_Alpha&#x27;, &#x27;inshell_art&#x27;, &#x27;lqrmynwr&#x27;, &#x27;JunB17892531&#x27;, &#x27;AuraMetaX&#x27;, &#x27;Usamadeen_001&#x27;, &#x27;WaruPanofficial1&#x27;
+      ];
+      const validPresets = presets.filter(text =&gt; handlePattern.test(text));
+
+      let presetCursor = 3;
+      let randomDistributionEnabled = true;
+      let randomHeightEnabled = true;
+      let currentTexts = [&#x27;Personal_Field&#x27;, presets[0], presets[1], presets[2]];
+
+      function element(name, attributes = {}) {
+        const node = document.createElementNS(SVG_NS, name);
+        Object.entries(attributes).forEach(([key, value]) =&gt; node.setAttribute(key, value));
+        return node;
+      }
+
+      function graphemes(text) {
+        if (globalThis.Intl &amp;&amp; Intl.Segmenter) {
+          const segmenter = new Intl.Segmenter(undefined, { granularity: &#x27;grapheme&#x27; });
+          return Array.from(segmenter.segment(text.normalize(&#x27;NFC&#x27;)), item =&gt; item.segment);
+        }
+        return Array.from(text.normalize(&#x27;NFC&#x27;));
+      }
+
+      const sha256Initial = new Uint32Array([
+        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+        0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+      ]);
+      const sha256Constants = new Uint32Array([
+        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+        0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+        0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+        0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+        0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+      ]);
+
+      function canonicalJson(value) {
+        if (Array.isArray(value)) return `[${value.map(canonicalJson).join(&#x27;,&#x27;)}]`;
+        if (value &amp;&amp; typeof value === &#x27;object&#x27;) {
+          return `{${Object.keys(value).sort().map(key =&gt; `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(&#x27;,&#x27;)}}`;
+        }
+        return JSON.stringify(value);
+      }
+
+      function rotateRight(value, shift) {
+        return value &gt;&gt;&gt; shift | value &lt;&lt; 32 - shift;
+      }
+
+      function sha256Bytes(text) {
+        const message = new TextEncoder().encode(text);
+        const bitLength = message.length * 8;
+        const paddedLength = Math.ceil((message.length + 9) / 64) * 64;
+        const padded = new Uint8Array(paddedLength);
+        padded.set(message);
+        padded[message.length] = 0x80;
+        const paddedView = new DataView(padded.buffer);
+        paddedView.setUint32(paddedLength - 8, Math.floor(bitLength / 4294967296), false);
+        paddedView.setUint32(paddedLength - 4, bitLength &gt;&gt;&gt; 0, false);
+
+        const hash = new Uint32Array(sha256Initial);
+        const words = new Uint32Array(64);
+        for (let offset = 0; offset &lt; paddedLength; offset += 64) {
+          for (let index = 0; index &lt; 16; index++) words[index] = paddedView.getUint32(offset + index * 4, false);
+          for (let index = 16; index &lt; 64; index++) {
+            const value15 = words[index - 15];
+            const value2 = words[index - 2];
+            const sigma0 = rotateRight(value15, 7) ^ rotateRight(value15, 18) ^ value15 &gt;&gt;&gt; 3;
+            const sigma1 = rotateRight(value2, 17) ^ rotateRight(value2, 19) ^ value2 &gt;&gt;&gt; 10;
+            words[index] = (words[index - 16] + sigma0 + words[index - 7] + sigma1) &gt;&gt;&gt; 0;
+          }
+
+          let [a, b, c, d, e, f, g, h] = hash;
+          for (let index = 0; index &lt; 64; index++) {
+            const sum1 = rotateRight(e, 6) ^ rotateRight(e, 11) ^ rotateRight(e, 25);
+            const choice = e &amp; f ^ ~e &amp; g;
+            const temporary1 = (h + sum1 + choice + sha256Constants[index] + words[index]) &gt;&gt;&gt; 0;
+            const sum0 = rotateRight(a, 2) ^ rotateRight(a, 13) ^ rotateRight(a, 22);
+            const majority = a &amp; b ^ a &amp; c ^ b &amp; c;
+            const temporary2 = (sum0 + majority) &gt;&gt;&gt; 0;
+            h = g;
+            g = f;
+            f = e;
+            e = (d + temporary1) &gt;&gt;&gt; 0;
+            d = c;
+            c = b;
+            b = a;
+            a = (temporary1 + temporary2) &gt;&gt;&gt; 0;
+          }
+          hash[0] = (hash[0] + a) &gt;&gt;&gt; 0;
+          hash[1] = (hash[1] + b) &gt;&gt;&gt; 0;
+          hash[2] = (hash[2] + c) &gt;&gt;&gt; 0;
+          hash[3] = (hash[3] + d) &gt;&gt;&gt; 0;
+          hash[4] = (hash[4] + e) &gt;&gt;&gt; 0;
+          hash[5] = (hash[5] + f) &gt;&gt;&gt; 0;
+          hash[6] = (hash[6] + g) &gt;&gt;&gt; 0;
+          hash[7] = (hash[7] + h) &gt;&gt;&gt; 0;
+        }
+
+        const digest = new Uint8Array(32);
+        const digestView = new DataView(digest.buffer);
+        hash.forEach((value, index) =&gt; digestView.setUint32(index * 4, value, false));
+        return digest;
+      }
+
+      function hashToUnitFloat(scope, parameter) {
+        const digest = sha256Bytes(canonicalJson({
+          namespace: randomNamespace,
+          parameter,
+          scheme: randomScheme,
+          scope
+        }));
+        const view = new DataView(digest.buffer, digest.byteOffset, digest.byteLength);
+        const first53Bits = view.getUint32(0, false) * 2097152 + (view.getUint32(4, false) &gt;&gt;&gt; 11);
+        return first53Bits / 9007199254740992;
+      }
+
+      function mapRange(unitValue, minimum, maximum) {
+        return minimum + unitValue * (maximum - minimum);
+      }
+
+      function isUppercase(character) {
+        return character &gt;= &#x27;A&#x27; &amp;&amp; character &lt;= &#x27;Z&#x27;;
+      }
+
+      function seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax) {
+        return characters.map(character =&gt; {
+          const scope = { kind: &#x27;character&#x27;, value: character };
+          return {
+            angle: mapRange(hashToUnitFloat(scope, &#x27;handle-angle&#x27;), rotationMin, rotationMax) * Math.PI / 180,
+            incomingLength: mapRange(hashToUnitFloat(scope, &#x27;incoming-handle-length&#x27;), handleLengthMin, handleLengthMax),
+            outgoingLength: mapRange(hashToUnitFloat(scope, &#x27;outgoing-handle-length&#x27;), handleLengthMin, handleLengthMax),
+            yShift: mapRange(hashToUnitFloat(scope, &#x27;point-y-shift&#x27;), yShiftMin, yShiftMax)
+          };
+        });
+      }
+
+      function pairGapWeight(leftCharacter, rightCharacter) {
+        return mapRange(hashToUnitFloat({
+          kind: &#x27;ordered-character-pair&#x27;,
+          left: { kind: &#x27;character&#x27;, value: leftCharacter },
+          right: { kind: &#x27;character&#x27;, value: rightCharacter }
+        }, &#x27;point-gap-weight&#x27;), .2, 1.8);
+      }
+
+      function smoothedHandleAngles(raw) {
+        const count = raw.length;
+        return raw.map((value, index) =&gt; {
+          const previous = raw[Math.max(0, index - 1)].angle;
+          const next = raw[Math.min(count - 1, index + 1)].angle;
+          return (previous + 2 * value.angle + next) / 4;
+        });
+      }
+
+      function isSerialDigit(character) {
+        return /^\d$/.test(character);
+      }
+
+      function geometryFor(characters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, useRandomHeight, serialMaxHeight, serialBaselineY, serialSpacing) {
+        const count = characters.length;
+        if (count === 0) return [];
+        const serialFlags = characters.map(isSerialDigit);
+        const serialDigitCount = serialFlags.filter(Boolean).length;
+        const hasSerialDigits = serialDigitCount &gt; 0;
+        const raw = seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax);
+        const smoothedAngles = smoothedHandleAngles(raw);
+        const lineStart = 60;
+        const lineEnd = 360;
+        const lineSpan = lineEnd - lineStart;
+        const targetSpan = count &lt;= 3 ? lineSpan * count / 4 : lineSpan;
+        const targetStart = center - targetSpan / 2;
+        const targetEnd = center + targetSpan / 2;
+
+        const identityPoint = (character, index, x) =&gt; {
+          const yShift = useRandomHeight ? raw[index].yShift : 0;
+          const anchor = [x, center + yShift];
+          const angle = smoothedAngles[index];
+          const direction = [Math.cos(angle), Math.sin(angle)];
+          return {
+            character,
+            uppercase: isUppercase(character),
+            serialTail: false,
+            anchor,
+            incoming: [anchor[0] - direction[0] * raw[index].incomingLength, anchor[1] - direction[1] * raw[index].incomingLength],
+            outgoing: [anchor[0] + direction[0] * raw[index].outgoingLength, anchor[1] + direction[1] * raw[index].outgoingLength]
+          };
+        };
+
+        const centerGeometry = points =&gt; {
+          const xValues = points.flatMap(point =&gt; [point.anchor[0], point.incoming[0], point.outgoing[0]]);
+          const geometryCenter = (Math.min(...xValues) + Math.max(...xValues)) / 2;
+          const shiftX = center - geometryCenter;
+          return points.map(point =&gt; ({
+            ...point,
+            anchor: [point.anchor[0] + shiftX, point.anchor[1]],
+            incoming: [point.incoming[0] + shiftX, point.incoming[1]],
+            outgoing: [point.outgoing[0] + shiftX, point.outgoing[1]]
+          }));
+        };
+
+        if (!hasSerialDigits) {
+          if (count === 1) {
+            return centerGeometry([
+              identityPoint(characters[0], 0, targetStart),
+              identityPoint(characters[0], 0, targetEnd)
+            ]);
+          }
+          const gapWeights = characters.slice(0, count - 1).map((character, index) =&gt; (
+            distribution === &#x27;average&#x27; ? 1 : pairGapWeight(character, characters[index + 1])
+          ));
+          const gapTotal = gapWeights.reduce((total, value) =&gt; total + value, 0);
+          const gaps = gapWeights.map(value =&gt; targetSpan * value / gapTotal);
+          const positions = [targetStart];
+          gaps.forEach(gap =&gt; positions.push(positions[positions.length - 1] + gap));
+          return centerGeometry(characters.map((character, index) =&gt; identityPoint(character, index, positions[index])));
+        }
+
+        const pulseHandle = serialSpacing * .28;
+        const pointYReferenceSpan = 50;
+        const pointYReferenceMidpoint = -15;
+        const pointYSpan = yShiftMax - yShiftMin;
+        const pointYMidpoint = (yShiftMin + yShiftMax) / 2;
+        const serialYScale = pointYSpan / pointYReferenceSpan;
+        const scaledSerialBaselineY = center + pointYMidpoint + (serialBaselineY - center - pointYReferenceMidpoint) * serialYScale;
+        const serialPoint = (character, x, y) =&gt; ({
+          character,
+          uppercase: false,
+          serialTail: true,
+          anchor: [x, y],
+          incoming: [x - pulseHandle, y],
+          outgoing: [x + pulseHandle, y]
+        });
+
+        const connectorGap = Math.min(24, serialSpacing * .6);
+        const flexibleBoundaries = [];
+        let transitionCount = 0;
+        for (let index = 0; index &lt; count - 1; index++) {
+          if (serialFlags[index] !== serialFlags[index + 1]) transitionCount++;
+          if (!serialFlags[index] &amp;&amp; !serialFlags[index + 1]) flexibleBoundaries.push(index);
+        }
+
+        const fixedWidth = serialDigitCount * serialSpacing + transitionCount * connectorGap;
+        const flexibleSpan = Math.max(0, targetSpan - fixedWidth);
+        const flexibleWeights = flexibleBoundaries.map(index =&gt; (
+          distribution === &#x27;average&#x27; ? 1 : pairGapWeight(characters[index], characters[index + 1])
+        ));
+        const flexibleTotal = flexibleWeights.reduce((total, value) =&gt; total + value, 0);
+        const flexibleAdvance = new Map(flexibleBoundaries.map((index, weightIndex) =&gt; [
+          index,
+          flexibleTotal &gt; 0 ? flexibleSpan * flexibleWeights[weightIndex] / flexibleTotal : 0
+        ]));
+        const usedWidth = fixedWidth + (flexibleBoundaries.length &gt; 0 ? flexibleSpan : 0);
+        let cursorX = center - usedWidth / 2;
+        const points = [];
+
+        characters.forEach((character, index) =&gt; {
+          if (serialFlags[index]) {
+            if (index === 0 || !serialFlags[index - 1]) {
+              points.push(serialPoint(character, cursorX, scaledSerialBaselineY));
+            }
+            const baseHeight = Number(character) / 9 * serialMaxHeight;
+            const scaledHeight = baseHeight * serialYScale;
+            points.push(serialPoint(character, cursorX + serialSpacing / 2, scaledSerialBaselineY - scaledHeight));
+            cursorX += serialSpacing;
+            points.push(serialPoint(character, cursorX, scaledSerialBaselineY));
+            if (index &lt; count - 1 &amp;&amp; !serialFlags[index + 1]) cursorX += connectorGap;
+          } else {
+            points.push(identityPoint(character, index, cursorX));
+            if (index &lt; count - 1) {
+              cursorX += serialFlags[index + 1] ? connectorGap : flexibleAdvance.get(index) || 0;
+            }
+          }
+        });
+
+        return centerGeometry(points);
+      }
+
+      function cubicPoint(p0, p1, p2, p3, t) {
+        const u = 1 - t;
+        const a = u * u * u;
+        const b = 3 * u * u * t;
+        const c = 3 * u * t * t;
+        const d = t * t * t;
+        return [
+          a * p0[0] + b * p1[0] + c * p2[0] + d * p3[0],
+          a * p0[1] + b * p1[1] + c * p2[1] + d * p3[1]
+        ];
+      }
+
+      function cubicDerivative(p0, p1, p2, p3, t) {
+        const u = 1 - t;
+        return [
+          3 * u * u * (p1[0] - p0[0]) + 6 * u * t * (p2[0] - p1[0]) + 3 * t * t * (p3[0] - p2[0]),
+          3 * u * u * (p1[1] - p0[1]) + 6 * u * t * (p2[1] - p1[1]) + 3 * t * t * (p3[1] - p2[1])
+        ];
+      }
+
+      function smoothstep(t) {
+        return t * t * (3 - 2 * t);
+      }
+
+      function weightAt(point, baseWeight, uppercaseExtra) {
+        if (point.serialTail) return baseWeight;
+        if (point.character === &#x27;_&#x27;) return Math.min(baseWeight, .15);
+        return baseWeight + (point.uppercase ? uppercaseExtra : 0);
+      }
+
+      function pair(point) {
+        const format = value =&gt; (Math.abs(value) &lt; .005 ? 0 : value).toFixed(2);
+        return `${format(point[0])},${format(point[1])}`;
+      }
+
+      function widthBetween(current, next, t, baseWeight, uppercaseExtra) {
+        const startWeight = weightAt(current, baseWeight, uppercaseExtra);
+        const endWeight = weightAt(next, baseWeight, uppercaseExtra);
+        return startWeight + (endWeight - startWeight) * smoothstep(t);
+      }
+
+      function offsetPoint(current, next, t, side, baseWeight, uppercaseExtra) {
+        const position = cubicPoint(current.anchor, current.outgoing, next.incoming, next.anchor, t);
+        const derivative = cubicDerivative(current.anchor, current.outgoing, next.incoming, next.anchor, t);
+        const length = Math.hypot(derivative[0], derivative[1]) || 1;
+        const normal = [-derivative[1] / length, derivative[0] / length];
+        const halfWidth = widthBetween(current, next, t, baseWeight, uppercaseExtra) / 2;
+        return [
+          position[0] + normal[0] * halfWidth * side,
+          position[1] + normal[1] * halfWidth * side
+        ];
+      }
+
+      function centerPointsForOutline(points, baseWeight, uppercaseExtra) {
+        if (points.length &lt; 2) return points;
+        let minimumX = Infinity;
+        let maximumX = -Infinity;
+        const samples = 64;
+
+        for (let index = 0; index &lt; points.length - 1; index++) {
+          const current = points[index];
+          const next = points[index + 1];
+          for (let sample = 0; sample &lt;= samples; sample++) {
+            const t = sample / samples;
+            const outer = offsetPoint(current, next, t, 1, baseWeight, uppercaseExtra);
+            const inner = offsetPoint(current, next, t, -1, baseWeight, uppercaseExtra);
+            minimumX = Math.min(minimumX, outer[0], inner[0]);
+            maximumX = Math.max(maximumX, outer[0], inner[0]);
+          }
+        }
+
+        const shiftX = center - (minimumX + maximumX) / 2;
+        return points.map(point =&gt; ({
+          ...point,
+          anchor: [point.anchor[0] + shiftX, point.anchor[1]],
+          incoming: [point.incoming[0] + shiftX, point.incoming[1]],
+          outgoing: [point.outgoing[0] + shiftX, point.outgoing[1]]
+        }));
+      }
+
+      function centerPointsForCenterline(points) {
+        if (points.length &lt; 2) return points;
+        let minimumX = Infinity;
+        let maximumX = -Infinity;
+        const samples = 64;
+
+        for (let index = 0; index &lt; points.length - 1; index++) {
+          const current = points[index];
+          const next = points[index + 1];
+          for (let sample = 0; sample &lt;= samples; sample++) {
+            const position = cubicPoint(current.anchor, current.outgoing, next.incoming, next.anchor, sample / samples);
+            minimumX = Math.min(minimumX, position[0]);
+            maximumX = Math.max(maximumX, position[0]);
+          }
+        }
+
+        const shiftX = center - (minimumX + maximumX) / 2;
+        return points.map(point =&gt; ({
+          ...point,
+          anchor: [point.anchor[0] + shiftX, point.anchor[1]],
+          incoming: [point.incoming[0] + shiftX, point.incoming[1]],
+          outgoing: [point.outgoing[0] + shiftX, point.outgoing[1]]
+        }));
+      }
+
+      function sampledVariableWidthPath(points, baseWeight, uppercaseExtra) {
+        if (points.length &lt; 2) return &#x27;&#x27;;
+        const outer = [];
+        const inner = [];
+        const samplesPerSegment = Math.max(8, Math.min(32, Math.ceil(240 / points.length)));
+        const segmentCount = points.length - 1;
+
+        function sampleSegment(current, next, t, startWeight, endWeight) {
+          const position = cubicPoint(current.anchor, current.outgoing, next.incoming, next.anchor, t);
+          const derivative = cubicDerivative(current.anchor, current.outgoing, next.incoming, next.anchor, t);
+          const length = Math.hypot(derivative[0], derivative[1]) || 1;
+          const normal = [-derivative[1] / length, derivative[0] / length];
+          const width = startWeight + (endWeight - startWeight) * smoothstep(t);
+          const half = width / 2;
+          outer.push([position[0] + normal[0] * half, position[1] + normal[1] * half]);
+          inner.push([position[0] - normal[0] * half, position[1] - normal[1] * half]);
+        }
+
+        for (let index = 0; index &lt; segmentCount; index++) {
+          const current = points[index];
+          const next = points[index + 1];
+          const startWeight = weightAt(current, baseWeight, uppercaseExtra);
+          const endWeight = weightAt(next, baseWeight, uppercaseExtra);
+
+          for (let sample = 0; sample &lt; samplesPerSegment; sample++) {
+            sampleSegment(current, next, sample / samplesPerSegment, startWeight, endWeight);
+          }
+        }
+
+        const current = points[points.length - 2];
+        const next = points[points.length - 1];
+        sampleSegment(current, next, 1, weightAt(current, baseWeight, uppercaseExtra), weightAt(next, baseWeight, uppercaseExtra));
+        return `M${outer.map(pair).join(&#x27;L&#x27;)}L${inner.reverse().map(pair).join(&#x27;L&#x27;)}Z`;
+      }
+
+      function cubicThroughThirds(start, oneThird, twoThirds, end) {
+        const first = [
+          27 * oneThird[0] - 8 * start[0] - end[0],
+          27 * oneThird[1] - 8 * start[1] - end[1]
+        ];
+        const second = [
+          27 * twoThirds[0] - start[0] - 8 * end[0],
+          27 * twoThirds[1] - start[1] - 8 * end[1]
+        ];
+        return {
+          control1: [(2 * first[0] - second[0]) / 18, (2 * first[1] - second[1]) / 18],
+          control2: [(2 * second[0] - first[0]) / 18, (2 * second[1] - first[1]) / 18]
+        };
+      }
+
+      function bezierVariableWidthPath(points, baseWeight, uppercaseExtra) {
+        if (points.length &lt; 2) return &#x27;&#x27;;
+        const lastSegment = points.length - 2;
+        const firstOuter = offsetPoint(points[0], points[1], 0, 1, baseWeight, uppercaseExtra);
+        let path = `M${pair(firstOuter)}`;
+
+        for (let index = 0; index &lt;= lastSegment; index++) {
+          const current = points[index];
+          const next = points[index + 1];
+          const start = offsetPoint(current, next, 0, 1, baseWeight, uppercaseExtra);
+          const oneThird = offsetPoint(current, next, 1 / 3, 1, baseWeight, uppercaseExtra);
+          const twoThirds = offsetPoint(current, next, 2 / 3, 1, baseWeight, uppercaseExtra);
+          const end = offsetPoint(current, next, 1, 1, baseWeight, uppercaseExtra);
+          const controls = cubicThroughThirds(start, oneThird, twoThirds, end);
+          path += `C${pair(controls.control1)} ${pair(controls.control2)} ${pair(end)}`;
+        }
+
+        const finalInner = offsetPoint(points[lastSegment], points[lastSegment + 1], 1, -1, baseWeight, uppercaseExtra);
+        path += `L${pair(finalInner)}`;
+
+        for (let index = lastSegment; index &gt;= 0; index--) {
+          const current = points[index];
+          const next = points[index + 1];
+          const start = offsetPoint(current, next, 0, -1, baseWeight, uppercaseExtra);
+          const oneThird = offsetPoint(current, next, 1 / 3, -1, baseWeight, uppercaseExtra);
+          const twoThirds = offsetPoint(current, next, 2 / 3, -1, baseWeight, uppercaseExtra);
+          const end = offsetPoint(current, next, 1, -1, baseWeight, uppercaseExtra);
+          const controls = cubicThroughThirds(start, oneThird, twoThirds, end);
+          path += `C${pair(controls.control2)} ${pair(controls.control1)} ${pair(start)}`;
+        }
+
+        return `${path}Z`;
+      }
+
+      function variableWidthPath(points, baseWeight, uppercaseExtra, pathMode) {
+        return pathMode === &#x27;bezier&#x27;
+          ? bezierVariableWidthPath(points, baseWeight, uppercaseExtra)
+          : sampledVariableWidthPath(points, baseWeight, uppercaseExtra);
+      }
+
+      function pureBezierPath(points) {
+        if (points.length &lt; 2) return &#x27;&#x27;;
+        let path = `M${pair(points[0].anchor)}`;
+        for (let index = 0; index &lt; points.length - 1; index++) {
+          const current = points[index];
+          const next = points[index + 1];
+          path += `C${pair(current.outgoing)} ${pair(next.incoming)} ${pair(next.anchor)}`;
+        }
+        return path;
+      }
+
+      function addBackground(svg) {
+        svg.appendChild(element(&#x27;rect&#x27;, { class: &#x27;tsbl-egg&#x27;, x: 0, y: 0, width: 420, height: 420 }));
+      }
+
+      function addEmptyMessage(svg) {
+        const message = element(&#x27;text&#x27;, { class: &#x27;tsbl-empty&#x27;, x: center, y: center });
+        message.textContent = &#x27;Enter at least 2 characters&#x27;;
+        svg.appendChild(message);
+      }
+
+      function drawCanvasText(svg, text, x, y, textSize, textWeight) {
+        const label = element(&#x27;text&#x27;, { class: &#x27;tsbl-canvas-text&#x27;, x, y, &#x27;font-size&#x27;: textSize, &#x27;font-weight&#x27;: textWeight, &#x27;dominant-baseline&#x27;: &#x27;middle&#x27; });
+        label.textContent = `@${text}`;
+        svg.appendChild(label);
+      }
+
+      function drawFinal(svg, points, weight, uppercaseExtra, renderMode, text, textSize, textWeight) {
+        svg.replaceChildren();
+        addBackground(svg);
+        if (points.length &lt; 2) {
+          addEmptyMessage(svg);
+        } else if (renderMode === &#x27;pure-bezier&#x27;) {
+          const centeredPoints = centerPointsForCenterline(points);
+          svg.appendChild(element(&#x27;path&#x27;, {
+            class: &#x27;tsbl-pure&#x27;,
+            d: pureBezierPath(centeredPoints),
+            &#x27;stroke-width&#x27;: weight
+          }));
+        } else {
+          const centeredPoints = centerPointsForOutline(points, weight, uppercaseExtra);
+          const pathMode = renderMode === &#x27;outline-bezier&#x27; ? &#x27;bezier&#x27; : &#x27;sampled&#x27;;
+          svg.appendChild(element(&#x27;path&#x27;, { class: &#x27;tsbl-variable&#x27;, d: variableWidthPath(centeredPoints, weight, uppercaseExtra, pathMode) }));
+        }
+        drawCanvasText(svg, text, canvasTextX, canvasTextY, textSize, textWeight);
+      }
+
+      function currentSettings() {
+        const mode = {
+          &#x27;outline-bezier&#x27;: &#x27;variable_bezier_outline&#x27;,
+          &#x27;pure-bezier&#x27;: &#x27;pure_cubic_bezier_stroke&#x27;,
+          &#x27;outline-sampled&#x27;: &#x27;variable_sampled_outline&#x27;
+        }[pathModeSelect.value];
+        return {
+          schema: &#x27;personal-field.settings.v1&#x27;,
+          system: {
+            id: &#x27;personal-field&#x27;,
+            version: specificationVersion,
+            random_scheme: randomScheme,
+            random_namespace: randomNamespace,
+            input_contract: &#x27;ascii-x-handle-v1&#x27;,
+            svg_serialization: &#x27;personal-field-svg-v1&#x27;
+          },
+          input: {
+            pattern: &#x27;^[A-Za-z0-9_]{1,15}$&#x27;,
+            display_prefix: &#x27;@&#x27;
+          },
+          canvas: {
+            width: 420,
+            height: 420,
+            background: &#x27;#f2ead6&#x27;,
+            ink: &#x27;#11110f&#x27;,
+            text: {
+              x: 210,
+              y: 399,
+              size_px: Number(textSizeInput.value),
+              weight: Number(textWeightInput.value),
+              anchor: &#x27;middle&#x27;,
+              dominant_baseline: &#x27;middle&#x27;,
+              font_family: &#x27;-apple-system, system-ui, Segoe UI, sans-serif&#x27;
+            }
+          },
+          geometry: {
+            point_distribution: randomDistributionEnabled ? &#x27;random&#x27; : &#x27;average&#x27;,
+            random_point_height: randomHeightEnabled,
+            line_start_x: 60,
+            line_end_x: 360,
+            short_text_span_denominator: 4,
+            gap_weight_range: [.2, 1.8],
+            handle_rotation_degrees: [Number(angleMinInput.value), Number(angleMaxInput.value)],
+            handle_length_px: [Number(handleLengthMinInput.value), Number(handleLengthMaxInput.value)],
+            point_y_shift_px: [Number(yShiftMinInput.value), Number(yShiftMaxInput.value)],
+            angle_smoothing_weights: [1, 2, 1],
+            centering_samples_per_segment: 64
+          },
+          serial: {
+            maximum_pulse_height_px: Number(serialMaxHeightInput.value),
+            baseline_y: Number(serialBaselineYInput.value),
+            spacing_px: Number(serialSpacingInput.value),
+            pulse_handle_spacing_factor: .28,
+            connector_gap_max_px: 24,
+            connector_spacing_factor: .6,
+            point_y_reference_span_px: 50,
+            point_y_reference_midpoint_px: -15
+          },
+          stroke: {
+            base_weight_px: Number(weightInput.value),
+            uppercase_extra_weight_px: Number(uppercaseWeightInput.value),
+            underscore_max_weight_px: .15,
+            weight_easing: &#x27;smoothstep&#x27;
+          },
+          path: {
+            mode,
+            coordinate_decimals: 2,
+            sampled_outline_target_samples: 240,
+            sampled_outline_min_samples_per_segment: 8,
+            sampled_outline_max_samples_per_segment: 32
+          },
+          render: {
+            canonical_format: &#x27;svg&#x27;,
+            preview_format: &#x27;png&#x27;,
+            preview_width: 420,
+            preview_height: 420,
+            preview_is_canonical: false
+          }
+        };
+      }
+
+      function pythonGeneratorSettings(settings) {
+        const generatorSettings = {
+          input_pattern: settings.input.pattern,
+          display_prefix: settings.input.display_prefix,
+          random_scheme: settings.system.random_scheme,
+          random_namespace: settings.system.random_namespace,
+          canvas_size: settings.canvas.width,
+          background: settings.canvas.background,
+          ink: settings.canvas.ink,
+          canvas_text_x: settings.canvas.text.x,
+          canvas_text_y: settings.canvas.text.y,
+          canvas_text_size_px: settings.canvas.text.size_px,
+          canvas_text_weight: settings.canvas.text.weight,
+          font_family: settings.canvas.text.font_family,
+          line_start_x: settings.geometry.line_start_x,
+          line_end_x: settings.geometry.line_end_x,
+          short_text_span_denominator: settings.geometry.short_text_span_denominator,
+          handle_rotation_degrees: settings.geometry.handle_rotation_degrees,
+          handle_length_px: settings.geometry.handle_length_px,
+          point_y_shift_px: settings.geometry.point_y_shift_px,
+          centering_samples_per_segment: settings.geometry.centering_samples_per_segment,
+          serial_maximum_pulse_height_px: settings.serial.maximum_pulse_height_px,
+          serial_baseline_y: settings.serial.baseline_y,
+          serial_spacing_px: settings.serial.spacing_px,
+          pulse_handle_spacing_factor: settings.serial.pulse_handle_spacing_factor,
+          connector_gap_max_px: settings.serial.connector_gap_max_px,
+          connector_spacing_factor: settings.serial.connector_spacing_factor,
+          point_y_reference_span_px: settings.serial.point_y_reference_span_px,
+          point_y_reference_midpoint_px: settings.serial.point_y_reference_midpoint_px,
+          base_weight_px: settings.stroke.base_weight_px
+        };
+        if (settings.geometry.point_distribution === &#x27;random&#x27;) {
+          generatorSettings.gap_weight_range = settings.geometry.gap_weight_range;
+        }
+        if (settings.path.mode !== &#x27;pure_cubic_bezier_stroke&#x27;) {
+          generatorSettings.uppercase_extra_weight_px = settings.stroke.uppercase_extra_weight_px;
+          generatorSettings.underscore_max_weight_px = settings.stroke.underscore_max_weight_px;
+        }
+        if (settings.path.mode === &#x27;variable_sampled_outline&#x27;) {
+          generatorSettings.sampled_outline_target_samples = settings.path.sampled_outline_target_samples;
+          generatorSettings.sampled_outline_min_samples_per_segment = settings.path.sampled_outline_min_samples_per_segment;
+          generatorSettings.sampled_outline_max_samples_per_segment = settings.path.sampled_outline_max_samples_per_segment;
+        }
+        return generatorSettings;
+      }
+
+      function noCodeGeneratorSettings(settings) {
+        const geometry = settings.geometry;
+        const serial = settings.serial;
+        const stroke = settings.stroke;
+        const canvasCenter = [settings.canvas.width / 2, settings.canvas.height / 2];
+        const normalSpan = geometry.line_end_x - geometry.line_start_x;
+        const pointYSpan = geometry.point_y_shift_px[1] - geometry.point_y_shift_px[0];
+        const pointYMidpoint = (geometry.point_y_shift_px[0] + geometry.point_y_shift_px[1]) / 2;
+        const serialYScale = pointYSpan / serial.point_y_reference_span_px;
+        const resolvedSerialBaseline = canvasCenter[1] + pointYMidpoint
+          + (serial.baseline_y - canvasCenter[1] - serial.point_y_reference_midpoint_px) * serialYScale;
+        const activeCharacterMappings = [
+          { label: &#x27;handle-angle&#x27;, minimum: geometry.handle_rotation_degrees[0], maximum: geometry.handle_rotation_degrees[1], mapped_unit: &#x27;degrees&#x27; },
+          { label: &#x27;incoming-handle-length&#x27;, minimum: geometry.handle_length_px[0], maximum: geometry.handle_length_px[1], mapped_unit: &#x27;px&#x27; },
+          { label: &#x27;outgoing-handle-length&#x27;, minimum: geometry.handle_length_px[0], maximum: geometry.handle_length_px[1], mapped_unit: &#x27;px&#x27; }
+        ];
+        if (geometry.random_point_height) {
+          activeCharacterMappings.push({ label: &#x27;point-y-shift&#x27;, minimum: geometry.point_y_shift_px[0], maximum: geometry.point_y_shift_px[1], mapped_unit: &#x27;px&#x27; });
+        }
+        const activeOrderedPairMappings = geometry.point_distribution === &#x27;random&#x27;
+          ? [{ label: &#x27;point-gap-weight&#x27;, minimum: geometry.gap_weight_range[0], maximum: geometry.gap_weight_range[1], mapped_unit: &#x27;unitless&#x27; }]
+          : [];
+        const conformanceScope = { kind: &#x27;character&#x27;, value: &#x27;A&#x27; };
+        const conformanceParameter = &#x27;handle-angle&#x27;;
+        const conformancePayloadObject = {
+          namespace: settings.system.random_namespace,
+          parameter: conformanceParameter,
+          scheme: settings.system.random_scheme,
+          scope: conformanceScope
+        };
+        const conformancePayload = canonicalJson(conformancePayloadObject);
+        const conformanceDigest = sha256Bytes(conformancePayload);
+        const conformanceDigestHex = Array.from(conformanceDigest, byte =&gt; byte.toString(16).padStart(2, &#x27;0&#x27;)).join(&#x27;&#x27;);
+        const conformanceView = new DataView(conformanceDigest.buffer, conformanceDigest.byteOffset, conformanceDigest.byteLength);
+        const conformanceU53 = conformanceView.getUint32(0, false) * 2097152 + (conformanceView.getUint32(4, false) &gt;&gt;&gt; 11);
+        const conformanceUnit = conformanceU53 / 9007199254740992;
+        const conformanceExactDecimalDigits = (BigInt(conformanceU53) * 5n ** 53n).toString().padStart(53, &#x27;0&#x27;);
+        const conformanceExactDecimal = `0.${conformanceExactDecimalDigits}`;
+        const selected = {
+          specification: {
+            type: &#x27;exact declarative deterministic-construction protocol&#x27;,
+            spec_version: settings.system.version,
+            spec_hash: noCodeSpecificationHashPlaceholder,
+            execution_mode: &#x27;Perform the ordered calculation steps directly from the natural-language and JSON rules. No program source is included or required.&#x27;,
+            precision: &#x27;Every rule, formula, semantic random label, and selected numeric value below is canonical and exact.&#x27;,
+            selected_options_only: true
+          },
+          execution_protocol: {
+            role: &#x27;Act as a deterministic geometry processor, not as a creative image-prompt interpreter.&#x27;,
+            strict_order_required: true,
+            internal_calculation_ledger_required: true,
+            internal_calculation_ledger_visibility: &#x27;Keep intermediate values internal unless the requester explicitly asks to inspect them.&#x27;,
+            phases: [
+              &#x27;0. Reproduce the supplied PRNG conformance vector exactly. Stop on any mismatch.&#x27;,
+              &#x27;1. Acquire, normalize, and validate the username seed.&#x27;,
+              &#x27;2. Enumerate every active unique character scope and active ordered-character-pair scope.&#x27;,
+              &#x27;3. Calculate every labeled SHA-256 U53 value, materialize its numeric ledger record, and map it into its selected range.&#x27;,
+              &#x27;4. Build the raw per-character value table, then calculate neighbor-smoothed angles.&#x27;,
+              &#x27;5. Calculate target span, character advances, serial digit pulses, anchors, handles, and point weights.&#x27;,
+              &#x27;6. Perform the initial complete anchor-and-handle X centering.&#x27;,
+              &#x27;7. Evaluate the selected cubic geometry and perform its selected final centering procedure.&#x27;,
+              &#x27;8. Construct the selected path commands, round coordinates, and assemble the exact SVG elements.&#x27;,
+              `9. Only after the SVG is complete, rasterize that SVG directly to a ${settings.canvas.width} by ${settings.canvas.height} PNG with a vector renderer and return that PNG.`
+            ],
+            render_gate: &#x27;Do not render or request an image before phases 0 through 8 are complete and the full deterministic SVG geometry exists.&#x27;,
+            required_renderer: `An SVG/vector renderer applied directly to the constructed SVG at exactly ${settings.canvas.width} by ${settings.canvas.height} output pixels.`,
+            output_format: &#x27;PNG&#x27;,
+            output_pixel_width: settings.canvas.width,
+            output_pixel_height: settings.canvas.height,
+            scaling_rule: &#x27;Rasterize the SVG directly at the final pixel dimensions. Do not create an intermediate bitmap, upscale, downscale, stretch, resample, screenshot, or crop it.&#x27;,
+            prohibited_renderer: &#x27;Do not use text-to-image, diffusion, generative image synthesis, handwriting generation, or a visual interpretation model to invent the main mark.&#x27;,
+            main_mark_rule: &#x27;The main mark is only the computed SVG path. It must never spell, trace, resemble, or redraw the username as readable lettering.&#x27;,
+            text_rule: &#x27;The only readable username is the small bottom SVG text label defined below.&#x27;,
+            forbidden_substitutions: [&#x27;calligraphy&#x27;, &#x27;handwriting&#x27;, &#x27;letterforms in the main mark&#x27;, &#x27;signature-style name drawing&#x27;, &#x27;underline flourish&#x27;, &#x27;decorative stroke&#x27;, &#x27;approximate curve&#x27;, &#x27;invented geometry&#x27;],
+            failure_policy: &#x27;If any exact calculation or vector-construction step cannot be performed, do not substitute an image-generation approximation. Report that deterministic construction is unavailable.&#x27;
+          },
+          prng_conformance_test: {
+            must_pass_before_processing_username: true,
+            scope: conformanceScope,
+            parameter: conformanceParameter,
+            canonical_payload_text: conformancePayload,
+            expected_sha256_hex: conformanceDigestHex,
+            expected_u53_integer: conformanceU53,
+            expected_unit_value_exact_fraction: `${conformanceU53}/9007199254740992`,
+            expected_unit_value_exact_decimal: conformanceExactDecimal,
+            expected_unit_value_binary64_display: conformanceUnit,
+            selected_mapping_range: geometry.handle_rotation_degrees,
+            expected_mapped_handle_angle_degrees: mapRange(conformanceUnit, geometry.handle_rotation_degrees[0], geometry.handle_rotation_degrees[1]),
+            comparison_rule: &#x27;The canonical payload text, SHA-256 hex digest, and U53 integer must match exactly. Treat the fraction as the authoritative unit value; a shorter decimal display may be rounded. The mapped angle must equal the stated range formula evaluated from that fraction. Stop on any substantive mismatch; do not approximate.&#x27;
+          },
+          value_materialization: {
+            mandatory_before_geometry: true,
+            range_mapping_formula: &#x27;mapped = minimum + unit_value * (maximum - minimum).&#x27;,
+            active_character_parameters: activeCharacterMappings,
+            active_ordered_pair_parameters: activeOrderedPairMappings,
+            character_table_key: &#x27;One entry for every unique exact case-sensitive character.&#x27;,
+            ordered_pair_table_key: geometry.point_distribution === &#x27;random&#x27;
+              ? &#x27;One entry for every unique active ordered non-digit-to-non-digit neighboring pair.&#x27;
+              : &#x27;No ordered-pair random table is active for the selected average distribution.&#x27;,
+            required_numeric_record_fields: [&#x27;canonical_payload_text&#x27;, &#x27;sha256_hex&#x27;, &#x27;u53_integer&#x27;, &#x27;unit_value&#x27;, &#x27;minimum&#x27;, &#x27;maximum&#x27;, &#x27;mapped_value&#x27;],
+            character_record_schema: {
+              &#x27;&lt;exact character&gt;&#x27;: {
+                &#x27;&lt;active parameter label&gt;&#x27;: {
+                  canonical_payload_text: &#x27;&lt;calculated canonical JSON text&gt;&#x27;,
+                  sha256_hex: &#x27;&lt;calculated 64-character lowercase hexadecimal digest&gt;&#x27;,
+                  u53_integer: &#x27;&lt;calculated integer&gt;&#x27;,
+                  unit_value: &#x27;&lt;calculated full-precision number in [0,1)&gt;&#x27;,
+                  minimum: &#x27;&lt;selected numeric minimum&gt;&#x27;,
+                  maximum: &#x27;&lt;selected numeric maximum&gt;&#x27;,
+                  mapped_value: &#x27;&lt;minimum + unit_value * (maximum - minimum)&gt;&#x27;
+                }
+              }
+            },
+            ordered_pair_record_schema: {
+              &#x27;&lt;left exact character&gt;→&lt;right exact character&gt;&#x27;: {
+                &#x27;point-gap-weight&#x27;: {
+                  canonical_payload_text: &#x27;&lt;calculated canonical JSON text&gt;&#x27;,
+                  sha256_hex: &#x27;&lt;calculated 64-character lowercase hexadecimal digest&gt;&#x27;,
+                  u53_integer: &#x27;&lt;calculated integer&gt;&#x27;,
+                  unit_value: &#x27;&lt;calculated full-precision number in [0,1)&gt;&#x27;,
+                  minimum: &#x27;&lt;selected numeric minimum&gt;&#x27;,
+                  maximum: &#x27;&lt;selected numeric maximum&gt;&#x27;,
+                  mapped_value: &#x27;&lt;minimum + unit_value * (maximum - minimum)&gt;&#x27;
+                }
+              }
+            },
+            completion_gate: &#x27;Every active record must contain numeric u53_integer, unit_value, minimum, maximum, and mapped_value fields before any anchor, handle, gap, or curve coordinate is calculated.&#x27;,
+            consumption_rule: &#x27;All later geometry must consume the stored mapped_value fields. No later value may be selected by taste, visual balance, language meaning, or aesthetic judgment.&#x27;
+          },
+          input: {
+            source: &#x27;X username of the account that authored the current request&#x27;,
+            normalization: &#x27;Remove exactly one leading @. Do not alter the remaining case or characters.&#x27;,
+            validation_pattern: settings.input.pattern,
+            case_sensitive: true,
+            display_prefix: settings.input.display_prefix,
+            seed_excludes_display_prefix: true
+          },
+          deterministic_mapping: {
+            hash_algorithm: &#x27;SHA-256&#x27;,
+            scheme: settings.system.random_scheme,
+            namespace: settings.system.random_namespace,
+            spec_version_and_hash_are_prng_inputs: false,
+            canonical_payload: {
+              fields: [&#x27;namespace&#x27;, &#x27;parameter&#x27;, &#x27;scheme&#x27;, &#x27;scope&#x27;],
+              serialization: &#x27;UTF-8 JSON with object keys sorted recursively, compact comma and colon separators, and Unicode characters preserved rather than ASCII-escaped.&#x27;
+            },
+            digest_formula: &#x27;digest = SHA256(UTF8(canonical_JSON(payload))).&#x27;,
+            digest_extraction: &#x27;Read digest bytes 0 through 7 as one unsigned 64-bit big-endian integer, shift that integer right by 11 bits, and keep the resulting first 53 digest bits.&#x27;,
+            divisor_2_pow_53: 9007199254740992,
+            unit_value_formula: &#x27;u = (unsigned_big_endian_integer(digest_bytes_0_through_7) shifted right by 11) / 9007199254740992. The result is in [0,1).&#x27;,
+            range_mapping_formula: &#x27;mapped = minimum + u * (maximum - minimum). Do not quantize mapped values before the final SVG coordinate serialization.&#x27;,
+            index_rule: &#x27;Character indices are never part of a random scope.&#x27;,
+            character_scope: { kind: &#x27;character&#x27;, value: &#x27;&lt;exact case-sensitive character&gt;&#x27; },
+            ordered_pair_scope: {
+              kind: &#x27;ordered-character-pair&#x27;,
+              left: { kind: &#x27;character&#x27;, value: &#x27;&lt;left exact character&gt;&#x27; },
+              right: { kind: &#x27;character&#x27;, value: &#x27;&lt;right exact character&gt;&#x27; }
+            },
+            character_parameter_labels: {
+              handle_angle: &#x27;handle-angle&#x27;,
+              incoming_handle_length: &#x27;incoming-handle-length&#x27;,
+              outgoing_handle_length: &#x27;outgoing-handle-length&#x27;
+            },
+            ordered_pair_parameter_label: &#x27;point-gap-weight&#x27;,
+            repetition_rule: &#x27;The same exact character always receives the same raw value for every active character parameter. A final smoothed handle angle can still differ between repeated characters because its immediate neighbors participate in smoothing.&#x27;
+          },
+          canvas: {
+            coordinate_width: settings.canvas.width,
+            coordinate_height: settings.canvas.height,
+            center: canvasCenter,
+            target_render_width: settings.render.preview_width,
+            target_render_height: settings.render.preview_height,
+            background: settings.canvas.background,
+            ink: settings.canvas.ink
+          },
+          character_geometry: {
+            reading_order: &#x27;Left to right over every validated input character, including digits.&#x27;,
+            handle_angle_range_degrees: geometry.handle_rotation_degrees,
+            incoming_handle_length_range_px: geometry.handle_length_px,
+            outgoing_handle_length_range_px: geometry.handle_length_px,
+            raw_angle_formula: &#x27;raw_angle_radians = mapped_handle_angle_degrees * pi / 180.&#x27;,
+            angle_smoothing: &#x27;For original character position i, smoothed_angle[i] = (raw_angle[max(0,i-1)] + 2*raw_angle[i] + raw_angle[min(count-1,i+1)]) / 4. Use ordinary arithmetic on the angle values; do not use circular wrapping.&#x27;,
+            angle_smoothing_weights: geometry.angle_smoothing_weights,
+            direction_formula: &#x27;direction = [cos(smoothed_angle), sin(smoothed_angle)].&#x27;,
+            anchor: geometry.random_point_height
+              ? &#x27;Anchor X is the assigned horizontal position. Anchor Y is canvas-center Y plus the character point-Y shift.&#x27;
+              : &#x27;Anchor X is the assigned horizontal position. Anchor Y is canvas-center Y with no character point-Y shift.&#x27;,
+            incoming_handle_formula: &#x27;incoming = anchor - direction * mapped_incoming_length.&#x27;,
+            outgoing_handle_formula: &#x27;outgoing = anchor + direction * mapped_outgoing_length.&#x27;,
+            digit_neighbor_effect: &#x27;Digits receive the same raw angle values and therefore influence smoothing of adjacent non-digit character angles, even though digit anchors are replaced by pulse geometry.&#x27;
+          },
+          horizontal_layout: {
+            normal_start_x: geometry.line_start_x,
+            normal_end_x: geometry.line_end_x,
+            normal_span_px: normalSpan,
+            selected_distribution: geometry.point_distribution,
+            target_span_rule: &#x27;For one, two, or three input characters, target span equals normal span multiplied by character count and divided by the short-text denominator. For four or more characters, target span equals the normal span.&#x27;,
+            short_text_denominator: geometry.short_text_span_denominator,
+            short_spans_px: {
+              one_character: normalSpan / geometry.short_text_span_denominator,
+              two_characters: normalSpan * 2 / geometry.short_text_span_denominator,
+              three_characters: normalSpan * 3 / geometry.short_text_span_denominator
+            },
+            target_bounds: &#x27;Target start and end are canvas-center X minus and plus half of target span.&#x27;,
+            one_non_digit_character_rule: &#x27;Only when the input contains no digits and has exactly one character: create two identity points controlled by that same character, one at target start and one at target end, producing one visible cubic segment.&#x27;,
+            one_digit_character_rule: &#x27;A one-character digit input does not use identity-point duplication. It creates one baseline-peak-baseline pulse, which is three serial anchors and two cubic segments.&#x27;,
+            initial_centering: &#x27;After building every geometry point, collect the X coordinate of each anchor, incoming handle, and outgoing handle. Shift every one of those X coordinates by canvas-center X minus (minimum X plus maximum X)/2.&#x27;
+          },
+          serial_digits: {
+            recognized_anywhere: true,
+            point_y_reference_span_px: serial.point_y_reference_span_px,
+            point_y_reference_midpoint_px: serial.point_y_reference_midpoint_px,
+            selected_maximum_height_px: serial.maximum_pulse_height_px,
+            selected_baseline_y: serial.baseline_y,
+            selected_spacing_px: serial.spacing_px,
+            point_y_control_range_px: geometry.point_y_shift_px,
+            pulse_handle_spacing_factor: serial.pulse_handle_spacing_factor,
+            pulse_handle_length_px: serial.spacing_px * serial.pulse_handle_spacing_factor,
+            connector_gap_max_px: serial.connector_gap_max_px,
+            connector_spacing_factor: serial.connector_spacing_factor,
+            resolved_connector_gap_px: Math.min(serial.connector_gap_max_px, serial.spacing_px * serial.connector_spacing_factor),
+            point_y_scale: serialYScale,
+            resolved_baseline_y: resolvedSerialBaseline,
+            resolved_maximum_height_px: serial.maximum_pulse_height_px * serialYScale,
+            point_y_scale_formula: &#x27;point_y_scale = (point_y_max - point_y_min) / point_y_reference_span.&#x27;,
+            point_y_midpoint_formula: &#x27;point_y_midpoint = (point_y_min + point_y_max) / 2.&#x27;,
+            baseline_formula: &#x27;resolved_baseline_y = canvas_center_y + point_y_midpoint + (selected_baseline_y - canvas_center_y - point_y_reference_midpoint) * point_y_scale.&#x27;,
+            height_formula: &#x27;resolved_digit_height = (digit_value / 9) * selected_maximum_height * point_y_scale; peak_y = resolved_baseline_y - resolved_digit_height. Zero has exactly zero height and nine reaches the resolved maximum.&#x27;,
+            pulse_geometry: &#x27;At the start of a digit run, add a baseline point. For each digit, add a peak half one serial spacing later and a baseline point one full serial spacing later. Every pulse handle is horizontal and extends the pulse-handle length to both sides.&#x27;,
+            digit_run_anchor_count: &#x27;A consecutive run of k digits creates exactly 2*k + 1 serial anchors.&#x27;,
+            consecutive_rule: &#x27;Consecutive digits share the baseline point between pulses and form one continuous equally spaced serial sequence.&#x27;,
+            random_y_rule: &#x27;Never add the character point-Y random shift to pulse anchors.&#x27;,
+            stroke_weight_rule: &#x27;Every digit pulse uses the base lowercase stroke weight with no taper.&#x27;
+          },
+          stroke_width: {
+            base_weight_px: stroke.base_weight_px,
+            serial_weight_px: stroke.base_weight_px,
+            interpolation: &#x27;Between two neighboring geometry points, interpolate their weights with smoothstep: t squared multiplied by three minus two t.&#x27;
+          },
+          selected_path: {
+            mode: settings.path.mode,
+            coordinate_decimals: settings.path.coordinate_decimals
+          },
+          label: {
+            content: &#x27;One @ followed by the exact input username. The @ is display-only.&#x27;,
+            x: settings.canvas.text.x,
+            y: settings.canvas.text.y,
+            size_px: settings.canvas.text.size_px,
+            weight: settings.canvas.text.weight,
+            color: settings.canvas.ink,
+            horizontal_anchor: settings.canvas.text.anchor,
+            dominant_baseline: settings.canvas.text.dominant_baseline,
+            font_family: settings.canvas.text.font_family
+          },
+          serialization: {
+            coordinate_rounding: &#x27;For every path coordinate, first replace any value whose absolute value is below 0.005 with positive zero. Otherwise round the absolute binary floating-point value to exactly two decimal places with decimal ROUND_HALF_UP, restore a negative sign when needed, and retain two trailing decimal digits.&#x27;,
+            non_path_number_format: &#x27;Write an integer without a decimal point; otherwise write the ordinary decimal representation.&#x27;,
+            svg_element_order: [&#x27;svg root&#x27;, &#x27;full-canvas background rect&#x27;, &#x27;signature path&#x27;, &#x27;bottom text&#x27;],
+            svg_root: {
+              viewBox: [0, 0, settings.canvas.width, settings.canvas.height],
+              width: settings.canvas.width,
+              height: settings.canvas.height,
+              namespace: &#x27;http://www.w3.org/2000/svg&#x27;
+            },
+            background_rect: { x: 0, y: 0, width: settings.canvas.width, height: settings.canvas.height, fill: settings.canvas.background },
+            rendered_output: {
+              format: &#x27;PNG&#x27;,
+              pixel_width: settings.canvas.width,
+              pixel_height: settings.canvas.height,
+              source: &#x27;The completed SVG rendered directly by a vector renderer.&#x27;,
+              resizing_after_render: false,
+              image_synthesis: false
+            },
+            image_count: 1,
+            response: &#x27;Return only the rendered artwork image. Do not include code, raw SVG, settings, an explanation, panel, frame, or mockup.&#x27;
+          }
+        };
+        if (geometry.random_point_height) {
+          selected.deterministic_mapping.character_parameter_labels.point_y_shift = &#x27;point-y-shift&#x27;;
+          selected.character_geometry.point_y_shift_range_px = geometry.point_y_shift_px;
+        } else {
+          selected.character_geometry.point_y_random_parameter_active = false;
+        }
+        if (geometry.point_distribution === &#x27;random&#x27;) {
+          selected.deterministic_mapping.repetition_rule += &#x27; The same ordered pair always receives the same gap weight.&#x27;;
+          selected.horizontal_layout.gap_weight_range = geometry.gap_weight_range;
+          selected.horizontal_layout.no_digit_gap_rule = &#x27;For each neighboring ordered character pair, map point-gap-weight into the selected gap range. Normalize all gap weights so their advances sum exactly to target span.&#x27;;
+          selected.horizontal_layout.flexible_gap_rule = &#x27;When digits are present, only non-digit to non-digit boundaries are flexible. Map and normalize their ordered-pair weights to fill the remaining flexible span.&#x27;;
+        } else {
+          delete selected.deterministic_mapping.ordered_pair_scope;
+          delete selected.deterministic_mapping.ordered_pair_parameter_label;
+          delete selected.value_materialization.ordered_pair_record_schema;
+          selected.horizontal_layout.no_digit_gap_rule = &#x27;All neighboring gaps are equal and sum exactly to target span.&#x27;;
+          selected.horizontal_layout.flexible_gap_rule = &#x27;When digits are present, divide the remaining flexible span equally among non-digit to non-digit boundaries.&#x27;;
+        }
+        selected.horizontal_layout.digit_mixed_layout = {
+          flexible_boundaries: &#x27;A boundary is flexible only when both neighboring original characters are non-digits.&#x27;,
+          transition_count: &#x27;Count every original boundary whose two characters differ in digit status.&#x27;,
+          fixed_width_formula: &#x27;fixed_width = digit_count * serial_spacing + transition_count * connector_gap.&#x27;,
+          flexible_span_formula: &#x27;flexible_span = max(0, target_span - fixed_width).&#x27;,
+          used_width_formula: &#x27;used_width = fixed_width + flexible_span when at least one flexible boundary exists; otherwise used_width = fixed_width.&#x27;,
+          start_cursor_formula: &#x27;cursor_x = canvas-center X - used_width/2.&#x27;,
+          non_digit_step: &#x27;Add one identity point at cursor_x. If followed by a digit, advance by connector_gap. If followed by a non-digit, advance by that boundary’s normalized flexible advance.&#x27;,
+          digit_step: &#x27;At the beginning of a digit run, add a baseline anchor at cursor_x. Add this digit’s peak at cursor_x + serial_spacing/2, advance cursor_x by serial_spacing, then add its baseline anchor at the new cursor_x. If the following character is a non-digit, then advance by connector_gap.&#x27;
+        };
+        if (settings.path.mode !== &#x27;pure_cubic_bezier_stroke&#x27;) {
+          selected.stroke_width.lowercase_weight_px = stroke.base_weight_px;
+          selected.stroke_width.uppercase_extra_weight_px = stroke.uppercase_extra_weight_px;
+          selected.stroke_width.uppercase_total_weight_px = stroke.base_weight_px + stroke.uppercase_extra_weight_px;
+          selected.stroke_width.underscore_weight_px = Math.min(stroke.base_weight_px, stroke.underscore_max_weight_px);
+          selected.stroke_width.character_weight_rule = &#x27;Digit points use base weight. Underscore uses the smaller of base weight and underscore maximum. Uppercase ASCII letters use base plus uppercase extra. Every other non-digit uses base weight.&#x27;;
+        } else {
+          selected.stroke_width = {
+            uniform_weight_px: stroke.base_weight_px,
+            rule: &#x27;Use this one width for the complete centerline stroke, including all digit-pulse segments.&#x27;
+          };
+        }
+        if (settings.path.mode === &#x27;variable_bezier_outline&#x27;) {
+          selected.selected_path.centerline_control_points = &#x27;For segment i: P0 = current anchor, P1 = current outgoing handle, P2 = following incoming handle, P3 = following anchor.&#x27;;
+          selected.selected_path.cubic_position_formula = &#x27;B(t) = (1-t)^3*P0 + 3*(1-t)^2*t*P1 + 3*(1-t)*t^2*P2 + t^3*P3.&#x27;;
+          selected.selected_path.cubic_derivative_formula = &#x27;D(t) = 3*(1-t)^2*(P1-P0) + 6*(1-t)*t*(P2-P1) + 3*t^2*(P3-P2).&#x27;;
+          selected.selected_path.width_formula = &#x27;s(t) = t^2*(3-2*t); W(t) = start_weight + (end_weight-start_weight)*s(t).&#x27;;
+          selected.selected_path.offset_formula = &#x27;Let L = hypot(Dx,Dy), but use L=1 when the derivative length is zero. N = [-Dy/L, Dx/L]. Offset(t,side) = B(t) + N*W(t)*side/2, where side is +1 outer or -1 inner.&#x27;;
+          selected.selected_path.visible_outline_centering = `For every segment and both sides, sample t = j/${geometry.centering_samples_per_segment} for every integer j from 0 through ${geometry.centering_samples_per_segment}, which is ${geometry.centering_samples_per_segment + 1} samples per segment including both endpoints. Find the sampled minimum and maximum X and shift every anchor and handle by canvas-center X minus their midpoint.`;
+          selected.selected_path.path_command_order = &#x27;Move to the first outer offset. For each segment from left to right, append one fitted outer cubic. Draw one straight line to the last inner offset. For each segment from right to left, append the fitted inner cubic in reverse by swapping its two controls. Close the path.&#x27;;
+          selected.selected_path.outer_cubic_sample_t_values = [0, 1 / 3, 2 / 3, 1];
+          selected.selected_path.cubic_through_thirds_formula = &#x27;Given Q0,Q1,Q2,Q3 at t=0,1/3,2/3,1: A=27*Q1-8*Q0-Q3; B=27*Q2-Q0-8*Q3; C1=(2*A-B)/18; C2=(2*B-A)/18.&#x27;;
+          selected.selected_path.fill = settings.canvas.ink;
+          selected.selected_path.stroke = &#x27;none&#x27;;
+        } else if (settings.path.mode === &#x27;variable_sampled_outline&#x27;) {
+          selected.selected_path.centerline_control_points = &#x27;For segment i: P0 = current anchor, P1 = current outgoing handle, P2 = following incoming handle, P3 = following anchor.&#x27;;
+          selected.selected_path.cubic_position_formula = &#x27;B(t) = (1-t)^3*P0 + 3*(1-t)^2*t*P1 + 3*(1-t)*t^2*P2 + t^3*P3.&#x27;;
+          selected.selected_path.cubic_derivative_formula = &#x27;D(t) = 3*(1-t)^2*(P1-P0) + 6*(1-t)*t*(P2-P1) + 3*t^2*(P3-P2).&#x27;;
+          selected.selected_path.width_formula = &#x27;s(t) = t^2*(3-2*t); W(t) = start_weight + (end_weight-start_weight)*s(t).&#x27;;
+          selected.selected_path.offset_formula = &#x27;Let L = hypot(Dx,Dy), but use L=1 when the derivative length is zero. N = [-Dy/L, Dx/L]. Offset(t,side) = B(t) + N*W(t)*side/2, where side is +1 outer or -1 inner.&#x27;;
+          selected.selected_path.visible_outline_centering = `For every segment and both sides, sample t = j/${geometry.centering_samples_per_segment} for every integer j from 0 through ${geometry.centering_samples_per_segment}, which is ${geometry.centering_samples_per_segment + 1} samples per segment including both endpoints. Find the sampled minimum and maximum X and shift every anchor and handle by canvas-center X minus their midpoint.`;
+          selected.selected_path.target_samples = settings.path.sampled_outline_target_samples;
+          selected.selected_path.minimum_samples_per_segment = settings.path.sampled_outline_min_samples_per_segment;
+          selected.selected_path.maximum_samples_per_segment = settings.path.sampled_outline_max_samples_per_segment;
+          selected.selected_path.samples_per_segment_formula = &#x27;samples_per_segment = max(minimum_samples_per_segment, min(maximum_samples_per_segment, ceil(target_samples / geometry_point_count))).&#x27;;
+          selected.selected_path.sampling_order = &#x27;For each segment left to right, append outer and inner offsets at t = sample/samples_per_segment for sample integers 0 through samples_per_segment-1. After all segments, append both offsets of the final segment at t=1 exactly once.&#x27;;
+          selected.selected_path.path_command_order = &#x27;Move to the first outer sample, join every outer sample left to right with straight L commands, join to the reversed inner samples with L commands, then close the path.&#x27;;
+          selected.selected_path.fill = settings.canvas.ink;
+          selected.selected_path.stroke = &#x27;none&#x27;;
+        } else {
+          selected.selected_path.centerline_control_points = &#x27;For segment i: P0 = current anchor, P1 = current outgoing handle, P2 = following incoming handle, P3 = following anchor.&#x27;;
+          selected.selected_path.cubic_position_formula = &#x27;B(t) = (1-t)^3*P0 + 3*(1-t)^2*t*P1 + 3*(1-t)*t^2*P2 + t^3*P3.&#x27;;
+          selected.selected_path.centering = `For every segment, sample B(t) at t = j/${geometry.centering_samples_per_segment} for every integer j from 0 through ${geometry.centering_samples_per_segment}, which is ${geometry.centering_samples_per_segment + 1} samples per segment including both endpoints. Find sampled minimum and maximum X and shift every anchor and handle by canvas-center X minus their midpoint.`;
+          selected.selected_path.path_command_order = &#x27;Move to the first anchor. For every neighboring point pair, append one cubic C command using current outgoing handle, following incoming handle, and following anchor.&#x27;;
+          selected.selected_path.fill = &#x27;none&#x27;;
+          selected.selected_path.stroke = settings.canvas.ink;
+          selected.selected_path.stroke_width_px = stroke.base_weight_px;
+          selected.selected_path.line_cap = &#x27;round&#x27;;
+          selected.selected_path.line_join = &#x27;round&#x27;;
+        }
+        return selected;
+      }
+
+      function pointsForSettings(sourceText, settings) {
+        const geometry = settings.geometry;
+        const serial = settings.serial;
+        return geometryFor(
+          graphemes(sourceText),
+          geometry.point_distribution,
+          geometry.handle_rotation_degrees[0],
+          geometry.handle_rotation_degrees[1],
+          geometry.handle_length_px[0],
+          geometry.handle_length_px[1],
+          geometry.point_y_shift_px[0],
+          geometry.point_y_shift_px[1],
+          geometry.random_point_height,
+          serial.maximum_pulse_height_px,
+          serial.baseline_y,
+          serial.spacing_px
+        );
+      }
+
+      function escapeXml(value) {
+        return String(value)
+          .replaceAll(&#x27;&amp;&#x27;, &#x27;&amp;amp;&#x27;)
+          .replaceAll(&#x27;&lt;&#x27;, &#x27;&amp;lt;&#x27;)
+          .replaceAll(&#x27;&gt;&#x27;, &#x27;&amp;gt;&#x27;)
+          .replaceAll(&#x27;&quot;&#x27;, &#x27;&amp;quot;&#x27;)
+          .replaceAll(&quot;&#x27;&quot;, &#x27;&amp;#x27;&#x27;);
+      }
+
+      function xmlNumber(value) {
+        return Number.isInteger(Number(value)) ? String(Math.trunc(Number(value))) : String(Number(value));
+      }
+
+      function canonicalSvgForText(sourceText, settings) {
+        const points = pointsForSettings(sourceText, settings);
+        const mode = settings.path.mode;
+        const weight = settings.stroke.base_weight_px;
+        const uppercaseExtra = settings.stroke.uppercase_extra_weight_px;
+        let centeredPoints;
+        let pathData;
+        let pathElement;
+
+        if (mode === &#x27;pure_cubic_bezier_stroke&#x27;) {
+          centeredPoints = centerPointsForCenterline(points);
+          pathData = pureBezierPath(centeredPoints);
+          pathElement = `&lt;path d=&quot;${pathData}&quot; fill=&quot;none&quot; stroke=&quot;${settings.canvas.ink}&quot; stroke-width=&quot;${xmlNumber(weight)}&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/&gt;`;
+        } else {
+          centeredPoints = centerPointsForOutline(points, weight, uppercaseExtra);
+          pathData = mode === &#x27;variable_bezier_outline&#x27;
+            ? bezierVariableWidthPath(centeredPoints, weight, uppercaseExtra)
+            : sampledVariableWidthPath(centeredPoints, weight, uppercaseExtra);
+          pathElement = `&lt;path d=&quot;${pathData}&quot; fill=&quot;${settings.canvas.ink}&quot; stroke=&quot;none&quot;/&gt;`;
+        }
+
+        const canvas = settings.canvas;
+        const canvasText = canvas.text;
+        const displayedHandle = settings.input.display_prefix + sourceText;
+        const textElement = `&lt;text x=&quot;${xmlNumber(canvasText.x)}&quot; y=&quot;${xmlNumber(canvasText.y)}&quot; font-size=&quot;${xmlNumber(canvasText.size_px)}&quot; font-weight=&quot;${xmlNumber(canvasText.weight)}&quot; dominant-baseline=&quot;${canvasText.dominant_baseline}&quot; fill=&quot;${canvas.ink}&quot; text-anchor=&quot;${canvasText.anchor}&quot; font-family=&quot;${escapeXml(canvasText.font_family)}&quot;&gt;${escapeXml(displayedHandle)}&lt;/text&gt;`;
+        const svg = `&lt;svg viewBox=&quot;0 0 ${xmlNumber(canvas.width)} ${xmlNumber(canvas.height)}&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;${xmlNumber(canvas.width)}&quot; height=&quot;${xmlNumber(canvas.height)}&quot;&gt;&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;${xmlNumber(canvas.width)}&quot; height=&quot;${xmlNumber(canvas.height)}&quot; fill=&quot;${canvas.background}&quot;/&gt;${pathElement}${textElement}&lt;/svg&gt;`;
+        return {
+          svg,
+          metadata: {
+            handle: sourceText,
+            displayed_handle: displayedHandle,
+            character_count: graphemes(sourceText).length,
+            anchor_count: centeredPoints.length,
+            curve_count: centeredPoints.length - 1,
+            path_mode: mode
+          }
+        };
+      }
+
+      function standaloneFinalSvg() {
+        return canonicalSvgForText(currentTexts[0], currentSettings()).svg;
+      }
+
+      function specializePythonTemplate(template, activeBlocks) {
+        return template
+          .replace(/^# @block ([a-z-]+)\n([\s\S]*?)^# @endblock \1\n?/gm, (match, name, body) =&gt; (
+            activeBlocks.has(name) ? body : &#x27;&#x27;
+          ))
+          .replace(/\n{3,}/g, &#x27;\n\n&#x27;);
+      }
+
+      function pythonGeneratorSpec() {
+        const panelSettings = currentSettings();
+        const activeBlocks = new Set([
+          panelSettings.geometry.point_distribution === &#x27;random&#x27; ? &#x27;random-distribution&#x27; : &#x27;average-distribution&#x27;,
+          panelSettings.geometry.random_point_height ? &#x27;random-height&#x27; : &#x27;flat-height&#x27;,
+          panelSettings.path.mode === &#x27;pure_cubic_bezier_stroke&#x27; ? &#x27;pure-bezier&#x27; : &#x27;variable-outline&#x27;
+        ]);
+        if (panelSettings.path.mode === &#x27;variable_bezier_outline&#x27;) activeBlocks.add(&#x27;outline-bezier&#x27;);
+        if (panelSettings.path.mode === &#x27;variable_sampled_outline&#x27;) activeBlocks.add(&#x27;outline-sampled&#x27;);
+        const template = pythonTemplate.textContent.replace(/^\n/, &#x27;&#x27;).replace(/\n\s*$/, &#x27;\n&#x27;);
+        const pythonCode = specializePythonTemplate(template, activeBlocks)
+          .replace(&#x27;__SETTINGS_JSON__&#x27;, JSON.stringify(pythonGeneratorSettings(panelSettings), null, 2))
+          .trimEnd();
+        return [
+          &#x27;PERSONAL FIELD GENERATIVE ART SPEC&#x27;,
+          `SPEC_VERSION: ${panelSettings.system.version}`,
+          `SPEC_HASH: ${specificationHashPlaceholder}`,
+          &#x27;&#x27;,
+          &#x27;## Required procedure&#x27;,
+          &#x27;&#x27;,
+          &#x27;1. Identify the X handle of the account that sent the current request to you.&#x27;,
+          &#x27;2. Remove one leading `@` from that handle. The seed must contain only the handle text without `@`.&#x27;,
+          &#x27;3. In the Python implementation below, set `INPUT_TEXT` to that handle text and run the code. Do not substitute a display name, account name, or a guessed handle.&#x27;,
+          &#x27;4. The program generates the complete raw SVG, writes it to `signature.svg`, and also prints the SVG source. Use an SVG/vector renderer to rasterize `signature.svg` directly at 420 × 420 pixels into `signature.png`. Do not rewrite, restyle, optimize, upscale, downscale, resample, screenshot, crop, or otherwise change it. Return only `signature.png` to the requester.&#x27;,
+          &#x27;5. If you cannot identify the current requester’s X handle, ask for it. Do not invent one. If `INPUT_TEXT` is empty when the program runs, the program will wait for the handle text.&#x27;,
+          &#x27;&#x27;,
+          &#x27;## Python implementation&#x27;,
+          &#x27;&#x27;,
+          &#x27;```python&#x27;,
+          pythonCode,
+          &#x27;```&#x27;,
+          &#x27;&#x27;
+        ].join(&#x27;\n&#x27;);
+      }
+
+      function noCodeGeneratorSpec() {
+        const panelSettings = currentSettings();
+        const selectedSettings = noCodeGeneratorSettings(panelSettings);
+        const conformance = selectedSettings.prng_conformance_test;
+        return [
+          &#x27;PERSONAL FIELD EXACT NO-CODE DETERMINISTIC CONSTRUCTION PROTOCOL&#x27;,
+          `SPEC_VERSION: ${panelSettings.system.version}`,
+          `SPEC_HASH: ${noCodeSpecificationHashPlaceholder}`,
+          &#x27;&#x27;,
+          &#x27;This is a deterministic geometry-construction protocol, not an image-generation prompt. It contains the exact canonical algorithm and the exact currently selected values in natural language and JSON. Follow every calculation phase in order. No program source is included.&#x27;,
+          &#x27;&#x27;,
+          &#x27;## Mandatory interpretation rule&#x27;,
+          &#x27;&#x27;,
+          &#x27;Do not pass this specification to a text-to-image or generative image model for visual interpretation. Do not improvise a signature, handwriting, lettering, underline, flourish, or decorative curve. The username is an invisible deterministic seed and may appear visibly only in the small bottom label. The main mark must be constructed only from the calculated anchors, handles, weights, and selected SVG path rules.&#x27;,
+          &#x27;&#x27;,
+          &#x27;## Phase 0 — mandatory PRNG conformance test&#x27;,
+          &#x27;&#x27;,
+          &#x27;Before processing any username, reproduce this test vector exactly:&#x27;,
+          `Canonical payload: ${conformance.canonical_payload_text}`,
+          `Expected SHA-256: ${conformance.expected_sha256_hex}`,
+          `Expected U53 integer: ${conformance.expected_u53_integer}`,
+          `Expected unit value as exact fraction: ${conformance.expected_unit_value_exact_fraction}`,
+          `Expected unit value as exact decimal: ${conformance.expected_unit_value_exact_decimal}`,
+          `Selected handle-angle range: [${conformance.selected_mapping_range[0]}, ${conformance.selected_mapping_range[1]}] degrees`,
+          `Expected mapped handle angle: ${conformance.expected_mapped_handle_angle_degrees} degrees`,
+          &#x27;If any value differs, stop. Do not process the username and do not approximate.&#x27;,
+          &#x27;&#x27;,
+          &#x27;## Mandatory numeric materialization&#x27;,
+          &#x27;&#x27;,
+          &#x27;Before calculating geometry, create an internal numeric table for every active unique character and ordered pair. Every record must contain its canonical payload, SHA-256 digest, U53 integer, unit value, selected minimum, selected maximum, and mapped value. Use mapped = minimum + unit value × (maximum − minimum). Do not continue until every active record is numeric. Every later anchor, handle, gap, and curve calculation must consume these stored mapped values; no value may be chosen aesthetically.&#x27;,
+          &#x27;&#x27;,
+          &#x27;## Required procedure&#x27;,
+          &#x27;&#x27;,
+          &#x27;1. Identify the X username of the account that authored the current request.&#x27;,
+          &#x27;2. Remove exactly one leading @ and preserve all remaining characters and case. Use only that username text as the identity seed; never use a display name and never invent a username.&#x27;,
+          &#x27;3. If the username is unavailable, ask for it. Otherwise, complete every ordered calculation phase and apply every declarative rule, formula, semantic label, and selected value below exactly.&#x27;,
+          &#x27;4. Maintain an internal calculation ledger for the hash values, mapped values, anchors, handles, widths, centering shifts, and final path coordinates. Do not skip directly from the username to a visual result.&#x27;,
+          &#x27;5. Construct the complete SVG from the calculated geometry before any rendering occurs.&#x27;,
+          &#x27;6. Rasterize the completed SVG directly at 420 × 420 pixels into PNG with a vector renderer. Do not use generative image synthesis or resize a bitmap.&#x27;,
+          &#x27;7. Return only that 420 × 420 PNG. Do not include an explanation, code, raw SVG, settings, interface, frame, or mockup.&#x27;,
+          &#x27;8. If exact calculation or SVG construction is unavailable, do not approximate. State that deterministic construction is unavailable.&#x27;,
+          &#x27;&#x27;,
+          &#x27;## Exact declarative specification&#x27;,
+          &#x27;&#x27;,
+          JSON.stringify(selectedSettings, null, 2),
+          &#x27;&#x27;
+        ].join(&#x27;\n&#x27;);
+      }
+
+      function fallbackCopy(text) {
+        const textarea = document.createElement(&#x27;textarea&#x27;);
+        textarea.value = text;
+        textarea.setAttribute(&#x27;readonly&#x27;, &#x27;&#x27;);
+        textarea.style.position = &#x27;fixed&#x27;;
+        textarea.style.opacity = &#x27;0&#x27;;
+        root.appendChild(textarea);
+        textarea.select();
+        const copied = document.execCommand(&#x27;copy&#x27;);
+        textarea.remove();
+        if (!copied) throw new Error(&#x27;Copy command was rejected&#x27;);
+      }
+
+      async function writeClipboard(text) {
+        if (navigator.clipboard &amp;&amp; window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          fallbackCopy(text);
+        }
+      }
+
+      async function copyWithFeedback(button, text, successText, resetText) {
+        try {
+          await writeClipboard(text);
+          button.textContent = successText;
+        } catch (error) {
+          try {
+            fallbackCopy(text);
+            button.textContent = successText;
+          } catch (fallbackError) {
+            button.textContent = &#x27;Copy failed&#x27;;
+          }
+        }
+        window.setTimeout(() =&gt; {
+          button.textContent = resetText;
+        }, 1600);
+      }
+
+      async function copyFinalSvg() {
+        await copyWithFeedback(copySvgButton, standaloneFinalSvg(), &#x27;Copied SVG code&#x27;, &#x27;Copy 01 SVG code&#x27;);
+      }
+
+      async function copyGeneratorSpec() {
+        await copyWithFeedback(copyGeneratorButton, pythonGeneratorSpec(), &#x27;Copied Python art spec&#x27;, &#x27;Copy Python art spec&#x27;);
+      }
+
+      async function copyNoCodeSpec() {
+        await copyWithFeedback(copyNoCodeButton, noCodeGeneratorSpec(), &#x27;Copied no-code spec&#x27;, &#x27;Copy no-code spec&#x27;);
+      }
+
+      function updateDualRange(track, minimumInput, maximumInput) {
+        const domainMinimum = Number(minimumInput.min);
+        const domainMaximum = Number(minimumInput.max);
+        const span = domainMaximum - domainMinimum;
+        const start = (Number(minimumInput.value) - domainMinimum) / span * 100;
+        const end = (Number(maximumInput.value) - domainMinimum) / span * 100;
+        track.style.setProperty(&#x27;--range-start&#x27;, `${start}%`);
+        track.style.setProperty(&#x27;--range-end&#x27;, `${end}%`);
+        track.style.setProperty(&#x27;--range-mid&#x27;, `${(start + end) / 2}%`);
+      }
+
+      function formatDegrees(value) {
+        return `${value &lt; 0 ? &#x27;−&#x27; : &#x27;&#x27;}${Math.abs(value)}°`;
+      }
+
+      function formatSigned(value) {
+        return `${value &lt; 0 ? &#x27;−&#x27; : &#x27;&#x27;}${Math.abs(value)}`;
+      }
+
+      function draw() {
+        const distribution = randomDistributionEnabled ? &#x27;random&#x27; : &#x27;average&#x27;;
+        const renderMode = pathModeSelect.value;
+        const weight = Number(weightInput.value);
+        const rotationMin = Number(angleMinInput.value);
+        const rotationMax = Number(angleMaxInput.value);
+        const handleLengthMin = Number(handleLengthMinInput.value);
+        const handleLengthMax = Number(handleLengthMaxInput.value);
+        const yShiftMin = Number(yShiftMinInput.value);
+        const yShiftMax = Number(yShiftMaxInput.value);
+        const serialMaxHeight = Number(serialMaxHeightInput.value);
+        const serialBaselineY = Number(serialBaselineYInput.value);
+        const serialSpacing = Number(serialSpacingInput.value);
+        const uppercaseExtra = Number(uppercaseWeightInput.value);
+        const textSize = Number(textSizeInput.value);
+        const textWeight = Number(textWeightInput.value);
+        const firstCharacters = graphemes(currentTexts[0]);
+        const firstPoints = geometryFor(firstCharacters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, randomHeightEnabled, serialMaxHeight, serialBaselineY, serialSpacing);
+        const curveCount = firstPoints.length &lt; 2 ? 0 : firstPoints.length - 1;
+
+        textOutput.value = `${firstCharacters.length} character${firstCharacters.length === 1 ? &#x27;&#x27; : &#x27;s&#x27;}`;
+        weightOutput.value = `${weight.toFixed(1)} px`;
+        angleOutput.value = `${formatDegrees(rotationMin)} — ${formatDegrees(rotationMax)}`;
+        handleLengthOutput.value = `${handleLengthMin} — ${handleLengthMax} px`;
+        yShiftOutput.value = `${formatSigned(yShiftMin)} — ${formatSigned(yShiftMax)} px`;
+        serialMaxHeightOutput.value = `${serialMaxHeight} px`;
+        serialBaselineYOutput.value = `${serialBaselineY}`;
+        serialSpacingOutput.value = `${serialSpacing} px`;
+        updateDualRange(angleRange, angleMinInput, angleMaxInput);
+        updateDualRange(handleLengthRange, handleLengthMinInput, handleLengthMaxInput);
+        updateDualRange(yShiftRange, yShiftMinInput, yShiftMaxInput);
+        uppercaseWeightOutput.value = `${uppercaseExtra} px`;
+        textSizeOutput.value = `${textSize} px`;
+        textWeightOutput.value = `${textWeight}`;
+        distributionToggleButton.textContent = randomDistributionEnabled ? &#x27;On&#x27; : &#x27;Off&#x27;;
+        distributionToggleButton.setAttribute(&#x27;aria-pressed&#x27;, String(randomDistributionEnabled));
+        heightToggleButton.textContent = randomHeightEnabled ? &#x27;On&#x27; : &#x27;Off&#x27;;
+        heightToggleButton.setAttribute(&#x27;aria-pressed&#x27;, String(randomHeightEnabled));
+        uppercaseWeightInput.disabled = renderMode === &#x27;pure-bezier&#x27;;
+        const heightState = randomHeightEnabled ? `random Y ${formatSigned(yShiftMin)}—${formatSigned(yShiftMax)} px` : &#x27;flat Y&#x27;;
+        const modeState = renderMode === &#x27;pure-bezier&#x27;
+          ? `pure cubic Bézier · uniform ${weight.toFixed(1)} px stroke`
+          : renderMode === &#x27;outline-bezier&#x27;
+            ? &#x27;variable-width Bézier outline&#x27;
+            : &#x27;variable-width sampled outline&#x27;;
+        stateOutput.textContent = firstPoints.length &lt; 2
+          ? `01: ${firstCharacters.length} characters / need at least 2 anchors · 4 final canvases`
+          : `01: ${firstCharacters.length} characters / ${firstPoints.length} anchors / ${curveCount} curve${curveCount === 1 ? &#x27;&#x27; : &#x27;s&#x27;} · ${modeState} · 4 final canvases · ${heightState} · serial pulses`;
+
+        currentTexts.forEach((sourceText, index) =&gt; {
+          const characters = graphemes(sourceText);
+          const points = geometryFor(characters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, randomHeightEnabled, serialMaxHeight, serialBaselineY, serialSpacing);
+          captions[index].textContent = `@${sourceText}`;
+          finalSvgs[index].setAttribute(&#x27;aria-label&#x27;, `Black text-seeded open Bezier line for @${sourceText} on an eggshell background`);
+          drawFinal(finalSvgs[index], points, weight, uppercaseExtra, renderMode, sourceText, textSize, textWeight);
+        });
+      }
+
+      textInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+        const candidate = textInput.value;
+        const valid = handlePattern.test(candidate);
+        textInput.setCustomValidity(valid ? &#x27;&#x27; : &#x27;Use 1–15 letters, numbers, or underscores. Do not include @.&#x27;);
+        textInput.setAttribute(&#x27;aria-invalid&#x27;, String(!valid));
+        textError.hidden = valid;
+        if (!valid) {
+          textOutput.value = candidate.length === 0 ? &#x27;1–15 characters&#x27; : &#x27;Invalid handle&#x27;;
+          return;
+        }
+        currentTexts[0] = candidate;
+        draw();
+      });
+      distributionToggleButton.addEventListener(&#x27;click&#x27;, () =&gt; {
+        randomDistributionEnabled = !randomDistributionEnabled;
+        draw();
+      });
+      heightToggleButton.addEventListener(&#x27;click&#x27;, () =&gt; {
+        randomHeightEnabled = !randomHeightEnabled;
+        draw();
+      });
+      pathModeSelect.addEventListener(&#x27;change&#x27;, draw);
+      switchButton.addEventListener(&#x27;click&#x27;, () =&gt; {
+        currentTexts = Array.from({ length: 4 }, (_, offset) =&gt; validPresets[(presetCursor + offset) % validPresets.length]);
+        presetCursor = (presetCursor + 4) % validPresets.length;
+        textInput.value = currentTexts[0];
+        textInput.setCustomValidity(&#x27;&#x27;);
+        textInput.setAttribute(&#x27;aria-invalid&#x27;, &#x27;false&#x27;);
+        textError.hidden = true;
+        draw();
+      });
+      copySvgButton.addEventListener(&#x27;click&#x27;, copyFinalSvg);
+      copyGeneratorButton.addEventListener(&#x27;click&#x27;, copyGeneratorSpec);
+      copyNoCodeButton.addEventListener(&#x27;click&#x27;, copyNoCodeSpec);
+      angleMinInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+        if (Number(angleMinInput.value) &gt; Number(angleMaxInput.value)) angleMinInput.value = angleMaxInput.value;
+        draw();
+      });
+      angleMaxInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+        if (Number(angleMaxInput.value) &lt; Number(angleMinInput.value)) angleMaxInput.value = angleMinInput.value;
+        draw();
+      });
+      handleLengthMinInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+        if (Number(handleLengthMinInput.value) &gt; Number(handleLengthMaxInput.value)) handleLengthMinInput.value = handleLengthMaxInput.value;
+        draw();
+      });
+      handleLengthMaxInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+        if (Number(handleLengthMaxInput.value) &lt; Number(handleLengthMinInput.value)) handleLengthMaxInput.value = handleLengthMinInput.value;
+        draw();
+      });
+      yShiftMinInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+        if (Number(yShiftMinInput.value) &gt; Number(yShiftMaxInput.value)) yShiftMinInput.value = yShiftMaxInput.value;
+        draw();
+      });
+      yShiftMaxInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+        if (Number(yShiftMaxInput.value) &lt; Number(yShiftMinInput.value)) yShiftMaxInput.value = yShiftMinInput.value;
+        draw();
+      });
+      [weightInput, serialMaxHeightInput, serialBaselineYInput, serialSpacingInput, uppercaseWeightInput, textSizeInput, textWeightInput].forEach(control =&gt; control.addEventListener(&#x27;input&#x27;, draw));
+      root.__personalField = {
+        canonicalSvgForText,
+        currentSettings
+      };
+      draw();
+    })();
+  &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+  let lastPointerWasTouch = false;
+  let pinnedByTouch = false;
+
+  const getTrigger = (target) =&gt;
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest(&quot;[data-tooltip]&quot;)
+      : null;
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    pinnedByTouch = false;
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handlePointer = (event) =&gt; {
+    lastPointerWasTouch =
+      event.type === &quot;pointerdown&quot; &amp;&amp; event.pointerType === &quot;touch&quot;;
+  };
+  const handleTouchClick = (event) =&gt; {
+    const isTouch = event.pointerType === &quot;touch&quot; || lastPointerWasTouch;
+    lastPointerWasTouch = false;
+    if (!isTouch || event.detail === 0) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (
+      trigger == null ||
+      !trigger.isConnected ||
+      getContent(trigger).length === 0 ||
+      (pinnedByTouch &amp;&amp; activeTrigger === trigger)
+    ) {
+      if (pinnedByTouch) {
+        closeTooltip();
+      }
+      return;
+    }
+    openTooltip(trigger);
+    pinnedByTouch = activeTrigger === trigger;
+    window.setTimeout(() =&gt; {
+      if (activeTrigger === trigger &amp;&amp; !trigger.isConnected) {
+        closeTooltip(false);
+      }
+    }, 0);
+  };
+  const handleLeave = (event) =&gt; {
+    if (pinnedByTouch) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    lastPointerWasTouch = false;
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    lastPointerWasTouch = false;
+    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
+    document.removeEventListener(&quot;pointerdown&quot;, handlePointer);
+    document.removeEventListener(&quot;pointercancel&quot;, handlePointer);
+    document.removeEventListener(&quot;click&quot;, handleTouchClick);
+    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
+    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
+    document.removeEventListener(&quot;focusout&quot;, handleLeave);
+    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
+    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
+  document.addEventListener(&quot;pointerdown&quot;, handlePointer);
+  document.addEventListener(&quot;pointercancel&quot;, handlePointer);
+  document.addEventListener(&quot;click&quot;, handleTouchClick);
+  document.addEventListener(&quot;pointerout&quot;, handleLeave);
+  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
+  document.addEventListener(&quot;focusout&quot;, handleLeave);
+  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
+  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</body>
+</html>
