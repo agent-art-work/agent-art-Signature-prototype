@@ -1,6 +1,6 @@
-# Agent Art Signature
+# Agent Art Signature Prototype
 
-An interactive, deterministic text-seeded Bézier signature generator.
+An interactive design panel for developing a deterministic, text-seeded Bézier signature prototype.
 
 The panel converts an X handle into a reproducible curve using SHA-256-labeled random values, character geometry, serial digit pulses, and selectable SVG path construction.
 
