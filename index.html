@@ -1042,7 +1042,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #text-seeded-bezier-loop-presets h2 { margin: 0 0 .45rem; }
     #text-seeded-bezier-loop-presets .tsbl-controls { display: grid; gap: .35rem .75rem; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: .45rem; }
     #text-seeded-bezier-loop-presets .tsbl-text-control { grid-column: 1 / -1; }
-    #text-seeded-bezier-loop-presets .tsbl-serial-controls { display: grid; gap: .35rem .75rem; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    #text-seeded-bezier-loop-presets .tsbl-serial-controls { display: grid; gap: .35rem .75rem; grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); }
     #text-seeded-bezier-loop-presets .tsbl-style-controls { display: grid; gap: .35rem .75rem; grid-column: 1 / -1; grid-template-columns: repeat(4, minmax(0, 1fr)); }
     #text-seeded-bezier-loop-presets .tsbl-control { display: grid; gap: .12rem; grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); width: 100%; }
     #text-seeded-bezier-loop-presets .tsbl-control-head { align-items: baseline; display: flex; gap: .75rem; justify-content: space-between; }
@@ -1124,16 +1124,9 @@ html&gt;body{padding:0}&lt;/style&gt;
         &lt;/span&gt;
       &lt;/label&gt;
       &lt;div class=&quot;tsbl-serial-controls&quot;&gt;
-        &lt;label class=&quot;tsbl-control form-label&quot;&gt;
-          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial maximum height range&lt;/span&gt;&lt;output id=&quot;tsbl-serial-max-height-value&quot;&gt;0 — 72 px&lt;/output&gt;&lt;/span&gt;
-          &lt;span class=&quot;tsbl-dual-range&quot; id=&quot;tsbl-serial-max-height-range&quot;&gt;
-            &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-serial-max-height-min&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;Minimum serial maximum height&quot;&gt;
-            &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-serial-max-height-max&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;72&quot; aria-label=&quot;Maximum serial maximum height&quot;&gt;
-          &lt;/span&gt;
-        &lt;/label&gt;
-        &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-serial-baseline-y&quot;&gt;
-          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial baseline Y&lt;/span&gt;&lt;output id=&quot;tsbl-serial-baseline-y-value&quot;&gt;250&lt;/output&gt;&lt;/span&gt;
-          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-serial-baseline-y&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;420&quot; step=&quot;1&quot; value=&quot;250&quot;&gt;
+        &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-serial-max-height&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial 9 maximum height&lt;/span&gt;&lt;output id=&quot;tsbl-serial-max-height-value&quot;&gt;72 px&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-serial-max-height&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;72&quot;&gt;
         &lt;/label&gt;
         &lt;label class=&quot;tsbl-control form-label&quot;&gt;
           &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial spacing range&lt;/span&gt;&lt;output id=&quot;tsbl-serial-spacing-value&quot;&gt;16 — 32 px&lt;/output&gt;&lt;/span&gt;
@@ -1205,15 +1198,12 @@ html&gt;body{padding:0}&lt;/style&gt;
       const handleLengthMaxInput = root.querySelector(&#x27;#tsbl-handle-length-max&#x27;);
       const yShiftMinInput = root.querySelector(&#x27;#tsbl-y-shift-min&#x27;);
       const yShiftMaxInput = root.querySelector(&#x27;#tsbl-y-shift-max&#x27;);
-      const serialMaxHeightMinInput = root.querySelector(&#x27;#tsbl-serial-max-height-min&#x27;);
-      const serialMaxHeightMaxInput = root.querySelector(&#x27;#tsbl-serial-max-height-max&#x27;);
-      const serialBaselineYInput = root.querySelector(&#x27;#tsbl-serial-baseline-y&#x27;);
+      const serialMaxHeightInput = root.querySelector(&#x27;#tsbl-serial-max-height&#x27;);
       const serialSpacingMinInput = root.querySelector(&#x27;#tsbl-serial-spacing-min&#x27;);
       const serialSpacingMaxInput = root.querySelector(&#x27;#tsbl-serial-spacing-max&#x27;);
       const angleRange = root.querySelector(&#x27;#tsbl-angle-range&#x27;);
       const handleLengthRange = root.querySelector(&#x27;#tsbl-handle-length-range&#x27;);
       const yShiftRange = root.querySelector(&#x27;#tsbl-y-shift-range&#x27;);
-      const serialMaxHeightRange = root.querySelector(&#x27;#tsbl-serial-max-height-range&#x27;);
       const serialSpacingRange = root.querySelector(&#x27;#tsbl-serial-spacing-range&#x27;);
       const uppercaseWeightInput = root.querySelector(&#x27;#tsbl-uppercase-weight&#x27;);
       const textSizeInput = root.querySelector(&#x27;#tsbl-text-size&#x27;);
@@ -1227,7 +1217,6 @@ html&gt;body{padding:0}&lt;/style&gt;
       const handleLengthOutput = root.querySelector(&#x27;#tsbl-handle-length-value&#x27;);
       const yShiftOutput = root.querySelector(&#x27;#tsbl-y-shift-value&#x27;);
       const serialMaxHeightOutput = root.querySelector(&#x27;#tsbl-serial-max-height-value&#x27;);
-      const serialBaselineYOutput = root.querySelector(&#x27;#tsbl-serial-baseline-y-value&#x27;);
       const serialSpacingOutput = root.querySelector(&#x27;#tsbl-serial-spacing-value&#x27;);
       const uppercaseWeightOutput = root.querySelector(&#x27;#tsbl-uppercase-weight-value&#x27;);
       const textSizeOutput = root.querySelector(&#x27;#tsbl-text-size-value&#x27;);
@@ -1380,16 +1369,14 @@ html&gt;body{padding:0}&lt;/style&gt;
         return character &gt;= &#x27;A&#x27; &amp;&amp; character &lt;= &#x27;Z&#x27;;
       }
 
-      function seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, serialMaxHeightMin, serialMaxHeightMax, serialSpacingMin, serialSpacingMax) {
+      function seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax) {
         return characters.map(character =&gt; {
           const scope = { kind: &#x27;character&#x27;, value: character };
           return {
             angle: mapRange(hashToUnitFloat(scope, &#x27;handle-angle&#x27;), rotationMin, rotationMax) * Math.PI / 180,
             incomingLength: mapRange(hashToUnitFloat(scope, &#x27;incoming-handle-length&#x27;), handleLengthMin, handleLengthMax),
             outgoingLength: mapRange(hashToUnitFloat(scope, &#x27;outgoing-handle-length&#x27;), handleLengthMin, handleLengthMax),
-            yShift: mapRange(hashToUnitFloat(scope, &#x27;point-y-shift&#x27;), yShiftMin, yShiftMax),
-            serialMaximumHeight: mapRange(hashToUnitFloat(scope, &#x27;serial-maximum-height&#x27;), serialMaxHeightMin, serialMaxHeightMax),
-            serialSpacing: mapRange(hashToUnitFloat(scope, &#x27;serial-spacing&#x27;), serialSpacingMin, serialSpacingMax)
+            yShift: mapRange(hashToUnitFloat(scope, &#x27;point-y-shift&#x27;), yShiftMin, yShiftMax)
           };
         });
       }
@@ -1415,13 +1402,13 @@ html&gt;body{padding:0}&lt;/style&gt;
         return /^\d$/.test(character);
       }
 
-      function geometryFor(characters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, useRandomHeight, serialMaxHeightMin, serialMaxHeightMax, serialBaselineY, serialSpacingMin, serialSpacingMax) {
+      function geometryFor(characters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, useRandomHeight, serialMaxHeight, serialSpacingMin, serialSpacingMax) {
         const count = characters.length;
         if (count === 0) return [];
         const serialFlags = characters.map(isSerialDigit);
         const serialDigitCount = serialFlags.filter(Boolean).length;
         const hasSerialDigits = serialDigitCount &gt; 0;
-        const raw = seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, serialMaxHeightMin, serialMaxHeightMax, serialSpacingMin, serialSpacingMax);
+        const raw = seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax);
         const smoothedAngles = smoothedHandleAngles(raw);
         const lineStart = 60;
         const lineEnd = 360;
@@ -1474,7 +1461,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           return centerGeometry(characters.map((character, index) =&gt; identityPoint(character, index, positions[index])));
         }
 
-        const serialSpacings = raw.map((value, index) =&gt; serialFlags[index] ? value.serialSpacing : 0);
+        const serialSpacings = Array(count).fill(0);
         const serialRunYShifts = new Map();
         for (let index = 0; index &lt; count;) {
           if (!serialFlags[index]) {
@@ -1484,10 +1471,15 @@ html&gt;body{padding:0}&lt;/style&gt;
           let endIndex = index + 1;
           while (endIndex &lt; count &amp;&amp; serialFlags[endIndex]) endIndex++;
           const runValue = characters.slice(index, endIndex).join(&#x27;&#x27;);
+          const runScope = { kind: &#x27;serial-run&#x27;, value: runValue };
           const runShift = useRandomHeight
-            ? mapRange(hashToUnitFloat({ kind: &#x27;serial-run&#x27;, value: runValue }, &#x27;point-y-shift&#x27;), yShiftMin, yShiftMax)
+            ? mapRange(hashToUnitFloat(runScope, &#x27;point-y-shift&#x27;), yShiftMin, yShiftMax)
             : 0;
-          for (let runIndex = index; runIndex &lt; endIndex; runIndex++) serialRunYShifts.set(runIndex, runShift);
+          const runSpacing = mapRange(hashToUnitFloat(runScope, &#x27;serial-spacing&#x27;), serialSpacingMin, serialSpacingMax);
+          for (let runIndex = index; runIndex &lt; endIndex; runIndex++) {
+            serialRunYShifts.set(runIndex, runShift);
+            serialSpacings[runIndex] = runSpacing;
+          }
           index = endIndex;
         }
 
@@ -1530,11 +1522,11 @@ html&gt;body{padding:0}&lt;/style&gt;
           if (serialFlags[index]) {
             const serialSpacing = serialSpacings[index];
             const pulseHandle = serialSpacing * .28;
-            const serialRunBaselineY = serialBaselineY + serialRunYShifts.get(index);
+            const serialRunBaselineY = center + serialRunYShifts.get(index);
             if (index === 0 || !serialFlags[index - 1]) {
               points.push(serialPoint(character, cursorX, serialRunBaselineY, pulseHandle, pulseHandle));
             }
-            const pulseHeight = Number(character) / 9 * raw[index].serialMaximumHeight;
+            const pulseHeight = Number(character) / 9 * serialMaxHeight;
             points.push(serialPoint(character, cursorX + serialSpacing / 2, serialRunBaselineY - pulseHeight, pulseHandle, pulseHandle));
             cursorX += serialSpacing;
             const outgoingHandle = index &lt; count - 1 &amp;&amp; serialFlags[index + 1]
@@ -1844,9 +1836,10 @@ html&gt;body{padding:0}&lt;/style&gt;
             centering_samples_per_segment: 64
           },
           serial: {
-            maximum_pulse_height_range_px: [Number(serialMaxHeightMinInput.value), Number(serialMaxHeightMaxInput.value)],
-            baseline_y: Number(serialBaselineYInput.value),
+            nine_pulse_height_px: Number(serialMaxHeightInput.value),
+            baseline: &#x27;main_curve_center_plus_serial_run_y_shift&#x27;,
             spacing_range_px: [Number(serialSpacingMinInput.value), Number(serialSpacingMaxInput.value)],
+            spacing_scope: &#x27;serial_run&#x27;,
             pulse_handle_spacing_factor: .28,
             connector_gap_max_px: 24,
             connector_spacing_factor: .6
@@ -1887,9 +1880,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           geometry.point_y_shift_px[0],
           geometry.point_y_shift_px[1],
           geometry.random_point_height,
-          serial.maximum_pulse_height_range_px[0],
-          serial.maximum_pulse_height_range_px[1],
-          serial.baseline_y,
+          serial.nine_pulse_height_px,
           serial.spacing_range_px[0],
           serial.spacing_range_px[1]
         );
@@ -2022,16 +2013,14 @@ html&gt;body{padding:0}&lt;/style&gt;
         const handleLengthMax = Number(handleLengthMaxInput.value);
         const yShiftMin = Number(yShiftMinInput.value);
         const yShiftMax = Number(yShiftMaxInput.value);
-        const serialMaxHeightMin = Number(serialMaxHeightMinInput.value);
-        const serialMaxHeightMax = Number(serialMaxHeightMaxInput.value);
-        const serialBaselineY = Number(serialBaselineYInput.value);
+        const serialMaxHeight = Number(serialMaxHeightInput.value);
         const serialSpacingMin = Number(serialSpacingMinInput.value);
         const serialSpacingMax = Number(serialSpacingMaxInput.value);
         const uppercaseExtra = Number(uppercaseWeightInput.value);
         const textSize = Number(textSizeInput.value);
         const textWeight = Number(textWeightInput.value);
         const firstCharacters = graphemes(currentTexts[0]);
-        const firstPoints = geometryFor(firstCharacters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, randomHeightEnabled, serialMaxHeightMin, serialMaxHeightMax, serialBaselineY, serialSpacingMin, serialSpacingMax);
+        const firstPoints = geometryFor(firstCharacters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, randomHeightEnabled, serialMaxHeight, serialSpacingMin, serialSpacingMax);
         const curveCount = firstPoints.length &lt; 2 ? 0 : firstPoints.length - 1;
 
         textOutput.value = `${firstCharacters.length} character${firstCharacters.length === 1 ? &#x27;&#x27; : &#x27;s&#x27;}`;
@@ -2039,13 +2028,11 @@ html&gt;body{padding:0}&lt;/style&gt;
         angleOutput.value = `${formatDegrees(rotationMin)} — ${formatDegrees(rotationMax)}`;
         handleLengthOutput.value = `${handleLengthMin} — ${handleLengthMax} px`;
         yShiftOutput.value = `${formatSigned(yShiftMin)} — ${formatSigned(yShiftMax)} px`;
-        serialMaxHeightOutput.value = `${serialMaxHeightMin} — ${serialMaxHeightMax} px`;
-        serialBaselineYOutput.value = `${serialBaselineY}`;
+        serialMaxHeightOutput.value = `${serialMaxHeight} px`;
         serialSpacingOutput.value = `${serialSpacingMin} — ${serialSpacingMax} px`;
         updateDualRange(angleRange, angleMinInput, angleMaxInput);
         updateDualRange(handleLengthRange, handleLengthMinInput, handleLengthMaxInput);
         updateDualRange(yShiftRange, yShiftMinInput, yShiftMaxInput);
-        updateDualRange(serialMaxHeightRange, serialMaxHeightMinInput, serialMaxHeightMaxInput);
         updateDualRange(serialSpacingRange, serialSpacingMinInput, serialSpacingMaxInput);
         uppercaseWeightOutput.value = `${uppercaseExtra} px`;
         textSizeOutput.value = `${textSize} px`;
@@ -2067,7 +2054,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 
         currentTexts.forEach((sourceText, index) =&gt; {
           const characters = graphemes(sourceText);
-          const points = geometryFor(characters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, randomHeightEnabled, serialMaxHeightMin, serialMaxHeightMax, serialBaselineY, serialSpacingMin, serialSpacingMax);
+          const points = geometryFor(characters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, randomHeightEnabled, serialMaxHeight, serialSpacingMin, serialSpacingMax);
           captions[index].textContent = `@${sourceText}`;
           finalSvgs[index].setAttribute(&#x27;aria-label&#x27;, `Black text-seeded open Bezier line for @${sourceText} on an eggshell background`);
           drawFinal(finalSvgs[index], points, weight, uppercaseExtra, renderMode, sourceText, textSize, textWeight);
@@ -2130,14 +2117,6 @@ html&gt;body{padding:0}&lt;/style&gt;
         if (Number(yShiftMaxInput.value) &lt; Number(yShiftMinInput.value)) yShiftMaxInput.value = yShiftMinInput.value;
         draw();
       });
-      serialMaxHeightMinInput.addEventListener(&#x27;input&#x27;, () =&gt; {
-        if (Number(serialMaxHeightMinInput.value) &gt; Number(serialMaxHeightMaxInput.value)) serialMaxHeightMinInput.value = serialMaxHeightMaxInput.value;
-        draw();
-      });
-      serialMaxHeightMaxInput.addEventListener(&#x27;input&#x27;, () =&gt; {
-        if (Number(serialMaxHeightMaxInput.value) &lt; Number(serialMaxHeightMinInput.value)) serialMaxHeightMaxInput.value = serialMaxHeightMinInput.value;
-        draw();
-      });
       serialSpacingMinInput.addEventListener(&#x27;input&#x27;, () =&gt; {
         if (Number(serialSpacingMinInput.value) &gt; Number(serialSpacingMaxInput.value)) serialSpacingMinInput.value = serialSpacingMaxInput.value;
         draw();
@@ -2146,7 +2125,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         if (Number(serialSpacingMaxInput.value) &lt; Number(serialSpacingMinInput.value)) serialSpacingMaxInput.value = serialSpacingMinInput.value;
         draw();
       });
-      [weightInput, serialBaselineYInput, uppercaseWeightInput, textSizeInput, textWeightInput].forEach(control =&gt; control.addEventListener(&#x27;input&#x27;, draw));
+      [weightInput, serialMaxHeightInput, uppercaseWeightInput, textSizeInput, textWeightInput].forEach(control =&gt; control.addEventListener(&#x27;input&#x27;, draw));
       root.__personalField = {
         canonicalSvgForText,
         currentSettings
