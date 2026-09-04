@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-visualize-standalone>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,7 +10,7 @@
 </head>
 <body>
 <iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Agent Art Signature Prototype" srcdoc="&lt;!doctype html&gt;
-&lt;html lang=&quot;en&quot;&gt;
+&lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
@@ -121,10 +121,12 @@
   --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
   --font-weight-normal: 430;
   --font-weight-medium: 500;
+  --icon-size: 16px;
   --line-height-normal: calc(var(--font-size-normal) * 1.5);
   --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
   --line-height-small: calc(var(--font-size-small) + 4px);
-  --radius: var(--border-radius-lg, 12.5px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 10px);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -174,7 +176,7 @@ html &gt; body {
   );
 
   margin: 0;
-  padding: 5px;
+  padding: var(--visualize-paint-gutter, 0px);
   color: var(--foreground);
   background: transparent !important;
   font-family: var(--font-sans) !important;
@@ -238,7 +240,7 @@ code:not(pre code) {
   display: inline;
   padding: 1px 6px;
   border-radius: var(--radius-sm);
-  corner-shape: superellipse(1.5);
+  corner-shape: var(--corner-shape);
   background: var(--muted);
   font-family: var(--font-mono);
   font-size: 0.92em;
@@ -328,7 +330,7 @@ code:not(pre code) {
   overflow: hidden;
   overflow-wrap: break-word;
   border-radius: var(--radius-2xl);
-  corner-shape: superellipse(1.5);
+  corner-shape: var(--corner-shape);
   color: var(--card-foreground);
   background: var(--card);
 }
@@ -362,7 +364,7 @@ code:not(pre code) {
   padding: 4px 8px;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
+  corner-shape: var(--corner-shape);
   color: var(--popover-foreground);
   background: var(--popover);
   box-shadow: none;
@@ -399,14 +401,33 @@ code:not(pre code) {
   gap: 10px;
 }
 
+hr {
+  width: 100%;
+  height: 1px;
+  margin-block: 6px;
+  border: 0;
+  background: var(--border);
+}
+
+.nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
 .progress {
   display: flex;
-  height: 6px;
-  margin-block: calc((var(--line-height-normal, 1.5em) - 6px) / 2);
+  height: 8px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
   overflow: hidden;
   border: 0;
   border-radius: var(--radius-full);
   background: var(--muted);
+}
+
+.progress-bar:only-child {
+  border-radius: var(--radius-full);
 }
 
 .progress-bar {
@@ -472,6 +493,7 @@ small,
 }
 
 .btn,
+.nav-link,
 .form-check-input,
 .form-control,
 .form-range,
@@ -479,7 +501,8 @@ small,
   font: inherit;
 }
 
-.btn {
+.btn,
+.nav-link {
   appearance: button;
   display: inline-flex;
   inline-size: fit-content;
@@ -493,7 +516,7 @@ small,
   -webkit-app-region: no-drag;
   border: 1px solid var(--input);
   border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
+  corner-shape: var(--corner-shape);
   color: var(--secondary-foreground);
   background: var(--secondary);
   cursor: var(--cursor-interaction, pointer);
@@ -519,7 +542,8 @@ a.btn {
   text-decoration: none;
 }
 
-.btn:not(:disabled):hover {
+.btn:not(:disabled):hover,
+.nav-link:not(:disabled):not([aria-disabled=&quot;true&quot;]):hover {
   background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
 }
 
@@ -550,7 +574,27 @@ a.btn {
   background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
 }
 
-.btn:disabled {
+.nav-pills .nav-link {
+  min-width: 0;
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.nav-justified .nav-link {
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.nav-pills .nav-link.active {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+.btn:disabled,
+.nav-link:disabled,
+.nav-link[aria-disabled=&quot;true&quot;] {
   cursor: not-allowed;
   opacity: 0.4;
 }
@@ -573,7 +617,7 @@ a.btn {
   outline: none;
   border: 1px solid var(--input);
   border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
+  corner-shape: var(--corner-shape);
   color: var(--foreground);
   background: var(--secondary);
 }
@@ -618,7 +662,7 @@ a.btn {
 .form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
   border: 0;
   border-radius: calc(var(--radius-lg) - 4px);
-  corner-shape: superellipse(1.5);
+  corner-shape: var(--corner-shape);
 }
 
 textarea.form-control {
@@ -649,7 +693,7 @@ textarea.form-control {
   outline: none;
   border: 1px solid var(--input);
   border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
+  corner-shape: var(--corner-shape);
   color: var(--foreground);
   background-color: var(--secondary);
   background-image:
@@ -698,7 +742,7 @@ textarea.form-control {
 .form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
   border-color: var(--input);
   border-radius: var(--radius-sm);
-  corner-shape: superellipse(1.5);
+  corner-shape: var(--corner-shape);
   background-color: var(--secondary);
   box-shadow: var(--shadow-sm);
 }
@@ -876,19 +920,22 @@ textarea.form-control {
   box-shadow: inset 0 0 0 1px var(--primary);
 }
 
-.btn:focus-visible {
+.btn:focus-visible,
+.nav-link:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 
 @media (pointer: coarse) {
   .btn,
+  .nav-link,
   .form-control,
   .form-select {
     min-width: 44px;
     min-height: 44px;
   }
 
+  /* Keep small-screen WebKit from zooming when a text field receives focus. */
   .form-control,
   .form-select {
     font-size: max(16px, var(--font-size-normal));
@@ -973,8 +1020,8 @@ svg {
 /* Model-authored chart rules can otherwise stretch icons after these styles load. */
 svg.lucide {
   display: block;
-  width: 16px !important;
-  height: 16px !important;
+  width: var(--icon-size) !important;
+  height: var(--icon-size) !important;
   flex: none;
   margin: 0 !important;
   stroke-width: 1.6;
@@ -1020,7 +1067,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #text-seeded-bezier-loop-presets .tsbl-pure { fill: none; stroke: #11110f; stroke-linecap: round; stroke-linejoin: round; }
     #text-seeded-bezier-loop-presets .tsbl-canvas-text { fill: #11110f; text-anchor: middle; }
     #text-seeded-bezier-loop-presets .tsbl-empty { fill: #11110f; font-size: 12px; text-anchor: middle; }
-    #text-seeded-bezier-loop-presets .tsbl-actions { display: grid; gap: .35rem; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: .4rem; }
+    #text-seeded-bezier-loop-presets .tsbl-actions { display: grid; gap: .35rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: .4rem; }
     @media (max-width: 700px) {
       #text-seeded-bezier-loop-presets .tsbl-controls { grid-template-columns: 1fr; }
       #text-seeded-bezier-loop-presets .tsbl-text-control { grid-column: auto; }
@@ -1077,23 +1124,29 @@ html&gt;body{padding:0}&lt;/style&gt;
         &lt;/span&gt;
       &lt;/label&gt;
       &lt;div class=&quot;tsbl-serial-controls&quot;&gt;
-        &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-serial-max-height&quot;&gt;
-          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial pulse maximum height&lt;/span&gt;&lt;output id=&quot;tsbl-serial-max-height-value&quot;&gt;72 px&lt;/output&gt;&lt;/span&gt;
-          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-serial-max-height&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;72&quot;&gt;
+        &lt;label class=&quot;tsbl-control form-label&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial maximum height range&lt;/span&gt;&lt;output id=&quot;tsbl-serial-max-height-value&quot;&gt;0 — 72 px&lt;/output&gt;&lt;/span&gt;
+          &lt;span class=&quot;tsbl-dual-range&quot; id=&quot;tsbl-serial-max-height-range&quot;&gt;
+            &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-serial-max-height-min&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;Minimum serial maximum height&quot;&gt;
+            &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-serial-max-height-max&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;72&quot; aria-label=&quot;Maximum serial maximum height&quot;&gt;
+          &lt;/span&gt;
         &lt;/label&gt;
         &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-serial-baseline-y&quot;&gt;
           &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial baseline Y&lt;/span&gt;&lt;output id=&quot;tsbl-serial-baseline-y-value&quot;&gt;250&lt;/output&gt;&lt;/span&gt;
           &lt;input class=&quot;form-range&quot; id=&quot;tsbl-serial-baseline-y&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;420&quot; step=&quot;1&quot; value=&quot;250&quot;&gt;
         &lt;/label&gt;
-        &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-serial-spacing&quot;&gt;
-          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial spacing&lt;/span&gt;&lt;output id=&quot;tsbl-serial-spacing-value&quot;&gt;24 px&lt;/output&gt;&lt;/span&gt;
-          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-serial-spacing&quot; type=&quot;range&quot; min=&quot;8&quot; max=&quot;60&quot; step=&quot;1&quot; value=&quot;24&quot;&gt;
+        &lt;label class=&quot;tsbl-control form-label&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial spacing range&lt;/span&gt;&lt;output id=&quot;tsbl-serial-spacing-value&quot;&gt;16 — 32 px&lt;/output&gt;&lt;/span&gt;
+          &lt;span class=&quot;tsbl-dual-range&quot; id=&quot;tsbl-serial-spacing-range&quot;&gt;
+            &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-serial-spacing-min&quot; type=&quot;range&quot; min=&quot;8&quot; max=&quot;60&quot; step=&quot;1&quot; value=&quot;16&quot; aria-label=&quot;Minimum serial spacing&quot;&gt;
+            &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-serial-spacing-max&quot; type=&quot;range&quot; min=&quot;8&quot; max=&quot;60&quot; step=&quot;1&quot; value=&quot;32&quot; aria-label=&quot;Maximum serial spacing&quot;&gt;
+          &lt;/span&gt;
         &lt;/label&gt;
       &lt;/div&gt;
       &lt;div class=&quot;tsbl-style-controls&quot;&gt;
         &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-uppercase-weight&quot;&gt;
-          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Uppercase extra weight&lt;/span&gt;&lt;output id=&quot;tsbl-uppercase-weight-value&quot;&gt;8 px&lt;/output&gt;&lt;/span&gt;
-          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-uppercase-weight&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;50&quot; step=&quot;1&quot; value=&quot;8&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Uppercase extra weight&lt;/span&gt;&lt;output id=&quot;tsbl-uppercase-weight-value&quot;&gt;10 px&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-uppercase-weight&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;50&quot; step=&quot;1&quot; value=&quot;10&quot;&gt;
         &lt;/label&gt;
         &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-text-size&quot;&gt;
           &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Canvas text size&lt;/span&gt;&lt;output id=&quot;tsbl-text-size-value&quot;&gt;10 px&lt;/output&gt;&lt;/span&gt;
@@ -1104,8 +1157,8 @@ html&gt;body{padding:0}&lt;/style&gt;
           &lt;input class=&quot;form-range&quot; id=&quot;tsbl-text-weight&quot; type=&quot;range&quot; min=&quot;100&quot; max=&quot;900&quot; step=&quot;100&quot; value=&quot;200&quot;&gt;
         &lt;/label&gt;
         &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-weight&quot;&gt;
-          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Curve stroke weight&lt;/span&gt;&lt;output id=&quot;tsbl-weight-value&quot;&gt;2.0 px&lt;/output&gt;&lt;/span&gt;
-          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-weight&quot; type=&quot;range&quot; min=&quot;0.5&quot; max=&quot;50&quot; step=&quot;0.5&quot; value=&quot;2&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Curve stroke weight&lt;/span&gt;&lt;output id=&quot;tsbl-weight-value&quot;&gt;3.0 px&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-weight&quot; type=&quot;range&quot; min=&quot;0.5&quot; max=&quot;50&quot; step=&quot;0.5&quot; value=&quot;3&quot;&gt;
         &lt;/label&gt;
       &lt;/div&gt;
     &lt;/div&gt;
@@ -1134,469 +1187,9 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;div class=&quot;tsbl-actions&quot;&gt;
       &lt;button class=&quot;btn btn-block tsbl-switch&quot; id=&quot;tsbl-switch&quot; type=&quot;button&quot; aria-label=&quot;Switch to the next four quick-test presets&quot;&gt;Switch 4 presets&lt;/button&gt;
       &lt;button class=&quot;btn btn-primary btn-block tsbl-copy&quot; id=&quot;tsbl-copy-svg&quot; type=&quot;button&quot;&gt;Copy 01 SVG code&lt;/button&gt;
-      &lt;button class=&quot;btn btn-block tsbl-copy&quot; id=&quot;tsbl-copy-generator&quot; type=&quot;button&quot;&gt;Copy Python art spec&lt;/button&gt;
-      &lt;button class=&quot;btn btn-block tsbl-copy&quot; id=&quot;tsbl-copy-nocode&quot; type=&quot;button&quot;&gt;Copy no-code spec&lt;/button&gt;
     &lt;/div&gt;
   &lt;/section&gt;
 
-  &lt;script id=&quot;tsbl-python-template&quot; type=&quot;text/plain&quot;&gt;
-import hashlib
-import json
-import math
-import re
-from decimal import Decimal, ROUND_HALF_UP
-
-INPUT_TEXT = &quot;&quot;
-OUTPUT_FILE = &quot;signature.svg&quot;
-SETTINGS = json.loads(r&#x27;&#x27;&#x27;__SETTINGS_JSON__&#x27;&#x27;&#x27;)
-
-
-def canonical_json(value):
-    return json.dumps(value, sort_keys=True, separators=(&quot;,&quot;, &quot;:&quot;), ensure_ascii=False)
-
-
-def hash_to_unit_float(scope, parameter):
-    payload = canonical_json({
-        &quot;namespace&quot;: SETTINGS[&quot;random_namespace&quot;],
-        &quot;parameter&quot;: parameter,
-        &quot;scheme&quot;: SETTINGS[&quot;random_scheme&quot;],
-        &quot;scope&quot;: scope,
-    }).encode(&quot;utf-8&quot;)
-    digest = hashlib.sha256(payload).digest()
-    first_53_bits = int.from_bytes(digest[:8], &quot;big&quot;) &gt;&gt; 11
-    return first_53_bits / 9007199254740992
-
-
-def map_range(unit_value, minimum, maximum):
-    return minimum + unit_value * (maximum - minimum)
-
-
-def seeded_values(characters):
-    rotation_min, rotation_max = SETTINGS[&quot;handle_rotation_degrees&quot;]
-    length_min, length_max = SETTINGS[&quot;handle_length_px&quot;]
-# @block random-height
-    y_min, y_max = SETTINGS[&quot;point_y_shift_px&quot;]
-# @endblock random-height
-    values = []
-    for character in characters:
-        scope = {&quot;kind&quot;: &quot;character&quot;, &quot;value&quot;: character}
-        values.append({
-            &quot;angle&quot;: map_range(hash_to_unit_float(scope, &quot;handle-angle&quot;), rotation_min, rotation_max) * math.pi / 180,
-            &quot;incoming_length&quot;: map_range(hash_to_unit_float(scope, &quot;incoming-handle-length&quot;), length_min, length_max),
-            &quot;outgoing_length&quot;: map_range(hash_to_unit_float(scope, &quot;outgoing-handle-length&quot;), length_min, length_max),
-# @block random-height
-            &quot;y_shift&quot;: map_range(hash_to_unit_float(scope, &quot;point-y-shift&quot;), y_min, y_max),
-# @endblock random-height
-        })
-    return values
-
-
-# @block random-distribution
-def pair_gap_weight(left_character, right_character):
-    minimum, maximum = SETTINGS[&quot;gap_weight_range&quot;]
-    scope = {
-        &quot;kind&quot;: &quot;ordered-character-pair&quot;,
-        &quot;left&quot;: {&quot;kind&quot;: &quot;character&quot;, &quot;value&quot;: left_character},
-        &quot;right&quot;: {&quot;kind&quot;: &quot;character&quot;, &quot;value&quot;: right_character},
-    }
-    return map_range(hash_to_unit_float(scope, &quot;point-gap-weight&quot;), minimum, maximum)
-# @endblock random-distribution
-
-
-def smooth_handle_angles(raw):
-    count = len(raw)
-    result = []
-    for index, value in enumerate(raw):
-        previous = raw[max(0, index - 1)][&quot;angle&quot;]
-        following = raw[min(count - 1, index + 1)][&quot;angle&quot;]
-        result.append((previous + 2 * value[&quot;angle&quot;] + following) / 4)
-    return result
-
-
-def is_uppercase(character):
-    return &quot;A&quot; &lt;= character &lt;= &quot;Z&quot;
-
-
-def is_serial_digit(character):
-    return &quot;0&quot; &lt;= character &lt;= &quot;9&quot;
-
-
-def shifted_point(point, shift_x):
-    return {
-        **point,
-        &quot;anchor&quot;: [point[&quot;anchor&quot;][0] + shift_x, point[&quot;anchor&quot;][1]],
-        &quot;incoming&quot;: [point[&quot;incoming&quot;][0] + shift_x, point[&quot;incoming&quot;][1]],
-        &quot;outgoing&quot;: [point[&quot;outgoing&quot;][0] + shift_x, point[&quot;outgoing&quot;][1]],
-    }
-
-
-def center_geometry(points):
-    x_values = []
-    for point in points:
-        x_values.extend((point[&quot;anchor&quot;][0], point[&quot;incoming&quot;][0], point[&quot;outgoing&quot;][0]))
-    shift_x = SETTINGS[&quot;canvas_size&quot;] / 2 - (min(x_values) + max(x_values)) / 2
-    return [shifted_point(point, shift_x) for point in points]
-
-
-def geometry_for(characters):
-    count = len(characters)
-    if count == 0:
-        return []
-    center = SETTINGS[&quot;canvas_size&quot;] / 2
-    raw = seeded_values(characters)
-    smoothed_angles = smooth_handle_angles(raw)
-    serial_flags = [is_serial_digit(character) for character in characters]
-    serial_digit_count = sum(serial_flags)
-    line_span = SETTINGS[&quot;line_end_x&quot;] - SETTINGS[&quot;line_start_x&quot;]
-    target_span = line_span * count / SETTINGS[&quot;short_text_span_denominator&quot;] if count &lt;= 3 else line_span
-    target_start = center - target_span / 2
-    target_end = center + target_span / 2
-
-    def identity_point(character, index, x):
-# @block random-height
-        y_shift = raw[index][&quot;y_shift&quot;]
-# @endblock random-height
-# @block flat-height
-        y_shift = 0
-# @endblock flat-height
-        anchor = [x, center + y_shift]
-        angle = smoothed_angles[index]
-        direction = [math.cos(angle), math.sin(angle)]
-        return {
-            &quot;character&quot;: character,
-            &quot;uppercase&quot;: is_uppercase(character),
-            &quot;serial_tail&quot;: False,
-            &quot;anchor&quot;: anchor,
-            &quot;incoming&quot;: [
-                anchor[0] - direction[0] * raw[index][&quot;incoming_length&quot;],
-                anchor[1] - direction[1] * raw[index][&quot;incoming_length&quot;],
-            ],
-            &quot;outgoing&quot;: [
-                anchor[0] + direction[0] * raw[index][&quot;outgoing_length&quot;],
-                anchor[1] + direction[1] * raw[index][&quot;outgoing_length&quot;],
-            ],
-        }
-
-    if serial_digit_count == 0:
-        if count == 1:
-            return center_geometry([
-                identity_point(characters[0], 0, target_start),
-                identity_point(characters[0], 0, target_end),
-            ])
-# @block average-distribution
-        gap_weights = [1 for _ in range(count - 1)]
-# @endblock average-distribution
-# @block random-distribution
-        gap_weights = [pair_gap_weight(characters[index], characters[index + 1]) for index in range(count - 1)]
-# @endblock random-distribution
-        gap_total = sum(gap_weights)
-        gaps = [target_span * value / gap_total for value in gap_weights]
-        positions = [target_start]
-        for gap in gaps:
-            positions.append(positions[-1] + gap)
-        return center_geometry([identity_point(character, index, positions[index]) for index, character in enumerate(characters)])
-
-    serial_spacing = SETTINGS[&quot;serial_spacing_px&quot;]
-    pulse_handle = serial_spacing * SETTINGS[&quot;pulse_handle_spacing_factor&quot;]
-    y_min, y_max = SETTINGS[&quot;point_y_shift_px&quot;]
-    point_y_span = y_max - y_min
-    point_y_midpoint = (y_min + y_max) / 2
-    serial_y_scale = point_y_span / SETTINGS[&quot;point_y_reference_span_px&quot;]
-    scaled_serial_baseline_y = (
-        center
-        + point_y_midpoint
-        + (SETTINGS[&quot;serial_baseline_y&quot;] - center - SETTINGS[&quot;point_y_reference_midpoint_px&quot;]) * serial_y_scale
-    )
-
-    def serial_point(character, x, y):
-        return {
-            &quot;character&quot;: character,
-            &quot;uppercase&quot;: False,
-            &quot;serial_tail&quot;: True,
-            &quot;anchor&quot;: [x, y],
-            &quot;incoming&quot;: [x - pulse_handle, y],
-            &quot;outgoing&quot;: [x + pulse_handle, y],
-        }
-
-    connector_gap = min(SETTINGS[&quot;connector_gap_max_px&quot;], serial_spacing * SETTINGS[&quot;connector_spacing_factor&quot;])
-    flexible_boundaries = []
-    transition_count = 0
-    for index in range(count - 1):
-        if serial_flags[index] != serial_flags[index + 1]:
-            transition_count += 1
-        if not serial_flags[index] and not serial_flags[index + 1]:
-            flexible_boundaries.append(index)
-
-    fixed_width = serial_digit_count * serial_spacing + transition_count * connector_gap
-    flexible_span = max(0, target_span - fixed_width)
-# @block average-distribution
-    flexible_weights = [1 for _ in flexible_boundaries]
-# @endblock average-distribution
-# @block random-distribution
-    flexible_weights = [pair_gap_weight(characters[index], characters[index + 1]) for index in flexible_boundaries]
-# @endblock random-distribution
-    flexible_total = sum(flexible_weights)
-    flexible_advance = {
-        boundary: flexible_span * flexible_weights[weight_index] / flexible_total if flexible_total &gt; 0 else 0
-        for weight_index, boundary in enumerate(flexible_boundaries)
-    }
-    used_width = fixed_width + (flexible_span if flexible_boundaries else 0)
-    cursor_x = center - used_width / 2
-    points = []
-
-    for index, character in enumerate(characters):
-        if serial_flags[index]:
-            if index == 0 or not serial_flags[index - 1]:
-                points.append(serial_point(character, cursor_x, scaled_serial_baseline_y))
-            base_height = int(character) / 9 * SETTINGS[&quot;serial_maximum_pulse_height_px&quot;]
-            scaled_height = base_height * serial_y_scale
-            points.append(serial_point(character, cursor_x + serial_spacing / 2, scaled_serial_baseline_y - scaled_height))
-            cursor_x += serial_spacing
-            points.append(serial_point(character, cursor_x, scaled_serial_baseline_y))
-            if index &lt; count - 1 and not serial_flags[index + 1]:
-                cursor_x += connector_gap
-        else:
-            points.append(identity_point(character, index, cursor_x))
-            if index &lt; count - 1:
-                cursor_x += connector_gap if serial_flags[index + 1] else flexible_advance.get(index, 0)
-
-    return center_geometry(points)
-
-
-def cubic_point(p0, p1, p2, p3, t):
-    u = 1 - t
-    a = u * u * u
-    b = 3 * u * u * t
-    c = 3 * u * t * t
-    d = t * t * t
-    return [
-        a * p0[0] + b * p1[0] + c * p2[0] + d * p3[0],
-        a * p0[1] + b * p1[1] + c * p2[1] + d * p3[1],
-    ]
-
-
-# @block variable-outline
-def cubic_derivative(p0, p1, p2, p3, t):
-    u = 1 - t
-    return [
-        3 * u * u * (p1[0] - p0[0]) + 6 * u * t * (p2[0] - p1[0]) + 3 * t * t * (p3[0] - p2[0]),
-        3 * u * u * (p1[1] - p0[1]) + 6 * u * t * (p2[1] - p1[1]) + 3 * t * t * (p3[1] - p2[1]),
-    ]
-
-
-def smoothstep(t):
-    return t * t * (3 - 2 * t)
-
-
-def weight_at(point):
-    base_weight = SETTINGS[&quot;base_weight_px&quot;]
-    if point[&quot;serial_tail&quot;]:
-        return base_weight
-    if point[&quot;character&quot;] == &quot;_&quot;:
-        return min(base_weight, SETTINGS[&quot;underscore_max_weight_px&quot;])
-    return base_weight + (SETTINGS[&quot;uppercase_extra_weight_px&quot;] if point[&quot;uppercase&quot;] else 0)
-
-
-def width_between(current, following, t):
-    return weight_at(current) + (weight_at(following) - weight_at(current)) * smoothstep(t)
-
-
-def offset_point(current, following, t, side):
-    position = cubic_point(current[&quot;anchor&quot;], current[&quot;outgoing&quot;], following[&quot;incoming&quot;], following[&quot;anchor&quot;], t)
-    derivative = cubic_derivative(current[&quot;anchor&quot;], current[&quot;outgoing&quot;], following[&quot;incoming&quot;], following[&quot;anchor&quot;], t)
-    length = math.hypot(derivative[0], derivative[1]) or 1
-    normal = [-derivative[1] / length, derivative[0] / length]
-    half_width = width_between(current, following, t) / 2
-    return [position[0] + normal[0] * half_width * side, position[1] + normal[1] * half_width * side]
-
-
-def center_points_for_outline(points):
-    if len(points) &lt; 2:
-        return points
-    minimum_x = math.inf
-    maximum_x = -math.inf
-    for index in range(len(points) - 1):
-        current = points[index]
-        following = points[index + 1]
-        for sample in range(SETTINGS[&quot;centering_samples_per_segment&quot;] + 1):
-            t = sample / SETTINGS[&quot;centering_samples_per_segment&quot;]
-            outer = offset_point(current, following, t, 1)
-            inner = offset_point(current, following, t, -1)
-            minimum_x = min(minimum_x, outer[0], inner[0])
-            maximum_x = max(maximum_x, outer[0], inner[0])
-    shift_x = SETTINGS[&quot;canvas_size&quot;] / 2 - (minimum_x + maximum_x) / 2
-    return [shifted_point(point, shift_x) for point in points]
-# @endblock variable-outline
-
-
-# @block pure-bezier
-def center_points_for_centerline(points):
-    if len(points) &lt; 2:
-        return points
-    minimum_x = math.inf
-    maximum_x = -math.inf
-    for index in range(len(points) - 1):
-        current = points[index]
-        following = points[index + 1]
-        for sample in range(SETTINGS[&quot;centering_samples_per_segment&quot;] + 1):
-            position = cubic_point(
-                current[&quot;anchor&quot;], current[&quot;outgoing&quot;], following[&quot;incoming&quot;], following[&quot;anchor&quot;],
-                sample / SETTINGS[&quot;centering_samples_per_segment&quot;],
-            )
-            minimum_x = min(minimum_x, position[0])
-            maximum_x = max(maximum_x, position[0])
-    shift_x = SETTINGS[&quot;canvas_size&quot;] / 2 - (minimum_x + maximum_x) / 2
-    return [shifted_point(point, shift_x) for point in points]
-# @endblock pure-bezier
-
-
-def fixed_2(value):
-    if abs(value) &lt; 0.005:
-        value = 0.0
-    sign = &quot;-&quot; if value &lt; 0 else &quot;&quot;
-    rounded = Decimal.from_float(abs(value)).quantize(Decimal(&quot;0.01&quot;), rounding=ROUND_HALF_UP)
-    return sign + format(rounded, &quot;.2f&quot;)
-
-
-def pair(point):
-    return f&quot;{fixed_2(point[0])},{fixed_2(point[1])}&quot;
-
-
-# @block outline-sampled
-def sampled_variable_width_path(points):
-    if len(points) &lt; 2:
-        return &quot;&quot;
-    outer = []
-    inner = []
-    samples_per_segment = max(
-        SETTINGS[&quot;sampled_outline_min_samples_per_segment&quot;],
-        min(SETTINGS[&quot;sampled_outline_max_samples_per_segment&quot;], math.ceil(SETTINGS[&quot;sampled_outline_target_samples&quot;] / len(points))),
-    )
-
-    def sample_segment(current, following, t):
-        position = cubic_point(current[&quot;anchor&quot;], current[&quot;outgoing&quot;], following[&quot;incoming&quot;], following[&quot;anchor&quot;], t)
-        derivative = cubic_derivative(current[&quot;anchor&quot;], current[&quot;outgoing&quot;], following[&quot;incoming&quot;], following[&quot;anchor&quot;], t)
-        length = math.hypot(derivative[0], derivative[1]) or 1
-        normal = [-derivative[1] / length, derivative[0] / length]
-        width = width_between(current, following, t)
-        half = width / 2
-        outer.append([position[0] + normal[0] * half, position[1] + normal[1] * half])
-        inner.append([position[0] - normal[0] * half, position[1] - normal[1] * half])
-
-    for index in range(len(points) - 1):
-        current = points[index]
-        following = points[index + 1]
-        for sample in range(samples_per_segment):
-            sample_segment(current, following, sample / samples_per_segment)
-    sample_segment(points[-2], points[-1], 1)
-    return &quot;M&quot; + &quot;L&quot;.join(map(pair, outer)) + &quot;L&quot; + &quot;L&quot;.join(map(pair, reversed(inner))) + &quot;Z&quot;
-# @endblock outline-sampled
-
-
-# @block outline-bezier
-def cubic_through_thirds(start, one_third, two_thirds, end):
-    first = [27 * one_third[0] - 8 * start[0] - end[0], 27 * one_third[1] - 8 * start[1] - end[1]]
-    second = [27 * two_thirds[0] - start[0] - 8 * end[0], 27 * two_thirds[1] - start[1] - 8 * end[1]]
-    return {
-        &quot;control1&quot;: [(2 * first[0] - second[0]) / 18, (2 * first[1] - second[1]) / 18],
-        &quot;control2&quot;: [(2 * second[0] - first[0]) / 18, (2 * second[1] - first[1]) / 18],
-    }
-
-
-def bezier_variable_width_path(points):
-    if len(points) &lt; 2:
-        return &quot;&quot;
-    last_segment = len(points) - 2
-    path = &quot;M&quot; + pair(offset_point(points[0], points[1], 0, 1))
-    for index in range(last_segment + 1):
-        current = points[index]
-        following = points[index + 1]
-        start = offset_point(current, following, 0, 1)
-        one_third = offset_point(current, following, 1 / 3, 1)
-        two_thirds = offset_point(current, following, 2 / 3, 1)
-        end = offset_point(current, following, 1, 1)
-        controls = cubic_through_thirds(start, one_third, two_thirds, end)
-        path += &quot;C&quot; + pair(controls[&quot;control1&quot;]) + &quot; &quot; + pair(controls[&quot;control2&quot;]) + &quot; &quot; + pair(end)
-    path += &quot;L&quot; + pair(offset_point(points[last_segment], points[last_segment + 1], 1, -1))
-    for index in range(last_segment, -1, -1):
-        current = points[index]
-        following = points[index + 1]
-        start = offset_point(current, following, 0, -1)
-        one_third = offset_point(current, following, 1 / 3, -1)
-        two_thirds = offset_point(current, following, 2 / 3, -1)
-        end = offset_point(current, following, 1, -1)
-        controls = cubic_through_thirds(start, one_third, two_thirds, end)
-        path += &quot;C&quot; + pair(controls[&quot;control2&quot;]) + &quot; &quot; + pair(controls[&quot;control1&quot;]) + &quot; &quot; + pair(start)
-    return path + &quot;Z&quot;
-# @endblock outline-bezier
-
-
-# @block pure-bezier
-def pure_bezier_path(points):
-    if len(points) &lt; 2:
-        return &quot;&quot;
-    path = &quot;M&quot; + pair(points[0][&quot;anchor&quot;])
-    for index in range(len(points) - 1):
-        current = points[index]
-        following = points[index + 1]
-        path += &quot;C&quot; + pair(current[&quot;outgoing&quot;]) + &quot; &quot; + pair(following[&quot;incoming&quot;]) + &quot; &quot; + pair(following[&quot;anchor&quot;])
-    return path
-# @endblock pure-bezier
-
-
-def xml_number(value):
-    number = float(value)
-    return str(int(number)) if number == int(number) else str(number)
-
-
-def generate_svg(source_text):
-    if not re.fullmatch(SETTINGS[&quot;input_pattern&quot;], source_text):
-        raise ValueError(&quot;input must match &quot; + SETTINGS[&quot;input_pattern&quot;])
-    points = geometry_for(list(source_text))
-# @block pure-bezier
-    centered_points = center_points_for_centerline(points)
-    path_element = (
-        f&#x27;&lt;path d=&quot;{pure_bezier_path(centered_points)}&quot; fill=&quot;none&quot; stroke=&quot;{SETTINGS[&quot;ink&quot;]}&quot; &#x27;
-        f&#x27;stroke-width=&quot;{xml_number(SETTINGS[&quot;base_weight_px&quot;])}&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/&gt;&#x27;
-    )
-# @endblock pure-bezier
-# @block outline-bezier
-    centered_points = center_points_for_outline(points)
-    path_data = bezier_variable_width_path(centered_points)
-    path_element = f&#x27;&lt;path d=&quot;{path_data}&quot; fill=&quot;{SETTINGS[&quot;ink&quot;]}&quot; stroke=&quot;none&quot;/&gt;&#x27;
-# @endblock outline-bezier
-# @block outline-sampled
-    centered_points = center_points_for_outline(points)
-    path_data = sampled_variable_width_path(centered_points)
-    path_element = f&#x27;&lt;path d=&quot;{path_data}&quot; fill=&quot;{SETTINGS[&quot;ink&quot;]}&quot; stroke=&quot;none&quot;/&gt;&#x27;
-# @endblock outline-sampled
-    displayed_handle = SETTINGS[&quot;display_prefix&quot;] + source_text
-    font_family = SETTINGS[&quot;font_family&quot;]
-    text_element = (
-        f&#x27;&lt;text x=&quot;{xml_number(SETTINGS[&quot;canvas_text_x&quot;])}&quot; y=&quot;{xml_number(SETTINGS[&quot;canvas_text_y&quot;])}&quot; &#x27;
-        f&#x27;font-size=&quot;{xml_number(SETTINGS[&quot;canvas_text_size_px&quot;])}&quot; font-weight=&quot;{xml_number(SETTINGS[&quot;canvas_text_weight&quot;])}&quot; &#x27;
-        f&#x27;dominant-baseline=&quot;middle&quot; fill=&quot;{SETTINGS[&quot;ink&quot;]}&quot; text-anchor=&quot;middle&quot; font-family=&quot;{font_family}&quot;&gt;&#x27;
-        f&#x27;{displayed_handle}&lt;/text&gt;&#x27;
-    )
-    size = xml_number(SETTINGS[&quot;canvas_size&quot;])
-    svg_namespace = &quot;http:&quot; + chr(47) * 2 + &quot;www&quot; + &quot;.w3&quot; + &quot;.org/2000/svg&quot;
-    return (
-        f&#x27;&lt;svg viewBox=&quot;0 0 {size} {size}&quot; xmlns=&quot;{svg_namespace}&quot; width=&quot;{size}&quot; height=&quot;{size}&quot;&gt;&#x27;
-        f&#x27;&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;{size}&quot; height=&quot;{size}&quot; fill=&quot;{SETTINGS[&quot;background&quot;]}&quot;/&gt;&#x27;
-        f&#x27;{path_element}{text_element}&lt;/svg&gt;&#x27;
-    )
-
-
-input_text = INPUT_TEXT.strip()
-if not input_text:
-    input_text = input(&quot;X handle without @: &quot;).strip()
-
-svg_source = generate_svg(input_text)
-with open(OUTPUT_FILE, &quot;w&quot;, encoding=&quot;utf-8&quot;) as output_file:
-    output_file.write(svg_source)
-
-print(svg_source)
-  &lt;/script&gt;
 
   &lt;script&gt;
     (() =&gt; {
@@ -1612,21 +1205,22 @@ print(svg_source)
       const handleLengthMaxInput = root.querySelector(&#x27;#tsbl-handle-length-max&#x27;);
       const yShiftMinInput = root.querySelector(&#x27;#tsbl-y-shift-min&#x27;);
       const yShiftMaxInput = root.querySelector(&#x27;#tsbl-y-shift-max&#x27;);
-      const serialMaxHeightInput = root.querySelector(&#x27;#tsbl-serial-max-height&#x27;);
+      const serialMaxHeightMinInput = root.querySelector(&#x27;#tsbl-serial-max-height-min&#x27;);
+      const serialMaxHeightMaxInput = root.querySelector(&#x27;#tsbl-serial-max-height-max&#x27;);
       const serialBaselineYInput = root.querySelector(&#x27;#tsbl-serial-baseline-y&#x27;);
-      const serialSpacingInput = root.querySelector(&#x27;#tsbl-serial-spacing&#x27;);
+      const serialSpacingMinInput = root.querySelector(&#x27;#tsbl-serial-spacing-min&#x27;);
+      const serialSpacingMaxInput = root.querySelector(&#x27;#tsbl-serial-spacing-max&#x27;);
       const angleRange = root.querySelector(&#x27;#tsbl-angle-range&#x27;);
       const handleLengthRange = root.querySelector(&#x27;#tsbl-handle-length-range&#x27;);
       const yShiftRange = root.querySelector(&#x27;#tsbl-y-shift-range&#x27;);
+      const serialMaxHeightRange = root.querySelector(&#x27;#tsbl-serial-max-height-range&#x27;);
+      const serialSpacingRange = root.querySelector(&#x27;#tsbl-serial-spacing-range&#x27;);
       const uppercaseWeightInput = root.querySelector(&#x27;#tsbl-uppercase-weight&#x27;);
       const textSizeInput = root.querySelector(&#x27;#tsbl-text-size&#x27;);
       const textWeightInput = root.querySelector(&#x27;#tsbl-text-weight&#x27;);
       const heightToggleButton = root.querySelector(&#x27;#tsbl-height-toggle&#x27;);
       const switchButton = root.querySelector(&#x27;#tsbl-switch&#x27;);
       const copySvgButton = root.querySelector(&#x27;#tsbl-copy-svg&#x27;);
-      const copyGeneratorButton = root.querySelector(&#x27;#tsbl-copy-generator&#x27;);
-      const copyNoCodeButton = root.querySelector(&#x27;#tsbl-copy-nocode&#x27;);
-      const pythonTemplate = root.querySelector(&#x27;#tsbl-python-template&#x27;);
       const textOutput = root.querySelector(&#x27;#tsbl-text-value&#x27;);
       const weightOutput = root.querySelector(&#x27;#tsbl-weight-value&#x27;);
       const angleOutput = root.querySelector(&#x27;#tsbl-angle-value&#x27;);
@@ -1648,8 +1242,6 @@ print(svg_source)
       const canvasTextY = canvasSize * (1 - .05);
       const handlePattern = /^[A-Za-z0-9_]{1,15}$/;
       const specificationVersion = &#x27;1.0.0&#x27;;
-      const specificationHashPlaceholder = &#x27;&lt;SPEC_HASH_PLACEHOLDER&gt;&#x27;;
-      const noCodeSpecificationHashPlaceholder = &#x27;&lt;NO_CODE_SPEC_HASH_PLACEHOLDER&gt;&#x27;;
       const randomScheme = &#x27;sha256-labeled-u53&#x27;;
       const randomNamespace = &#x27;personal-field&#x27;;
       const presets = [
@@ -1788,14 +1380,16 @@ print(svg_source)
         return character &gt;= &#x27;A&#x27; &amp;&amp; character &lt;= &#x27;Z&#x27;;
       }
 
-      function seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax) {
+      function seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, serialMaxHeightMin, serialMaxHeightMax, serialSpacingMin, serialSpacingMax) {
         return characters.map(character =&gt; {
           const scope = { kind: &#x27;character&#x27;, value: character };
           return {
             angle: mapRange(hashToUnitFloat(scope, &#x27;handle-angle&#x27;), rotationMin, rotationMax) * Math.PI / 180,
             incomingLength: mapRange(hashToUnitFloat(scope, &#x27;incoming-handle-length&#x27;), handleLengthMin, handleLengthMax),
             outgoingLength: mapRange(hashToUnitFloat(scope, &#x27;outgoing-handle-length&#x27;), handleLengthMin, handleLengthMax),
-            yShift: mapRange(hashToUnitFloat(scope, &#x27;point-y-shift&#x27;), yShiftMin, yShiftMax)
+            yShift: mapRange(hashToUnitFloat(scope, &#x27;point-y-shift&#x27;), yShiftMin, yShiftMax),
+            serialMaximumHeight: mapRange(hashToUnitFloat(scope, &#x27;serial-maximum-height&#x27;), serialMaxHeightMin, serialMaxHeightMax),
+            serialSpacing: mapRange(hashToUnitFloat(scope, &#x27;serial-spacing&#x27;), serialSpacingMin, serialSpacingMax)
           };
         });
       }
@@ -1821,13 +1415,13 @@ print(svg_source)
         return /^\d$/.test(character);
       }
 
-      function geometryFor(characters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, useRandomHeight, serialMaxHeight, serialBaselineY, serialSpacing) {
+      function geometryFor(characters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, useRandomHeight, serialMaxHeightMin, serialMaxHeightMax, serialBaselineY, serialSpacingMin, serialSpacingMax) {
         const count = characters.length;
         if (count === 0) return [];
         const serialFlags = characters.map(isSerialDigit);
         const serialDigitCount = serialFlags.filter(Boolean).length;
         const hasSerialDigits = serialDigitCount &gt; 0;
-        const raw = seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax);
+        const raw = seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, serialMaxHeightMin, serialMaxHeightMax, serialSpacingMin, serialSpacingMax);
         const smoothedAngles = smoothedHandleAngles(raw);
         const lineStart = 60;
         const lineEnd = 360;
@@ -1880,31 +1474,45 @@ print(svg_source)
           return centerGeometry(characters.map((character, index) =&gt; identityPoint(character, index, positions[index])));
         }
 
-        const pulseHandle = serialSpacing * .28;
-        const pointYReferenceSpan = 50;
-        const pointYReferenceMidpoint = -15;
-        const pointYSpan = yShiftMax - yShiftMin;
-        const pointYMidpoint = (yShiftMin + yShiftMax) / 2;
-        const serialYScale = pointYSpan / pointYReferenceSpan;
-        const scaledSerialBaselineY = center + pointYMidpoint + (serialBaselineY - center - pointYReferenceMidpoint) * serialYScale;
-        const serialPoint = (character, x, y) =&gt; ({
+        const serialSpacings = raw.map((value, index) =&gt; serialFlags[index] ? value.serialSpacing : 0);
+        const serialRunYShifts = new Map();
+        for (let index = 0; index &lt; count;) {
+          if (!serialFlags[index]) {
+            index++;
+            continue;
+          }
+          let endIndex = index + 1;
+          while (endIndex &lt; count &amp;&amp; serialFlags[endIndex]) endIndex++;
+          const runValue = characters.slice(index, endIndex).join(&#x27;&#x27;);
+          const runShift = useRandomHeight
+            ? mapRange(hashToUnitFloat({ kind: &#x27;serial-run&#x27;, value: runValue }, &#x27;point-y-shift&#x27;), yShiftMin, yShiftMax)
+            : 0;
+          for (let runIndex = index; runIndex &lt; endIndex; runIndex++) serialRunYShifts.set(runIndex, runShift);
+          index = endIndex;
+        }
+
+        const serialPoint = (character, x, y, incomingHandle, outgoingHandle) =&gt; ({
           character,
           uppercase: false,
           serialTail: true,
           anchor: [x, y],
-          incoming: [x - pulseHandle, y],
-          outgoing: [x + pulseHandle, y]
+          incoming: [x - incomingHandle, y],
+          outgoing: [x + outgoingHandle, y]
         });
 
-        const connectorGap = Math.min(24, serialSpacing * .6);
+        const connectorGapForBoundary = index =&gt; {
+          const serialIndex = serialFlags[index] ? index : index + 1;
+          return Math.min(24, serialSpacings[serialIndex] * .6);
+        };
         const flexibleBoundaries = [];
-        let transitionCount = 0;
+        const transitionBoundaries = [];
         for (let index = 0; index &lt; count - 1; index++) {
-          if (serialFlags[index] !== serialFlags[index + 1]) transitionCount++;
+          if (serialFlags[index] !== serialFlags[index + 1]) transitionBoundaries.push(index);
           if (!serialFlags[index] &amp;&amp; !serialFlags[index + 1]) flexibleBoundaries.push(index);
         }
 
-        const fixedWidth = serialDigitCount * serialSpacing + transitionCount * connectorGap;
+        const fixedWidth = serialSpacings.reduce((total, value) =&gt; total + value, 0)
+          + transitionBoundaries.reduce((total, index) =&gt; total + connectorGapForBoundary(index), 0);
         const flexibleSpan = Math.max(0, targetSpan - fixedWidth);
         const flexibleWeights = flexibleBoundaries.map(index =&gt; (
           distribution === &#x27;average&#x27; ? 1 : pairGapWeight(characters[index], characters[index + 1])
@@ -1920,19 +1528,24 @@ print(svg_source)
 
         characters.forEach((character, index) =&gt; {
           if (serialFlags[index]) {
+            const serialSpacing = serialSpacings[index];
+            const pulseHandle = serialSpacing * .28;
+            const serialRunBaselineY = serialBaselineY + serialRunYShifts.get(index);
             if (index === 0 || !serialFlags[index - 1]) {
-              points.push(serialPoint(character, cursorX, scaledSerialBaselineY));
+              points.push(serialPoint(character, cursorX, serialRunBaselineY, pulseHandle, pulseHandle));
             }
-            const baseHeight = Number(character) / 9 * serialMaxHeight;
-            const scaledHeight = baseHeight * serialYScale;
-            points.push(serialPoint(character, cursorX + serialSpacing / 2, scaledSerialBaselineY - scaledHeight));
+            const pulseHeight = Number(character) / 9 * raw[index].serialMaximumHeight;
+            points.push(serialPoint(character, cursorX + serialSpacing / 2, serialRunBaselineY - pulseHeight, pulseHandle, pulseHandle));
             cursorX += serialSpacing;
-            points.push(serialPoint(character, cursorX, scaledSerialBaselineY));
-            if (index &lt; count - 1 &amp;&amp; !serialFlags[index + 1]) cursorX += connectorGap;
+            const outgoingHandle = index &lt; count - 1 &amp;&amp; serialFlags[index + 1]
+              ? serialSpacings[index + 1] * .28
+              : pulseHandle;
+            points.push(serialPoint(character, cursorX, serialRunBaselineY, pulseHandle, outgoingHandle));
+            if (index &lt; count - 1 &amp;&amp; !serialFlags[index + 1]) cursorX += connectorGapForBoundary(index);
           } else {
             points.push(identityPoint(character, index, cursorX));
             if (index &lt; count - 1) {
-              cursorX += serialFlags[index + 1] ? connectorGap : flexibleAdvance.get(index) || 0;
+              cursorX += serialFlags[index + 1] ? connectorGapForBoundary(index) : flexibleAdvance.get(index) || 0;
             }
           }
         });
@@ -2231,14 +1844,12 @@ print(svg_source)
             centering_samples_per_segment: 64
           },
           serial: {
-            maximum_pulse_height_px: Number(serialMaxHeightInput.value),
+            maximum_pulse_height_range_px: [Number(serialMaxHeightMinInput.value), Number(serialMaxHeightMaxInput.value)],
             baseline_y: Number(serialBaselineYInput.value),
-            spacing_px: Number(serialSpacingInput.value),
+            spacing_range_px: [Number(serialSpacingMinInput.value), Number(serialSpacingMaxInput.value)],
             pulse_handle_spacing_factor: .28,
             connector_gap_max_px: 24,
-            connector_spacing_factor: .6,
-            point_y_reference_span_px: 50,
-            point_y_reference_midpoint_px: -15
+            connector_spacing_factor: .6
           },
           stroke: {
             base_weight_px: Number(weightInput.value),
@@ -2263,410 +1874,6 @@ print(svg_source)
         };
       }
 
-      function pythonGeneratorSettings(settings) {
-        const generatorSettings = {
-          input_pattern: settings.input.pattern,
-          display_prefix: settings.input.display_prefix,
-          random_scheme: settings.system.random_scheme,
-          random_namespace: settings.system.random_namespace,
-          canvas_size: settings.canvas.width,
-          background: settings.canvas.background,
-          ink: settings.canvas.ink,
-          canvas_text_x: settings.canvas.text.x,
-          canvas_text_y: settings.canvas.text.y,
-          canvas_text_size_px: settings.canvas.text.size_px,
-          canvas_text_weight: settings.canvas.text.weight,
-          font_family: settings.canvas.text.font_family,
-          line_start_x: settings.geometry.line_start_x,
-          line_end_x: settings.geometry.line_end_x,
-          short_text_span_denominator: settings.geometry.short_text_span_denominator,
-          handle_rotation_degrees: settings.geometry.handle_rotation_degrees,
-          handle_length_px: settings.geometry.handle_length_px,
-          point_y_shift_px: settings.geometry.point_y_shift_px,
-          centering_samples_per_segment: settings.geometry.centering_samples_per_segment,
-          serial_maximum_pulse_height_px: settings.serial.maximum_pulse_height_px,
-          serial_baseline_y: settings.serial.baseline_y,
-          serial_spacing_px: settings.serial.spacing_px,
-          pulse_handle_spacing_factor: settings.serial.pulse_handle_spacing_factor,
-          connector_gap_max_px: settings.serial.connector_gap_max_px,
-          connector_spacing_factor: settings.serial.connector_spacing_factor,
-          point_y_reference_span_px: settings.serial.point_y_reference_span_px,
-          point_y_reference_midpoint_px: settings.serial.point_y_reference_midpoint_px,
-          base_weight_px: settings.stroke.base_weight_px
-        };
-        if (settings.geometry.point_distribution === &#x27;random&#x27;) {
-          generatorSettings.gap_weight_range = settings.geometry.gap_weight_range;
-        }
-        if (settings.path.mode !== &#x27;pure_cubic_bezier_stroke&#x27;) {
-          generatorSettings.uppercase_extra_weight_px = settings.stroke.uppercase_extra_weight_px;
-          generatorSettings.underscore_max_weight_px = settings.stroke.underscore_max_weight_px;
-        }
-        if (settings.path.mode === &#x27;variable_sampled_outline&#x27;) {
-          generatorSettings.sampled_outline_target_samples = settings.path.sampled_outline_target_samples;
-          generatorSettings.sampled_outline_min_samples_per_segment = settings.path.sampled_outline_min_samples_per_segment;
-          generatorSettings.sampled_outline_max_samples_per_segment = settings.path.sampled_outline_max_samples_per_segment;
-        }
-        return generatorSettings;
-      }
-
-      function noCodeGeneratorSettings(settings) {
-        const geometry = settings.geometry;
-        const serial = settings.serial;
-        const stroke = settings.stroke;
-        const canvasCenter = [settings.canvas.width / 2, settings.canvas.height / 2];
-        const normalSpan = geometry.line_end_x - geometry.line_start_x;
-        const pointYSpan = geometry.point_y_shift_px[1] - geometry.point_y_shift_px[0];
-        const pointYMidpoint = (geometry.point_y_shift_px[0] + geometry.point_y_shift_px[1]) / 2;
-        const serialYScale = pointYSpan / serial.point_y_reference_span_px;
-        const resolvedSerialBaseline = canvasCenter[1] + pointYMidpoint
-          + (serial.baseline_y - canvasCenter[1] - serial.point_y_reference_midpoint_px) * serialYScale;
-        const activeCharacterMappings = [
-          { label: &#x27;handle-angle&#x27;, minimum: geometry.handle_rotation_degrees[0], maximum: geometry.handle_rotation_degrees[1], mapped_unit: &#x27;degrees&#x27; },
-          { label: &#x27;incoming-handle-length&#x27;, minimum: geometry.handle_length_px[0], maximum: geometry.handle_length_px[1], mapped_unit: &#x27;px&#x27; },
-          { label: &#x27;outgoing-handle-length&#x27;, minimum: geometry.handle_length_px[0], maximum: geometry.handle_length_px[1], mapped_unit: &#x27;px&#x27; }
-        ];
-        if (geometry.random_point_height) {
-          activeCharacterMappings.push({ label: &#x27;point-y-shift&#x27;, minimum: geometry.point_y_shift_px[0], maximum: geometry.point_y_shift_px[1], mapped_unit: &#x27;px&#x27; });
-        }
-        const activeOrderedPairMappings = geometry.point_distribution === &#x27;random&#x27;
-          ? [{ label: &#x27;point-gap-weight&#x27;, minimum: geometry.gap_weight_range[0], maximum: geometry.gap_weight_range[1], mapped_unit: &#x27;unitless&#x27; }]
-          : [];
-        const conformanceScope = { kind: &#x27;character&#x27;, value: &#x27;A&#x27; };
-        const conformanceParameter = &#x27;handle-angle&#x27;;
-        const conformancePayloadObject = {
-          namespace: settings.system.random_namespace,
-          parameter: conformanceParameter,
-          scheme: settings.system.random_scheme,
-          scope: conformanceScope
-        };
-        const conformancePayload = canonicalJson(conformancePayloadObject);
-        const conformanceDigest = sha256Bytes(conformancePayload);
-        const conformanceDigestHex = Array.from(conformanceDigest, byte =&gt; byte.toString(16).padStart(2, &#x27;0&#x27;)).join(&#x27;&#x27;);
-        const conformanceView = new DataView(conformanceDigest.buffer, conformanceDigest.byteOffset, conformanceDigest.byteLength);
-        const conformanceU53 = conformanceView.getUint32(0, false) * 2097152 + (conformanceView.getUint32(4, false) &gt;&gt;&gt; 11);
-        const conformanceUnit = conformanceU53 / 9007199254740992;
-        const conformanceExactDecimalDigits = (BigInt(conformanceU53) * 5n ** 53n).toString().padStart(53, &#x27;0&#x27;);
-        const conformanceExactDecimal = `0.${conformanceExactDecimalDigits}`;
-        const selected = {
-          specification: {
-            type: &#x27;exact declarative deterministic-construction protocol&#x27;,
-            spec_version: settings.system.version,
-            spec_hash: noCodeSpecificationHashPlaceholder,
-            execution_mode: &#x27;Perform the ordered calculation steps directly from the natural-language and JSON rules. No program source is included or required.&#x27;,
-            precision: &#x27;Every rule, formula, semantic random label, and selected numeric value below is canonical and exact.&#x27;,
-            selected_options_only: true
-          },
-          execution_protocol: {
-            role: &#x27;Act as a deterministic geometry processor, not as a creative image-prompt interpreter.&#x27;,
-            strict_order_required: true,
-            internal_calculation_ledger_required: true,
-            internal_calculation_ledger_visibility: &#x27;Keep intermediate values internal unless the requester explicitly asks to inspect them.&#x27;,
-            phases: [
-              &#x27;0. Reproduce the supplied PRNG conformance vector exactly. Stop on any mismatch.&#x27;,
-              &#x27;1. Acquire, normalize, and validate the username seed.&#x27;,
-              &#x27;2. Enumerate every active unique character scope and active ordered-character-pair scope.&#x27;,
-              &#x27;3. Calculate every labeled SHA-256 U53 value, materialize its numeric ledger record, and map it into its selected range.&#x27;,
-              &#x27;4. Build the raw per-character value table, then calculate neighbor-smoothed angles.&#x27;,
-              &#x27;5. Calculate target span, character advances, serial digit pulses, anchors, handles, and point weights.&#x27;,
-              &#x27;6. Perform the initial complete anchor-and-handle X centering.&#x27;,
-              &#x27;7. Evaluate the selected cubic geometry and perform its selected final centering procedure.&#x27;,
-              &#x27;8. Construct the selected path commands, round coordinates, and assemble the exact SVG elements.&#x27;,
-              `9. Only after the SVG is complete, rasterize that SVG directly to a ${settings.canvas.width} by ${settings.canvas.height} PNG with a vector renderer and return that PNG.`
-            ],
-            render_gate: &#x27;Do not render or request an image before phases 0 through 8 are complete and the full deterministic SVG geometry exists.&#x27;,
-            required_renderer: `An SVG/vector renderer applied directly to the constructed SVG at exactly ${settings.canvas.width} by ${settings.canvas.height} output pixels.`,
-            output_format: &#x27;PNG&#x27;,
-            output_pixel_width: settings.canvas.width,
-            output_pixel_height: settings.canvas.height,
-            scaling_rule: &#x27;Rasterize the SVG directly at the final pixel dimensions. Do not create an intermediate bitmap, upscale, downscale, stretch, resample, screenshot, or crop it.&#x27;,
-            prohibited_renderer: &#x27;Do not use text-to-image, diffusion, generative image synthesis, handwriting generation, or a visual interpretation model to invent the main mark.&#x27;,
-            main_mark_rule: &#x27;The main mark is only the computed SVG path. It must never spell, trace, resemble, or redraw the username as readable lettering.&#x27;,
-            text_rule: &#x27;The only readable username is the small bottom SVG text label defined below.&#x27;,
-            forbidden_substitutions: [&#x27;calligraphy&#x27;, &#x27;handwriting&#x27;, &#x27;letterforms in the main mark&#x27;, &#x27;signature-style name drawing&#x27;, &#x27;underline flourish&#x27;, &#x27;decorative stroke&#x27;, &#x27;approximate curve&#x27;, &#x27;invented geometry&#x27;],
-            failure_policy: &#x27;If any exact calculation or vector-construction step cannot be performed, do not substitute an image-generation approximation. Report that deterministic construction is unavailable.&#x27;
-          },
-          prng_conformance_test: {
-            must_pass_before_processing_username: true,
-            scope: conformanceScope,
-            parameter: conformanceParameter,
-            canonical_payload_text: conformancePayload,
-            expected_sha256_hex: conformanceDigestHex,
-            expected_u53_integer: conformanceU53,
-            expected_unit_value_exact_fraction: `${conformanceU53}/9007199254740992`,
-            expected_unit_value_exact_decimal: conformanceExactDecimal,
-            expected_unit_value_binary64_display: conformanceUnit,
-            selected_mapping_range: geometry.handle_rotation_degrees,
-            expected_mapped_handle_angle_degrees: mapRange(conformanceUnit, geometry.handle_rotation_degrees[0], geometry.handle_rotation_degrees[1]),
-            comparison_rule: &#x27;The canonical payload text, SHA-256 hex digest, and U53 integer must match exactly. Treat the fraction as the authoritative unit value; a shorter decimal display may be rounded. The mapped angle must equal the stated range formula evaluated from that fraction. Stop on any substantive mismatch; do not approximate.&#x27;
-          },
-          value_materialization: {
-            mandatory_before_geometry: true,
-            range_mapping_formula: &#x27;mapped = minimum + unit_value * (maximum - minimum).&#x27;,
-            active_character_parameters: activeCharacterMappings,
-            active_ordered_pair_parameters: activeOrderedPairMappings,
-            character_table_key: &#x27;One entry for every unique exact case-sensitive character.&#x27;,
-            ordered_pair_table_key: geometry.point_distribution === &#x27;random&#x27;
-              ? &#x27;One entry for every unique active ordered non-digit-to-non-digit neighboring pair.&#x27;
-              : &#x27;No ordered-pair random table is active for the selected average distribution.&#x27;,
-            required_numeric_record_fields: [&#x27;canonical_payload_text&#x27;, &#x27;sha256_hex&#x27;, &#x27;u53_integer&#x27;, &#x27;unit_value&#x27;, &#x27;minimum&#x27;, &#x27;maximum&#x27;, &#x27;mapped_value&#x27;],
-            character_record_schema: {
-              &#x27;&lt;exact character&gt;&#x27;: {
-                &#x27;&lt;active parameter label&gt;&#x27;: {
-                  canonical_payload_text: &#x27;&lt;calculated canonical JSON text&gt;&#x27;,
-                  sha256_hex: &#x27;&lt;calculated 64-character lowercase hexadecimal digest&gt;&#x27;,
-                  u53_integer: &#x27;&lt;calculated integer&gt;&#x27;,
-                  unit_value: &#x27;&lt;calculated full-precision number in [0,1)&gt;&#x27;,
-                  minimum: &#x27;&lt;selected numeric minimum&gt;&#x27;,
-                  maximum: &#x27;&lt;selected numeric maximum&gt;&#x27;,
-                  mapped_value: &#x27;&lt;minimum + unit_value * (maximum - minimum)&gt;&#x27;
-                }
-              }
-            },
-            ordered_pair_record_schema: {
-              &#x27;&lt;left exact character&gt;→&lt;right exact character&gt;&#x27;: {
-                &#x27;point-gap-weight&#x27;: {
-                  canonical_payload_text: &#x27;&lt;calculated canonical JSON text&gt;&#x27;,
-                  sha256_hex: &#x27;&lt;calculated 64-character lowercase hexadecimal digest&gt;&#x27;,
-                  u53_integer: &#x27;&lt;calculated integer&gt;&#x27;,
-                  unit_value: &#x27;&lt;calculated full-precision number in [0,1)&gt;&#x27;,
-                  minimum: &#x27;&lt;selected numeric minimum&gt;&#x27;,
-                  maximum: &#x27;&lt;selected numeric maximum&gt;&#x27;,
-                  mapped_value: &#x27;&lt;minimum + unit_value * (maximum - minimum)&gt;&#x27;
-                }
-              }
-            },
-            completion_gate: &#x27;Every active record must contain numeric u53_integer, unit_value, minimum, maximum, and mapped_value fields before any anchor, handle, gap, or curve coordinate is calculated.&#x27;,
-            consumption_rule: &#x27;All later geometry must consume the stored mapped_value fields. No later value may be selected by taste, visual balance, language meaning, or aesthetic judgment.&#x27;
-          },
-          input: {
-            source: &#x27;X username of the account that authored the current request&#x27;,
-            normalization: &#x27;Remove exactly one leading @. Do not alter the remaining case or characters.&#x27;,
-            validation_pattern: settings.input.pattern,
-            case_sensitive: true,
-            display_prefix: settings.input.display_prefix,
-            seed_excludes_display_prefix: true
-          },
-          deterministic_mapping: {
-            hash_algorithm: &#x27;SHA-256&#x27;,
-            scheme: settings.system.random_scheme,
-            namespace: settings.system.random_namespace,
-            spec_version_and_hash_are_prng_inputs: false,
-            canonical_payload: {
-              fields: [&#x27;namespace&#x27;, &#x27;parameter&#x27;, &#x27;scheme&#x27;, &#x27;scope&#x27;],
-              serialization: &#x27;UTF-8 JSON with object keys sorted recursively, compact comma and colon separators, and Unicode characters preserved rather than ASCII-escaped.&#x27;
-            },
-            digest_formula: &#x27;digest = SHA256(UTF8(canonical_JSON(payload))).&#x27;,
-            digest_extraction: &#x27;Read digest bytes 0 through 7 as one unsigned 64-bit big-endian integer, shift that integer right by 11 bits, and keep the resulting first 53 digest bits.&#x27;,
-            divisor_2_pow_53: 9007199254740992,
-            unit_value_formula: &#x27;u = (unsigned_big_endian_integer(digest_bytes_0_through_7) shifted right by 11) / 9007199254740992. The result is in [0,1).&#x27;,
-            range_mapping_formula: &#x27;mapped = minimum + u * (maximum - minimum). Do not quantize mapped values before the final SVG coordinate serialization.&#x27;,
-            index_rule: &#x27;Character indices are never part of a random scope.&#x27;,
-            character_scope: { kind: &#x27;character&#x27;, value: &#x27;&lt;exact case-sensitive character&gt;&#x27; },
-            ordered_pair_scope: {
-              kind: &#x27;ordered-character-pair&#x27;,
-              left: { kind: &#x27;character&#x27;, value: &#x27;&lt;left exact character&gt;&#x27; },
-              right: { kind: &#x27;character&#x27;, value: &#x27;&lt;right exact character&gt;&#x27; }
-            },
-            character_parameter_labels: {
-              handle_angle: &#x27;handle-angle&#x27;,
-              incoming_handle_length: &#x27;incoming-handle-length&#x27;,
-              outgoing_handle_length: &#x27;outgoing-handle-length&#x27;
-            },
-            ordered_pair_parameter_label: &#x27;point-gap-weight&#x27;,
-            repetition_rule: &#x27;The same exact character always receives the same raw value for every active character parameter. A final smoothed handle angle can still differ between repeated characters because its immediate neighbors participate in smoothing.&#x27;
-          },
-          canvas: {
-            coordinate_width: settings.canvas.width,
-            coordinate_height: settings.canvas.height,
-            center: canvasCenter,
-            target_render_width: settings.render.preview_width,
-            target_render_height: settings.render.preview_height,
-            background: settings.canvas.background,
-            ink: settings.canvas.ink
-          },
-          character_geometry: {
-            reading_order: &#x27;Left to right over every validated input character, including digits.&#x27;,
-            handle_angle_range_degrees: geometry.handle_rotation_degrees,
-            incoming_handle_length_range_px: geometry.handle_length_px,
-            outgoing_handle_length_range_px: geometry.handle_length_px,
-            raw_angle_formula: &#x27;raw_angle_radians = mapped_handle_angle_degrees * pi / 180.&#x27;,
-            angle_smoothing: &#x27;For original character position i, smoothed_angle[i] = (raw_angle[max(0,i-1)] + 2*raw_angle[i] + raw_angle[min(count-1,i+1)]) / 4. Use ordinary arithmetic on the angle values; do not use circular wrapping.&#x27;,
-            angle_smoothing_weights: geometry.angle_smoothing_weights,
-            direction_formula: &#x27;direction = [cos(smoothed_angle), sin(smoothed_angle)].&#x27;,
-            anchor: geometry.random_point_height
-              ? &#x27;Anchor X is the assigned horizontal position. Anchor Y is canvas-center Y plus the character point-Y shift.&#x27;
-              : &#x27;Anchor X is the assigned horizontal position. Anchor Y is canvas-center Y with no character point-Y shift.&#x27;,
-            incoming_handle_formula: &#x27;incoming = anchor - direction * mapped_incoming_length.&#x27;,
-            outgoing_handle_formula: &#x27;outgoing = anchor + direction * mapped_outgoing_length.&#x27;,
-            digit_neighbor_effect: &#x27;Digits receive the same raw angle values and therefore influence smoothing of adjacent non-digit character angles, even though digit anchors are replaced by pulse geometry.&#x27;
-          },
-          horizontal_layout: {
-            normal_start_x: geometry.line_start_x,
-            normal_end_x: geometry.line_end_x,
-            normal_span_px: normalSpan,
-            selected_distribution: geometry.point_distribution,
-            target_span_rule: &#x27;For one, two, or three input characters, target span equals normal span multiplied by character count and divided by the short-text denominator. For four or more characters, target span equals the normal span.&#x27;,
-            short_text_denominator: geometry.short_text_span_denominator,
-            short_spans_px: {
-              one_character: normalSpan / geometry.short_text_span_denominator,
-              two_characters: normalSpan * 2 / geometry.short_text_span_denominator,
-              three_characters: normalSpan * 3 / geometry.short_text_span_denominator
-            },
-            target_bounds: &#x27;Target start and end are canvas-center X minus and plus half of target span.&#x27;,
-            one_non_digit_character_rule: &#x27;Only when the input contains no digits and has exactly one character: create two identity points controlled by that same character, one at target start and one at target end, producing one visible cubic segment.&#x27;,
-            one_digit_character_rule: &#x27;A one-character digit input does not use identity-point duplication. It creates one baseline-peak-baseline pulse, which is three serial anchors and two cubic segments.&#x27;,
-            initial_centering: &#x27;After building every geometry point, collect the X coordinate of each anchor, incoming handle, and outgoing handle. Shift every one of those X coordinates by canvas-center X minus (minimum X plus maximum X)/2.&#x27;
-          },
-          serial_digits: {
-            recognized_anywhere: true,
-            point_y_reference_span_px: serial.point_y_reference_span_px,
-            point_y_reference_midpoint_px: serial.point_y_reference_midpoint_px,
-            selected_maximum_height_px: serial.maximum_pulse_height_px,
-            selected_baseline_y: serial.baseline_y,
-            selected_spacing_px: serial.spacing_px,
-            point_y_control_range_px: geometry.point_y_shift_px,
-            pulse_handle_spacing_factor: serial.pulse_handle_spacing_factor,
-            pulse_handle_length_px: serial.spacing_px * serial.pulse_handle_spacing_factor,
-            connector_gap_max_px: serial.connector_gap_max_px,
-            connector_spacing_factor: serial.connector_spacing_factor,
-            resolved_connector_gap_px: Math.min(serial.connector_gap_max_px, serial.spacing_px * serial.connector_spacing_factor),
-            point_y_scale: serialYScale,
-            resolved_baseline_y: resolvedSerialBaseline,
-            resolved_maximum_height_px: serial.maximum_pulse_height_px * serialYScale,
-            point_y_scale_formula: &#x27;point_y_scale = (point_y_max - point_y_min) / point_y_reference_span.&#x27;,
-            point_y_midpoint_formula: &#x27;point_y_midpoint = (point_y_min + point_y_max) / 2.&#x27;,
-            baseline_formula: &#x27;resolved_baseline_y = canvas_center_y + point_y_midpoint + (selected_baseline_y - canvas_center_y - point_y_reference_midpoint) * point_y_scale.&#x27;,
-            height_formula: &#x27;resolved_digit_height = (digit_value / 9) * selected_maximum_height * point_y_scale; peak_y = resolved_baseline_y - resolved_digit_height. Zero has exactly zero height and nine reaches the resolved maximum.&#x27;,
-            pulse_geometry: &#x27;At the start of a digit run, add a baseline point. For each digit, add a peak half one serial spacing later and a baseline point one full serial spacing later. Every pulse handle is horizontal and extends the pulse-handle length to both sides.&#x27;,
-            digit_run_anchor_count: &#x27;A consecutive run of k digits creates exactly 2*k + 1 serial anchors.&#x27;,
-            consecutive_rule: &#x27;Consecutive digits share the baseline point between pulses and form one continuous equally spaced serial sequence.&#x27;,
-            random_y_rule: &#x27;Never add the character point-Y random shift to pulse anchors.&#x27;,
-            stroke_weight_rule: &#x27;Every digit pulse uses the base lowercase stroke weight with no taper.&#x27;
-          },
-          stroke_width: {
-            base_weight_px: stroke.base_weight_px,
-            serial_weight_px: stroke.base_weight_px,
-            interpolation: &#x27;Between two neighboring geometry points, interpolate their weights with smoothstep: t squared multiplied by three minus two t.&#x27;
-          },
-          selected_path: {
-            mode: settings.path.mode,
-            coordinate_decimals: settings.path.coordinate_decimals
-          },
-          label: {
-            content: &#x27;One @ followed by the exact input username. The @ is display-only.&#x27;,
-            x: settings.canvas.text.x,
-            y: settings.canvas.text.y,
-            size_px: settings.canvas.text.size_px,
-            weight: settings.canvas.text.weight,
-            color: settings.canvas.ink,
-            horizontal_anchor: settings.canvas.text.anchor,
-            dominant_baseline: settings.canvas.text.dominant_baseline,
-            font_family: settings.canvas.text.font_family
-          },
-          serialization: {
-            coordinate_rounding: &#x27;For every path coordinate, first replace any value whose absolute value is below 0.005 with positive zero. Otherwise round the absolute binary floating-point value to exactly two decimal places with decimal ROUND_HALF_UP, restore a negative sign when needed, and retain two trailing decimal digits.&#x27;,
-            non_path_number_format: &#x27;Write an integer without a decimal point; otherwise write the ordinary decimal representation.&#x27;,
-            svg_element_order: [&#x27;svg root&#x27;, &#x27;full-canvas background rect&#x27;, &#x27;signature path&#x27;, &#x27;bottom text&#x27;],
-            svg_root: {
-              viewBox: [0, 0, settings.canvas.width, settings.canvas.height],
-              width: settings.canvas.width,
-              height: settings.canvas.height,
-              namespace: &#x27;http://www.w3.org/2000/svg&#x27;
-            },
-            background_rect: { x: 0, y: 0, width: settings.canvas.width, height: settings.canvas.height, fill: settings.canvas.background },
-            rendered_output: {
-              format: &#x27;PNG&#x27;,
-              pixel_width: settings.canvas.width,
-              pixel_height: settings.canvas.height,
-              source: &#x27;The completed SVG rendered directly by a vector renderer.&#x27;,
-              resizing_after_render: false,
-              image_synthesis: false
-            },
-            image_count: 1,
-            response: &#x27;Return only the rendered artwork image. Do not include code, raw SVG, settings, an explanation, panel, frame, or mockup.&#x27;
-          }
-        };
-        if (geometry.random_point_height) {
-          selected.deterministic_mapping.character_parameter_labels.point_y_shift = &#x27;point-y-shift&#x27;;
-          selected.character_geometry.point_y_shift_range_px = geometry.point_y_shift_px;
-        } else {
-          selected.character_geometry.point_y_random_parameter_active = false;
-        }
-        if (geometry.point_distribution === &#x27;random&#x27;) {
-          selected.deterministic_mapping.repetition_rule += &#x27; The same ordered pair always receives the same gap weight.&#x27;;
-          selected.horizontal_layout.gap_weight_range = geometry.gap_weight_range;
-          selected.horizontal_layout.no_digit_gap_rule = &#x27;For each neighboring ordered character pair, map point-gap-weight into the selected gap range. Normalize all gap weights so their advances sum exactly to target span.&#x27;;
-          selected.horizontal_layout.flexible_gap_rule = &#x27;When digits are present, only non-digit to non-digit boundaries are flexible. Map and normalize their ordered-pair weights to fill the remaining flexible span.&#x27;;
-        } else {
-          delete selected.deterministic_mapping.ordered_pair_scope;
-          delete selected.deterministic_mapping.ordered_pair_parameter_label;
-          delete selected.value_materialization.ordered_pair_record_schema;
-          selected.horizontal_layout.no_digit_gap_rule = &#x27;All neighboring gaps are equal and sum exactly to target span.&#x27;;
-          selected.horizontal_layout.flexible_gap_rule = &#x27;When digits are present, divide the remaining flexible span equally among non-digit to non-digit boundaries.&#x27;;
-        }
-        selected.horizontal_layout.digit_mixed_layout = {
-          flexible_boundaries: &#x27;A boundary is flexible only when both neighboring original characters are non-digits.&#x27;,
-          transition_count: &#x27;Count every original boundary whose two characters differ in digit status.&#x27;,
-          fixed_width_formula: &#x27;fixed_width = digit_count * serial_spacing + transition_count * connector_gap.&#x27;,
-          flexible_span_formula: &#x27;flexible_span = max(0, target_span - fixed_width).&#x27;,
-          used_width_formula: &#x27;used_width = fixed_width + flexible_span when at least one flexible boundary exists; otherwise used_width = fixed_width.&#x27;,
-          start_cursor_formula: &#x27;cursor_x = canvas-center X - used_width/2.&#x27;,
-          non_digit_step: &#x27;Add one identity point at cursor_x. If followed by a digit, advance by connector_gap. If followed by a non-digit, advance by that boundary’s normalized flexible advance.&#x27;,
-          digit_step: &#x27;At the beginning of a digit run, add a baseline anchor at cursor_x. Add this digit’s peak at cursor_x + serial_spacing/2, advance cursor_x by serial_spacing, then add its baseline anchor at the new cursor_x. If the following character is a non-digit, then advance by connector_gap.&#x27;
-        };
-        if (settings.path.mode !== &#x27;pure_cubic_bezier_stroke&#x27;) {
-          selected.stroke_width.lowercase_weight_px = stroke.base_weight_px;
-          selected.stroke_width.uppercase_extra_weight_px = stroke.uppercase_extra_weight_px;
-          selected.stroke_width.uppercase_total_weight_px = stroke.base_weight_px + stroke.uppercase_extra_weight_px;
-          selected.stroke_width.underscore_weight_px = Math.min(stroke.base_weight_px, stroke.underscore_max_weight_px);
-          selected.stroke_width.character_weight_rule = &#x27;Digit points use base weight. Underscore uses the smaller of base weight and underscore maximum. Uppercase ASCII letters use base plus uppercase extra. Every other non-digit uses base weight.&#x27;;
-        } else {
-          selected.stroke_width = {
-            uniform_weight_px: stroke.base_weight_px,
-            rule: &#x27;Use this one width for the complete centerline stroke, including all digit-pulse segments.&#x27;
-          };
-        }
-        if (settings.path.mode === &#x27;variable_bezier_outline&#x27;) {
-          selected.selected_path.centerline_control_points = &#x27;For segment i: P0 = current anchor, P1 = current outgoing handle, P2 = following incoming handle, P3 = following anchor.&#x27;;
-          selected.selected_path.cubic_position_formula = &#x27;B(t) = (1-t)^3*P0 + 3*(1-t)^2*t*P1 + 3*(1-t)*t^2*P2 + t^3*P3.&#x27;;
-          selected.selected_path.cubic_derivative_formula = &#x27;D(t) = 3*(1-t)^2*(P1-P0) + 6*(1-t)*t*(P2-P1) + 3*t^2*(P3-P2).&#x27;;
-          selected.selected_path.width_formula = &#x27;s(t) = t^2*(3-2*t); W(t) = start_weight + (end_weight-start_weight)*s(t).&#x27;;
-          selected.selected_path.offset_formula = &#x27;Let L = hypot(Dx,Dy), but use L=1 when the derivative length is zero. N = [-Dy/L, Dx/L]. Offset(t,side) = B(t) + N*W(t)*side/2, where side is +1 outer or -1 inner.&#x27;;
-          selected.selected_path.visible_outline_centering = `For every segment and both sides, sample t = j/${geometry.centering_samples_per_segment} for every integer j from 0 through ${geometry.centering_samples_per_segment}, which is ${geometry.centering_samples_per_segment + 1} samples per segment including both endpoints. Find the sampled minimum and maximum X and shift every anchor and handle by canvas-center X minus their midpoint.`;
-          selected.selected_path.path_command_order = &#x27;Move to the first outer offset. For each segment from left to right, append one fitted outer cubic. Draw one straight line to the last inner offset. For each segment from right to left, append the fitted inner cubic in reverse by swapping its two controls. Close the path.&#x27;;
-          selected.selected_path.outer_cubic_sample_t_values = [0, 1 / 3, 2 / 3, 1];
-          selected.selected_path.cubic_through_thirds_formula = &#x27;Given Q0,Q1,Q2,Q3 at t=0,1/3,2/3,1: A=27*Q1-8*Q0-Q3; B=27*Q2-Q0-8*Q3; C1=(2*A-B)/18; C2=(2*B-A)/18.&#x27;;
-          selected.selected_path.fill = settings.canvas.ink;
-          selected.selected_path.stroke = &#x27;none&#x27;;
-        } else if (settings.path.mode === &#x27;variable_sampled_outline&#x27;) {
-          selected.selected_path.centerline_control_points = &#x27;For segment i: P0 = current anchor, P1 = current outgoing handle, P2 = following incoming handle, P3 = following anchor.&#x27;;
-          selected.selected_path.cubic_position_formula = &#x27;B(t) = (1-t)^3*P0 + 3*(1-t)^2*t*P1 + 3*(1-t)*t^2*P2 + t^3*P3.&#x27;;
-          selected.selected_path.cubic_derivative_formula = &#x27;D(t) = 3*(1-t)^2*(P1-P0) + 6*(1-t)*t*(P2-P1) + 3*t^2*(P3-P2).&#x27;;
-          selected.selected_path.width_formula = &#x27;s(t) = t^2*(3-2*t); W(t) = start_weight + (end_weight-start_weight)*s(t).&#x27;;
-          selected.selected_path.offset_formula = &#x27;Let L = hypot(Dx,Dy), but use L=1 when the derivative length is zero. N = [-Dy/L, Dx/L]. Offset(t,side) = B(t) + N*W(t)*side/2, where side is +1 outer or -1 inner.&#x27;;
-          selected.selected_path.visible_outline_centering = `For every segment and both sides, sample t = j/${geometry.centering_samples_per_segment} for every integer j from 0 through ${geometry.centering_samples_per_segment}, which is ${geometry.centering_samples_per_segment + 1} samples per segment including both endpoints. Find the sampled minimum and maximum X and shift every anchor and handle by canvas-center X minus their midpoint.`;
-          selected.selected_path.target_samples = settings.path.sampled_outline_target_samples;
-          selected.selected_path.minimum_samples_per_segment = settings.path.sampled_outline_min_samples_per_segment;
-          selected.selected_path.maximum_samples_per_segment = settings.path.sampled_outline_max_samples_per_segment;
-          selected.selected_path.samples_per_segment_formula = &#x27;samples_per_segment = max(minimum_samples_per_segment, min(maximum_samples_per_segment, ceil(target_samples / geometry_point_count))).&#x27;;
-          selected.selected_path.sampling_order = &#x27;For each segment left to right, append outer and inner offsets at t = sample/samples_per_segment for sample integers 0 through samples_per_segment-1. After all segments, append both offsets of the final segment at t=1 exactly once.&#x27;;
-          selected.selected_path.path_command_order = &#x27;Move to the first outer sample, join every outer sample left to right with straight L commands, join to the reversed inner samples with L commands, then close the path.&#x27;;
-          selected.selected_path.fill = settings.canvas.ink;
-          selected.selected_path.stroke = &#x27;none&#x27;;
-        } else {
-          selected.selected_path.centerline_control_points = &#x27;For segment i: P0 = current anchor, P1 = current outgoing handle, P2 = following incoming handle, P3 = following anchor.&#x27;;
-          selected.selected_path.cubic_position_formula = &#x27;B(t) = (1-t)^3*P0 + 3*(1-t)^2*t*P1 + 3*(1-t)*t^2*P2 + t^3*P3.&#x27;;
-          selected.selected_path.centering = `For every segment, sample B(t) at t = j/${geometry.centering_samples_per_segment} for every integer j from 0 through ${geometry.centering_samples_per_segment}, which is ${geometry.centering_samples_per_segment + 1} samples per segment including both endpoints. Find sampled minimum and maximum X and shift every anchor and handle by canvas-center X minus their midpoint.`;
-          selected.selected_path.path_command_order = &#x27;Move to the first anchor. For every neighboring point pair, append one cubic C command using current outgoing handle, following incoming handle, and following anchor.&#x27;;
-          selected.selected_path.fill = &#x27;none&#x27;;
-          selected.selected_path.stroke = settings.canvas.ink;
-          selected.selected_path.stroke_width_px = stroke.base_weight_px;
-          selected.selected_path.line_cap = &#x27;round&#x27;;
-          selected.selected_path.line_join = &#x27;round&#x27;;
-        }
-        return selected;
-      }
-
       function pointsForSettings(sourceText, settings) {
         const geometry = settings.geometry;
         const serial = settings.serial;
@@ -2680,9 +1887,11 @@ print(svg_source)
           geometry.point_y_shift_px[0],
           geometry.point_y_shift_px[1],
           geometry.random_point_height,
-          serial.maximum_pulse_height_px,
+          serial.maximum_pulse_height_range_px[0],
+          serial.maximum_pulse_height_range_px[1],
           serial.baseline_y,
-          serial.spacing_px
+          serial.spacing_range_px[0],
+          serial.spacing_range_px[1]
         );
       }
 
@@ -2742,98 +1951,6 @@ print(svg_source)
         return canonicalSvgForText(currentTexts[0], currentSettings()).svg;
       }
 
-      function specializePythonTemplate(template, activeBlocks) {
-        return template
-          .replace(/^# @block ([a-z-]+)\n([\s\S]*?)^# @endblock \1\n?/gm, (match, name, body) =&gt; (
-            activeBlocks.has(name) ? body : &#x27;&#x27;
-          ))
-          .replace(/\n{3,}/g, &#x27;\n\n&#x27;);
-      }
-
-      function pythonGeneratorSpec() {
-        const panelSettings = currentSettings();
-        const activeBlocks = new Set([
-          panelSettings.geometry.point_distribution === &#x27;random&#x27; ? &#x27;random-distribution&#x27; : &#x27;average-distribution&#x27;,
-          panelSettings.geometry.random_point_height ? &#x27;random-height&#x27; : &#x27;flat-height&#x27;,
-          panelSettings.path.mode === &#x27;pure_cubic_bezier_stroke&#x27; ? &#x27;pure-bezier&#x27; : &#x27;variable-outline&#x27;
-        ]);
-        if (panelSettings.path.mode === &#x27;variable_bezier_outline&#x27;) activeBlocks.add(&#x27;outline-bezier&#x27;);
-        if (panelSettings.path.mode === &#x27;variable_sampled_outline&#x27;) activeBlocks.add(&#x27;outline-sampled&#x27;);
-        const template = pythonTemplate.textContent.replace(/^\n/, &#x27;&#x27;).replace(/\n\s*$/, &#x27;\n&#x27;);
-        const pythonCode = specializePythonTemplate(template, activeBlocks)
-          .replace(&#x27;__SETTINGS_JSON__&#x27;, JSON.stringify(pythonGeneratorSettings(panelSettings), null, 2))
-          .trimEnd();
-        return [
-          &#x27;PERSONAL FIELD GENERATIVE ART SPEC&#x27;,
-          `SPEC_VERSION: ${panelSettings.system.version}`,
-          `SPEC_HASH: ${specificationHashPlaceholder}`,
-          &#x27;&#x27;,
-          &#x27;## Required procedure&#x27;,
-          &#x27;&#x27;,
-          &#x27;1. Identify the X handle of the account that sent the current request to you.&#x27;,
-          &#x27;2. Remove one leading `@` from that handle. The seed must contain only the handle text without `@`.&#x27;,
-          &#x27;3. In the Python implementation below, set `INPUT_TEXT` to that handle text and run the code. Do not substitute a display name, account name, or a guessed handle.&#x27;,
-          &#x27;4. The program generates the complete raw SVG, writes it to `signature.svg`, and also prints the SVG source. Use an SVG/vector renderer to rasterize `signature.svg` directly at 420 × 420 pixels into `signature.png`. Do not rewrite, restyle, optimize, upscale, downscale, resample, screenshot, crop, or otherwise change it. Return only `signature.png` to the requester.&#x27;,
-          &#x27;5. If you cannot identify the current requester’s X handle, ask for it. Do not invent one. If `INPUT_TEXT` is empty when the program runs, the program will wait for the handle text.&#x27;,
-          &#x27;&#x27;,
-          &#x27;## Python implementation&#x27;,
-          &#x27;&#x27;,
-          &#x27;```python&#x27;,
-          pythonCode,
-          &#x27;```&#x27;,
-          &#x27;&#x27;
-        ].join(&#x27;\n&#x27;);
-      }
-
-      function noCodeGeneratorSpec() {
-        const panelSettings = currentSettings();
-        const selectedSettings = noCodeGeneratorSettings(panelSettings);
-        const conformance = selectedSettings.prng_conformance_test;
-        return [
-          &#x27;PERSONAL FIELD EXACT NO-CODE DETERMINISTIC CONSTRUCTION PROTOCOL&#x27;,
-          `SPEC_VERSION: ${panelSettings.system.version}`,
-          `SPEC_HASH: ${noCodeSpecificationHashPlaceholder}`,
-          &#x27;&#x27;,
-          &#x27;This is a deterministic geometry-construction protocol, not an image-generation prompt. It contains the exact canonical algorithm and the exact currently selected values in natural language and JSON. Follow every calculation phase in order. No program source is included.&#x27;,
-          &#x27;&#x27;,
-          &#x27;## Mandatory interpretation rule&#x27;,
-          &#x27;&#x27;,
-          &#x27;Do not pass this specification to a text-to-image or generative image model for visual interpretation. Do not improvise a signature, handwriting, lettering, underline, flourish, or decorative curve. The username is an invisible deterministic seed and may appear visibly only in the small bottom label. The main mark must be constructed only from the calculated anchors, handles, weights, and selected SVG path rules.&#x27;,
-          &#x27;&#x27;,
-          &#x27;## Phase 0 — mandatory PRNG conformance test&#x27;,
-          &#x27;&#x27;,
-          &#x27;Before processing any username, reproduce this test vector exactly:&#x27;,
-          `Canonical payload: ${conformance.canonical_payload_text}`,
-          `Expected SHA-256: ${conformance.expected_sha256_hex}`,
-          `Expected U53 integer: ${conformance.expected_u53_integer}`,
-          `Expected unit value as exact fraction: ${conformance.expected_unit_value_exact_fraction}`,
-          `Expected unit value as exact decimal: ${conformance.expected_unit_value_exact_decimal}`,
-          `Selected handle-angle range: [${conformance.selected_mapping_range[0]}, ${conformance.selected_mapping_range[1]}] degrees`,
-          `Expected mapped handle angle: ${conformance.expected_mapped_handle_angle_degrees} degrees`,
-          &#x27;If any value differs, stop. Do not process the username and do not approximate.&#x27;,
-          &#x27;&#x27;,
-          &#x27;## Mandatory numeric materialization&#x27;,
-          &#x27;&#x27;,
-          &#x27;Before calculating geometry, create an internal numeric table for every active unique character and ordered pair. Every record must contain its canonical payload, SHA-256 digest, U53 integer, unit value, selected minimum, selected maximum, and mapped value. Use mapped = minimum + unit value × (maximum − minimum). Do not continue until every active record is numeric. Every later anchor, handle, gap, and curve calculation must consume these stored mapped values; no value may be chosen aesthetically.&#x27;,
-          &#x27;&#x27;,
-          &#x27;## Required procedure&#x27;,
-          &#x27;&#x27;,
-          &#x27;1. Identify the X username of the account that authored the current request.&#x27;,
-          &#x27;2. Remove exactly one leading @ and preserve all remaining characters and case. Use only that username text as the identity seed; never use a display name and never invent a username.&#x27;,
-          &#x27;3. If the username is unavailable, ask for it. Otherwise, complete every ordered calculation phase and apply every declarative rule, formula, semantic label, and selected value below exactly.&#x27;,
-          &#x27;4. Maintain an internal calculation ledger for the hash values, mapped values, anchors, handles, widths, centering shifts, and final path coordinates. Do not skip directly from the username to a visual result.&#x27;,
-          &#x27;5. Construct the complete SVG from the calculated geometry before any rendering occurs.&#x27;,
-          &#x27;6. Rasterize the completed SVG directly at 420 × 420 pixels into PNG with a vector renderer. Do not use generative image synthesis or resize a bitmap.&#x27;,
-          &#x27;7. Return only that 420 × 420 PNG. Do not include an explanation, code, raw SVG, settings, interface, frame, or mockup.&#x27;,
-          &#x27;8. If exact calculation or SVG construction is unavailable, do not approximate. State that deterministic construction is unavailable.&#x27;,
-          &#x27;&#x27;,
-          &#x27;## Exact declarative specification&#x27;,
-          &#x27;&#x27;,
-          JSON.stringify(selectedSettings, null, 2),
-          &#x27;&#x27;
-        ].join(&#x27;\n&#x27;);
-      }
-
       function fallbackCopy(text) {
         const textarea = document.createElement(&#x27;textarea&#x27;);
         textarea.value = text;
@@ -2876,14 +1993,6 @@ print(svg_source)
         await copyWithFeedback(copySvgButton, standaloneFinalSvg(), &#x27;Copied SVG code&#x27;, &#x27;Copy 01 SVG code&#x27;);
       }
 
-      async function copyGeneratorSpec() {
-        await copyWithFeedback(copyGeneratorButton, pythonGeneratorSpec(), &#x27;Copied Python art spec&#x27;, &#x27;Copy Python art spec&#x27;);
-      }
-
-      async function copyNoCodeSpec() {
-        await copyWithFeedback(copyNoCodeButton, noCodeGeneratorSpec(), &#x27;Copied no-code spec&#x27;, &#x27;Copy no-code spec&#x27;);
-      }
-
       function updateDualRange(track, minimumInput, maximumInput) {
         const domainMinimum = Number(minimumInput.min);
         const domainMaximum = Number(minimumInput.max);
@@ -2913,14 +2022,16 @@ print(svg_source)
         const handleLengthMax = Number(handleLengthMaxInput.value);
         const yShiftMin = Number(yShiftMinInput.value);
         const yShiftMax = Number(yShiftMaxInput.value);
-        const serialMaxHeight = Number(serialMaxHeightInput.value);
+        const serialMaxHeightMin = Number(serialMaxHeightMinInput.value);
+        const serialMaxHeightMax = Number(serialMaxHeightMaxInput.value);
         const serialBaselineY = Number(serialBaselineYInput.value);
-        const serialSpacing = Number(serialSpacingInput.value);
+        const serialSpacingMin = Number(serialSpacingMinInput.value);
+        const serialSpacingMax = Number(serialSpacingMaxInput.value);
         const uppercaseExtra = Number(uppercaseWeightInput.value);
         const textSize = Number(textSizeInput.value);
         const textWeight = Number(textWeightInput.value);
         const firstCharacters = graphemes(currentTexts[0]);
-        const firstPoints = geometryFor(firstCharacters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, randomHeightEnabled, serialMaxHeight, serialBaselineY, serialSpacing);
+        const firstPoints = geometryFor(firstCharacters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, randomHeightEnabled, serialMaxHeightMin, serialMaxHeightMax, serialBaselineY, serialSpacingMin, serialSpacingMax);
         const curveCount = firstPoints.length &lt; 2 ? 0 : firstPoints.length - 1;
 
         textOutput.value = `${firstCharacters.length} character${firstCharacters.length === 1 ? &#x27;&#x27; : &#x27;s&#x27;}`;
@@ -2928,12 +2039,14 @@ print(svg_source)
         angleOutput.value = `${formatDegrees(rotationMin)} — ${formatDegrees(rotationMax)}`;
         handleLengthOutput.value = `${handleLengthMin} — ${handleLengthMax} px`;
         yShiftOutput.value = `${formatSigned(yShiftMin)} — ${formatSigned(yShiftMax)} px`;
-        serialMaxHeightOutput.value = `${serialMaxHeight} px`;
+        serialMaxHeightOutput.value = `${serialMaxHeightMin} — ${serialMaxHeightMax} px`;
         serialBaselineYOutput.value = `${serialBaselineY}`;
-        serialSpacingOutput.value = `${serialSpacing} px`;
+        serialSpacingOutput.value = `${serialSpacingMin} — ${serialSpacingMax} px`;
         updateDualRange(angleRange, angleMinInput, angleMaxInput);
         updateDualRange(handleLengthRange, handleLengthMinInput, handleLengthMaxInput);
         updateDualRange(yShiftRange, yShiftMinInput, yShiftMaxInput);
+        updateDualRange(serialMaxHeightRange, serialMaxHeightMinInput, serialMaxHeightMaxInput);
+        updateDualRange(serialSpacingRange, serialSpacingMinInput, serialSpacingMaxInput);
         uppercaseWeightOutput.value = `${uppercaseExtra} px`;
         textSizeOutput.value = `${textSize} px`;
         textWeightOutput.value = `${textWeight}`;
@@ -2954,7 +2067,7 @@ print(svg_source)
 
         currentTexts.forEach((sourceText, index) =&gt; {
           const characters = graphemes(sourceText);
-          const points = geometryFor(characters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, randomHeightEnabled, serialMaxHeight, serialBaselineY, serialSpacing);
+          const points = geometryFor(characters, distribution, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, randomHeightEnabled, serialMaxHeightMin, serialMaxHeightMax, serialBaselineY, serialSpacingMin, serialSpacingMax);
           captions[index].textContent = `@${sourceText}`;
           finalSvgs[index].setAttribute(&#x27;aria-label&#x27;, `Black text-seeded open Bezier line for @${sourceText} on an eggshell background`);
           drawFinal(finalSvgs[index], points, weight, uppercaseExtra, renderMode, sourceText, textSize, textWeight);
@@ -2993,8 +2106,6 @@ print(svg_source)
         draw();
       });
       copySvgButton.addEventListener(&#x27;click&#x27;, copyFinalSvg);
-      copyGeneratorButton.addEventListener(&#x27;click&#x27;, copyGeneratorSpec);
-      copyNoCodeButton.addEventListener(&#x27;click&#x27;, copyNoCodeSpec);
       angleMinInput.addEventListener(&#x27;input&#x27;, () =&gt; {
         if (Number(angleMinInput.value) &gt; Number(angleMaxInput.value)) angleMinInput.value = angleMaxInput.value;
         draw();
@@ -3019,7 +2130,23 @@ print(svg_source)
         if (Number(yShiftMaxInput.value) &lt; Number(yShiftMinInput.value)) yShiftMaxInput.value = yShiftMinInput.value;
         draw();
       });
-      [weightInput, serialMaxHeightInput, serialBaselineYInput, serialSpacingInput, uppercaseWeightInput, textSizeInput, textWeightInput].forEach(control =&gt; control.addEventListener(&#x27;input&#x27;, draw));
+      serialMaxHeightMinInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+        if (Number(serialMaxHeightMinInput.value) &gt; Number(serialMaxHeightMaxInput.value)) serialMaxHeightMinInput.value = serialMaxHeightMaxInput.value;
+        draw();
+      });
+      serialMaxHeightMaxInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+        if (Number(serialMaxHeightMaxInput.value) &lt; Number(serialMaxHeightMinInput.value)) serialMaxHeightMaxInput.value = serialMaxHeightMinInput.value;
+        draw();
+      });
+      serialSpacingMinInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+        if (Number(serialSpacingMinInput.value) &gt; Number(serialSpacingMaxInput.value)) serialSpacingMinInput.value = serialSpacingMaxInput.value;
+        draw();
+      });
+      serialSpacingMaxInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+        if (Number(serialSpacingMaxInput.value) &lt; Number(serialSpacingMinInput.value)) serialSpacingMaxInput.value = serialSpacingMinInput.value;
+        draw();
+      });
+      [weightInput, serialBaselineYInput, uppercaseWeightInput, textSizeInput, textWeightInput].forEach(control =&gt; control.addEventListener(&#x27;input&#x27;, draw));
       root.__personalField = {
         canonicalSvgForText,
         currentSettings
@@ -3294,6 +2421,73 @@ print(svg_source)
   document.addEventListener(&quot;keydown&quot;, handleKeyDown);
   document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
   window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-tabs&quot;&gt;
+(() =&gt; {
+  const selector = &#x27;.nav[role=&quot;tablist&quot;] [role=&quot;tab&quot;]&#x27;;
+  const disabled = &#x27;:disabled,[aria-disabled=&quot;true&quot;]&#x27;;
+  const selectTab = (selected) =&gt; {
+    const panelId = selected.getAttribute(&quot;aria-controls&quot;);
+    for (const tab of selected.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;)) {
+      const active = tab === selected;
+      tab.classList.toggle(&quot;active&quot;, active);
+      tab.setAttribute(&quot;aria-selected&quot;, String(active));
+      const id = tab.getAttribute(&quot;aria-controls&quot;);
+      const panel = id &amp;&amp; document.getElementById(id);
+      if (panel != null) {
+        panel.hidden = id !== panelId;
+        if (!panel.hidden &amp;&amp; selected.id) {
+          panel.setAttribute(&quot;aria-labelledby&quot;, selected.id);
+        }
+      }
+    }
+  };
+  const interact = (event) =&gt; {
+    const tab = event.target?.closest?.(selector);
+    if (event.defaultPrevented || tab == null || tab.matches(disabled)) {
+      return;
+    }
+    if (event.type === &quot;click&quot;) {
+      selectTab(tab);
+      return;
+    }
+    const tabs = Array.from(
+      tab.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;),
+    ).filter((candidate) =&gt; !candidate.matches(disabled));
+    const current = tabs.indexOf(tab);
+    let next;
+    if (event.key === &quot;ArrowRight&quot; || event.key === &quot;ArrowDown&quot;) {
+      next = (current + 1) % tabs.length;
+    } else if (event.key === &quot;ArrowLeft&quot; || event.key === &quot;ArrowUp&quot;) {
+      next = (current + tabs.length - 1) % tabs.length;
+    } else if (event.key === &quot;Home&quot;) {
+      next = 0;
+    } else if (event.key === &quot;End&quot;) {
+      next = tabs.length - 1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    tabs[next].focus();
+    selectTab(tabs[next]);
+  };
+
+  for (const list of document.querySelectorAll(&#x27;.nav[role=&quot;tablist&quot;]&#x27;)) {
+    const selected =
+      list.querySelector(&#x27;[role=&quot;tab&quot;][aria-selected=&quot;true&quot;]&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;].active&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;]&#x27;);
+    if (selected != null) {
+      selectTab(selected);
+    }
+  }
+  document.addEventListener(&quot;click&quot;, interact);
+  document.addEventListener(&quot;keydown&quot;, interact);
+  window.addEventListener(&quot;pagehide&quot;, () =&gt; {
+    document.removeEventListener(&quot;click&quot;, interact);
+    document.removeEventListener(&quot;keydown&quot;, interact);
+  }, { once: true });
 })();
 &lt;/script&gt;
 &lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;

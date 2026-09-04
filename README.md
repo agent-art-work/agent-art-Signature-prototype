@@ -17,6 +17,6 @@ The four canvases and loaded X handles are preview and comparison tools only. Th
 
 ## Use
 
-Open `index.html` in a browser. Adjust the selected parameters, inspect four examples in the 2×2 canvas grid, and copy the SVG, Python art specification, or no-code deterministic specification.
+Open `index.html` in a browser. Adjust the selected parameters, inspect four examples in the 2×2 canvas grid, switch through the preset handles, and copy the SVG for canvas 01.
 
 The canonical artwork canvas and final PNG target are both 420 × 420 pixels.
