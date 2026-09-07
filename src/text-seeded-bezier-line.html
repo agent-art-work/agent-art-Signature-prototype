@@ -55,11 +55,11 @@
       </label>
       <div class="tsbl-control">
         <span>Random point distribution</span>
-        <button class="btn btn-block" id="tsbl-distribution-toggle" type="button" aria-label="Random point distribution" aria-pressed="true">On</button>
+        <button class="btn btn-block" id="tsbl-distribution-toggle" type="button" aria-label="Random point distribution" aria-pressed="false">Off</button>
       </div>
       <div class="tsbl-control">
         <span>Random point height</span>
-        <button class="btn btn-block" id="tsbl-height-toggle" type="button" aria-label="Random point height" aria-pressed="true">On</button>
+        <button class="btn btn-block" id="tsbl-height-toggle" type="button" aria-label="Random point height" aria-pressed="false">Off</button>
       </div>
       <label class="tsbl-control form-label" for="tsbl-path-mode">
         <span>Path mode</span>
@@ -81,13 +81,6 @@
         <span class="tsbl-dual-range" id="tsbl-handle-length-range">
           <input class="form-range tsbl-dual-input tsbl-dual-min" id="tsbl-handle-length-min" type="range" min="0" max="120" step="1" value="0" aria-label="Minimum handle length">
           <input class="form-range tsbl-dual-input tsbl-dual-max" id="tsbl-handle-length-max" type="range" min="0" max="120" step="1" value="45" aria-label="Maximum handle length">
-        </span>
-      </label>
-      <label class="tsbl-control form-label">
-        <span class="tsbl-control-head"><span>Point Y shift range</span><output id="tsbl-y-shift-value">−40 — 10 px</output></span>
-        <span class="tsbl-dual-range" id="tsbl-y-shift-range">
-          <input class="form-range tsbl-dual-input tsbl-dual-min" id="tsbl-y-shift-min" type="range" min="-160" max="160" step="1" value="-40" aria-label="Minimum point Y shift">
-          <input class="form-range tsbl-dual-input tsbl-dual-max" id="tsbl-y-shift-max" type="range" min="-160" max="160" step="1" value="10" aria-label="Maximum point Y shift">
         </span>
       </label>
       <div class="tsbl-serial-controls">
@@ -117,8 +110,8 @@
           <input class="form-range" id="tsbl-text-weight" type="range" min="100" max="900" step="100" value="200">
         </label>
         <label class="tsbl-control form-label" for="tsbl-weight">
-          <span class="tsbl-control-head"><span>Curve stroke weight</span><output id="tsbl-weight-value">3.0 px</output></span>
-          <input class="form-range" id="tsbl-weight" type="range" min="0.5" max="50" step="0.5" value="3">
+          <span class="tsbl-control-head"><span>Curve stroke weight</span><output id="tsbl-weight-value">5.0 px</output></span>
+          <input class="form-range" id="tsbl-weight" type="range" min="0.5" max="50" step="0.5" value="5">
         </label>
       </div>
       <div class="tsbl-gr0k-controls">
@@ -132,15 +125,15 @@
         <div class="tsbl-gr0k-shifts">
           <label class="tsbl-control form-label" for="tsbl-gr0k-rotation">
             <span class="tsbl-control-head"><span>Rotation shift</span><output id="tsbl-gr0k-rotation-value">3°</output></span>
-            <input class="form-range" id="tsbl-gr0k-rotation" type="range" min="0" max="12" step="0.5" value="3">
+            <input class="form-range" id="tsbl-gr0k-rotation" type="range" min="0" max="30" step="0.5" value="3">
           </label>
           <label class="tsbl-control form-label" for="tsbl-gr0k-handle-length">
             <span class="tsbl-control-head"><span>Handle length shift</span><output id="tsbl-gr0k-handle-length-value">5%</output></span>
-            <input class="form-range" id="tsbl-gr0k-handle-length" type="range" min="0" max="25" step="1" value="5">
+            <input class="form-range" id="tsbl-gr0k-handle-length" type="range" min="0" max="50" step="1" value="5">
           </label>
           <label class="tsbl-control form-label" for="tsbl-gr0k-character-y">
             <span class="tsbl-control-head"><span>Character Y shift</span><output id="tsbl-gr0k-character-y-value">3 px</output></span>
-            <input class="form-range" id="tsbl-gr0k-character-y" type="range" min="0" max="12" step="0.5" value="3">
+            <input class="form-range" id="tsbl-gr0k-character-y" type="range" min="0" max="30" step="0.5" value="3">
           </label>
           <label class="tsbl-control form-label" for="tsbl-gr0k-gap">
             <span class="tsbl-control-head"><span>Gap shift</span><output id="tsbl-gr0k-gap-value">4%</output></span>
@@ -191,14 +184,11 @@
       const angleMaxInput = root.querySelector('#tsbl-angle-max');
       const handleLengthMinInput = root.querySelector('#tsbl-handle-length-min');
       const handleLengthMaxInput = root.querySelector('#tsbl-handle-length-max');
-      const yShiftMinInput = root.querySelector('#tsbl-y-shift-min');
-      const yShiftMaxInput = root.querySelector('#tsbl-y-shift-max');
       const serialMaxHeightInput = root.querySelector('#tsbl-serial-max-height');
       const serialWidthWeightMinInput = root.querySelector('#tsbl-serial-width-weight-min');
       const serialWidthWeightMaxInput = root.querySelector('#tsbl-serial-width-weight-max');
       const angleRange = root.querySelector('#tsbl-angle-range');
       const handleLengthRange = root.querySelector('#tsbl-handle-length-range');
-      const yShiftRange = root.querySelector('#tsbl-y-shift-range');
       const serialWidthWeightRange = root.querySelector('#tsbl-serial-width-weight-range');
       const uppercaseWeightInput = root.querySelector('#tsbl-uppercase-weight');
       const textSizeInput = root.querySelector('#tsbl-text-size');
@@ -220,7 +210,6 @@
       const weightOutput = root.querySelector('#tsbl-weight-value');
       const angleOutput = root.querySelector('#tsbl-angle-value');
       const handleLengthOutput = root.querySelector('#tsbl-handle-length-value');
-      const yShiftOutput = root.querySelector('#tsbl-y-shift-value');
       const serialMaxHeightOutput = root.querySelector('#tsbl-serial-max-height-value');
       const serialWidthWeightOutput = root.querySelector('#tsbl-serial-width-weight-value');
       const uppercaseWeightOutput = root.querySelector('#tsbl-uppercase-weight-value');
@@ -241,6 +230,8 @@
       const canvasSize = 420;
       const center = canvasSize / 2;
       const serialBaselineOffset = 12;
+      const legacyPointYShiftMin = -40;
+      const legacyPointYShiftMax = 10;
       const canvasTextX = center;
       const canvasTextY = canvasSize * (1 - .05);
       const handlePattern = /^[A-Za-z0-9_]{1,15}$/;
@@ -262,8 +253,8 @@
       const validPresets = presets.filter(text => handlePattern.test(text));
 
       let presetCursor = 0;
-      let randomDistributionEnabled = true;
-      let randomHeightEnabled = true;
+      let randomDistributionEnabled = false;
+      let randomHeightEnabled = false;
       let currentText = 'Personal_Field';
 
       function element(name, attributes = {}) {
@@ -397,19 +388,21 @@
             angleDelta: variantSigned(scope, 'handle-angle', gr0kRaw) * variation.rotationDegrees * Math.PI / 180,
             incomingLength: incomingLength * (1 + variantSigned(scope, 'incoming-handle-length', gr0kRaw) * variation.handleLengthRatio),
             outgoingLength: outgoingLength * (1 + variantSigned(scope, 'outgoing-handle-length', gr0kRaw) * variation.handleLengthRatio),
-            yShift: mapRange(hashToUnitFloat(scope, 'point-y-shift'), yShiftMin, yShiftMax)
-              + variantSigned(scope, 'point-y-shift', gr0kRaw) * variation.characterYPx
+            canonicalYShift: mapRange(hashToUnitFloat(scope, 'point-y-shift'), yShiftMin, yShiftMax),
+            gr0kYShift: variantSigned(scope, 'point-y-shift', gr0kRaw) * variation.characterYPx
           };
         });
       }
 
-      function pairGapWeight(leftCharacter, rightCharacter, gr0kRaw, variation) {
+      function pairGapWeight(leftCharacter, rightCharacter, useRandomCanonical, gr0kRaw, variation) {
         const scope = {
           kind: 'ordered-x-handle-character-pair',
           left: { kind: 'x-handle-character', value: leftCharacter },
           right: { kind: 'x-handle-character', value: rightCharacter }
         };
-        const canonical = mapRange(hashToUnitFloat(scope, 'point-gap-weight'), .2, 1.8);
+        const canonical = useRandomCanonical
+          ? mapRange(hashToUnitFloat(scope, 'point-gap-weight'), .2, 1.8)
+          : 1;
         return canonical * (1 + variantSigned(scope, 'point-gap-weight', gr0kRaw) * variation.gapRatio);
       }
 
@@ -442,7 +435,7 @@
         const targetEnd = center + targetSpan / 2;
 
         const identityPoint = (character, index, x) => {
-          const yShift = useRandomHeight ? raw[index].yShift : 0;
+          const yShift = (useRandomHeight ? raw[index].canonicalYShift : 0) + raw[index].gr0kYShift;
           const anchor = [x, center + yShift];
           const angle = smoothedAngles[index];
           const direction = [Math.cos(angle), Math.sin(angle)];
@@ -476,7 +469,7 @@
             ]);
           }
           const gapWeights = characters.slice(0, count - 1).map((character, index) => (
-            distribution === 'average' ? 1 : pairGapWeight(character, characters[index + 1], gr0kRaw, variation)
+            pairGapWeight(character, characters[index + 1], distribution !== 'average', gr0kRaw, variation)
           ));
           const gapTotal = gapWeights.reduce((total, value) => total + value, 0);
           const gaps = gapWeights.map(value => targetSpan * value / gapTotal);
@@ -495,10 +488,11 @@
           while (endIndex < count && serialFlags[endIndex]) endIndex++;
           const runValue = characters.slice(index, endIndex).join('');
           const runScope = { kind: 'x-handle-serial-run', value: runValue };
-          const runShift = useRandomHeight
+          const canonicalRunShift = useRandomHeight
             ? mapRange(hashToUnitFloat(runScope, 'point-y-shift'), yShiftMin, yShiftMax)
-              + variantSigned(runScope, 'point-y-shift', gr0kRaw) * variation.serialYPx
             : 0;
+          const runShift = canonicalRunShift
+            + variantSigned(runScope, 'point-y-shift', gr0kRaw) * variation.serialYPx;
           for (let runIndex = index; runIndex < endIndex; runIndex++) {
             serialRunYShifts.set(runIndex, runShift);
           }
@@ -522,7 +516,7 @@
         }
 
         const flexibleWeights = flexibleBoundaries.map(index => (
-          distribution === 'average' ? 1 : pairGapWeight(characters[index], characters[index + 1], gr0kRaw, variation)
+          pairGapWeight(characters[index], characters[index + 1], distribution !== 'average', gr0kRaw, variation)
         ));
         const handleScope = { kind: 'x-handle', value: characters.join('') };
         const serialWidthWeight = mapRange(
@@ -858,7 +852,7 @@
             gap_weight_range: [.2, 1.8],
             handle_rotation_degrees: [Number(angleMinInput.value), Number(angleMaxInput.value)],
             handle_length_px: [Number(handleLengthMinInput.value), Number(handleLengthMaxInput.value)],
-            point_y_shift_px: [Number(yShiftMinInput.value), Number(yShiftMaxInput.value)],
+            legacy_random_point_y_shift_px: [legacyPointYShiftMin, legacyPointYShiftMax],
             angle_smoothing_weights: [1, 2, 1],
             centering_samples_per_segment: 64
           },
@@ -915,8 +909,8 @@
           geometry.handle_rotation_degrees[1],
           geometry.handle_length_px[0],
           geometry.handle_length_px[1],
-          geometry.point_y_shift_px[0],
-          geometry.point_y_shift_px[1],
+          geometry.legacy_random_point_y_shift_px[0],
+          geometry.legacy_random_point_y_shift_px[1],
           geometry.random_point_height,
           serial.nine_pulse_height_px,
           serial.width_weight_range[0],
@@ -1059,8 +1053,8 @@
         const rotationMax = Number(angleMaxInput.value);
         const handleLengthMin = Number(handleLengthMinInput.value);
         const handleLengthMax = Number(handleLengthMaxInput.value);
-        const yShiftMin = Number(yShiftMinInput.value);
-        const yShiftMax = Number(yShiftMaxInput.value);
+        const yShiftMin = legacyPointYShiftMin;
+        const yShiftMax = legacyPointYShiftMax;
         const serialMaxHeight = Number(serialMaxHeightInput.value);
         const serialWidthWeightMin = Number(serialWidthWeightMinInput.value);
         const serialWidthWeightMax = Number(serialWidthWeightMaxInput.value);
@@ -1085,12 +1079,10 @@
         weightOutput.value = `${weight.toFixed(1)} px`;
         angleOutput.value = `${formatDegrees(rotationMin)} — ${formatDegrees(rotationMax)}`;
         handleLengthOutput.value = `${handleLengthMin} — ${handleLengthMax} px`;
-        yShiftOutput.value = `${formatSigned(yShiftMin)} — ${formatSigned(yShiftMax)} px`;
         serialMaxHeightOutput.value = `${serialMaxHeight} px`;
         serialWidthWeightOutput.value = `${serialWidthWeightMin.toFixed(1)}× — ${serialWidthWeightMax.toFixed(1)}×`;
         updateDualRange(angleRange, angleMinInput, angleMaxInput);
         updateDualRange(handleLengthRange, handleLengthMinInput, handleLengthMaxInput);
-        updateDualRange(yShiftRange, yShiftMinInput, yShiftMaxInput);
         updateDualRange(serialWidthWeightRange, serialWidthWeightMinInput, serialWidthWeightMaxInput);
         uppercaseWeightOutput.value = `${uppercaseExtra} px`;
         textSizeOutput.value = `${textSize} px`;
@@ -1110,7 +1102,9 @@
         heightToggleButton.textContent = randomHeightEnabled ? 'On' : 'Off';
         heightToggleButton.setAttribute('aria-pressed', String(randomHeightEnabled));
         uppercaseWeightInput.disabled = renderMode === 'pure-bezier';
-        const heightState = randomHeightEnabled ? `random Y ${formatSigned(yShiftMin)}—${formatSigned(yShiftMax)} px` : 'flat Y';
+        const heightState = randomHeightEnabled
+          ? `legacy random Y ${formatSigned(yShiftMin)}—${formatSigned(yShiftMax)} px + gr0k Y`
+          : `centered Y + gr0k shift up to ${variation.characterYPx} px`;
         const modeState = renderMode === 'pure-bezier'
           ? `pure cubic Bézier · uniform ${weight.toFixed(1)} px stroke`
           : renderMode === 'outline-bezier'
@@ -1200,14 +1194,6 @@
       });
       handleLengthMaxInput.addEventListener('input', () => {
         if (Number(handleLengthMaxInput.value) < Number(handleLengthMinInput.value)) handleLengthMaxInput.value = handleLengthMinInput.value;
-        draw();
-      });
-      yShiftMinInput.addEventListener('input', () => {
-        if (Number(yShiftMinInput.value) > Number(yShiftMaxInput.value)) yShiftMinInput.value = yShiftMaxInput.value;
-        draw();
-      });
-      yShiftMaxInput.addEventListener('input', () => {
-        if (Number(yShiftMaxInput.value) < Number(yShiftMinInput.value)) yShiftMaxInput.value = yShiftMinInput.value;
         draw();
       });
       serialWidthWeightMinInput.addEventListener('input', () => {
