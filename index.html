@@ -1047,6 +1047,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #text-seeded-bezier-loop-presets .tsbl-gr0k-controls { display: grid; gap: .35rem; grid-column: 1 / -1; }
     #text-seeded-bezier-loop-presets .tsbl-gr0k-inputs { display: grid; gap: .35rem; grid-template-columns: minmax(0, 1fr) 5.5rem; }
     #text-seeded-bezier-loop-presets .tsbl-gr0k-shifts { display: grid; gap: .35rem .75rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    #text-seeded-bezier-loop-presets .tsbl-size-inputs { align-items: center; display: grid; gap: .35rem; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
     #text-seeded-bezier-loop-presets .tsbl-control { display: grid; gap: .12rem; grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); width: 100%; }
     #text-seeded-bezier-loop-presets .tsbl-control-head { align-items: baseline; display: flex; gap: .75rem; justify-content: space-between; }
     #text-seeded-bezier-loop-presets .tsbl-dual-range { --range-start: 0%; --range-end: 100%; --range-mid: 50%; display: block; height: 1.45rem; position: relative; width: 100%; }
@@ -1065,11 +1066,11 @@ html&gt;body{padding:0}&lt;/style&gt;
     #text-seeded-bezier-loop-presets figcaption { align-items: baseline; border-top: 1px solid var(--border); display: flex; gap: .4rem; justify-content: space-between; margin-bottom: .2rem; padding-top: .35rem; }
     #text-seeded-bezier-loop-presets figcaption span { color: var(--muted-foreground); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     #text-seeded-bezier-loop-presets .tsbl-svg { display: block; height: auto; margin: 0 auto; max-width: 420px; width: 100%; }
-    #text-seeded-bezier-loop-presets .tsbl-egg { fill: #f2ead6; }
-    #text-seeded-bezier-loop-presets .tsbl-variable { fill: #11110f; stroke: none; }
-    #text-seeded-bezier-loop-presets .tsbl-pure { fill: none; stroke: #11110f; stroke-linecap: round; stroke-linejoin: round; }
-    #text-seeded-bezier-loop-presets .tsbl-canvas-text { fill: #11110f; text-anchor: middle; }
-    #text-seeded-bezier-loop-presets .tsbl-empty { fill: #11110f; font-size: 12px; text-anchor: middle; }
+    #text-seeded-bezier-loop-presets .tsbl-egg { fill: #f4e7c7; }
+    #text-seeded-bezier-loop-presets .tsbl-variable { fill: #000000; stroke: none; }
+    #text-seeded-bezier-loop-presets .tsbl-pure { fill: none; stroke: #000000; stroke-linecap: round; stroke-linejoin: round; }
+    #text-seeded-bezier-loop-presets .tsbl-canvas-text { fill: #000000; text-anchor: middle; }
+    #text-seeded-bezier-loop-presets .tsbl-empty { fill: #000000; font-size: 12px; text-anchor: middle; }
     #text-seeded-bezier-loop-presets .tsbl-actions { display: grid; gap: .35rem; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: .4rem; }
     @media (max-width: 700px) {
       #text-seeded-bezier-loop-presets .tsbl-controls { grid-template-columns: 1fr; }
@@ -1090,6 +1091,14 @@ html&gt;body{padding:0}&lt;/style&gt;
         &lt;input class=&quot;form-control&quot; id=&quot;tsbl-text&quot; type=&quot;text&quot; minlength=&quot;1&quot; maxlength=&quot;15&quot; pattern=&quot;^[A-Za-z0-9_]{1,15}$&quot; value=&quot;Personal_Field&quot; aria-describedby=&quot;tsbl-text-error&quot; required spellcheck=&quot;false&quot;&gt;
         &lt;span class=&quot;text-small text-destructive&quot; id=&quot;tsbl-text-error&quot; role=&quot;alert&quot; hidden&gt;Use 1–15 letters, numbers, or underscores. Do not include @.&lt;/span&gt;
       &lt;/label&gt;
+      &lt;label class=&quot;tsbl-control form-label&quot;&gt;
+        &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Output canvas size&lt;/span&gt;&lt;output id=&quot;tsbl-output-size-value&quot;&gt;1080 × 1080 px&lt;/output&gt;&lt;/span&gt;
+        &lt;span class=&quot;tsbl-size-inputs&quot;&gt;
+          &lt;input class=&quot;form-control&quot; id=&quot;tsbl-output-width&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;10000&quot; step=&quot;1&quot; value=&quot;1080&quot; aria-label=&quot;Output canvas width in pixels&quot;&gt;
+          &lt;span aria-hidden=&quot;true&quot;&gt;×&lt;/span&gt;
+          &lt;input class=&quot;form-control&quot; id=&quot;tsbl-output-height&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;10000&quot; step=&quot;1&quot; value=&quot;1080&quot; aria-label=&quot;Output canvas height in pixels&quot;&gt;
+        &lt;/span&gt;
+      &lt;/label&gt;
       &lt;div class=&quot;tsbl-control&quot;&gt;
         &lt;span&gt;Random point distribution&lt;/span&gt;
         &lt;button class=&quot;btn btn-block&quot; id=&quot;tsbl-distribution-toggle&quot; type=&quot;button&quot; aria-label=&quot;Random point distribution&quot; aria-pressed=&quot;false&quot;&gt;Off&lt;/button&gt;
@@ -1107,36 +1116,36 @@ html&gt;body{padding:0}&lt;/style&gt;
         &lt;/select&gt;
       &lt;/label&gt;
       &lt;label class=&quot;tsbl-control form-label&quot;&gt;
-        &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Handle rotation range&lt;/span&gt;&lt;output id=&quot;tsbl-angle-value&quot;&gt;−28° — 28°&lt;/output&gt;&lt;/span&gt;
+        &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Handle rotation range&lt;/span&gt;&lt;output id=&quot;tsbl-angle-value&quot;&gt;−45° — 45°&lt;/output&gt;&lt;/span&gt;
         &lt;span class=&quot;tsbl-dual-range&quot; id=&quot;tsbl-angle-range&quot;&gt;
-          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-angle-min&quot; type=&quot;range&quot; min=&quot;-360&quot; max=&quot;360&quot; step=&quot;1&quot; value=&quot;-28&quot; aria-label=&quot;Minimum handle rotation&quot;&gt;
-          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-angle-max&quot; type=&quot;range&quot; min=&quot;-360&quot; max=&quot;360&quot; step=&quot;1&quot; value=&quot;28&quot; aria-label=&quot;Maximum handle rotation&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-angle-min&quot; type=&quot;range&quot; min=&quot;-360&quot; max=&quot;360&quot; step=&quot;1&quot; value=&quot;-45&quot; aria-label=&quot;Minimum handle rotation&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-angle-max&quot; type=&quot;range&quot; min=&quot;-360&quot; max=&quot;360&quot; step=&quot;1&quot; value=&quot;45&quot; aria-label=&quot;Maximum handle rotation&quot;&gt;
         &lt;/span&gt;
       &lt;/label&gt;
       &lt;label class=&quot;tsbl-control form-label&quot;&gt;
-        &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Handle length range&lt;/span&gt;&lt;output id=&quot;tsbl-handle-length-value&quot;&gt;0 — 45 px&lt;/output&gt;&lt;/span&gt;
+        &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Handle length range&lt;/span&gt;&lt;output id=&quot;tsbl-handle-length-value&quot;&gt;10 — 90 px&lt;/output&gt;&lt;/span&gt;
         &lt;span class=&quot;tsbl-dual-range&quot; id=&quot;tsbl-handle-length-range&quot;&gt;
-          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-handle-length-min&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;120&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;Minimum handle length&quot;&gt;
-          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-handle-length-max&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;120&quot; step=&quot;1&quot; value=&quot;45&quot; aria-label=&quot;Maximum handle length&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-handle-length-min&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;120&quot; step=&quot;1&quot; value=&quot;10&quot; aria-label=&quot;Minimum handle length&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-handle-length-max&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;120&quot; step=&quot;1&quot; value=&quot;90&quot; aria-label=&quot;Maximum handle length&quot;&gt;
         &lt;/span&gt;
       &lt;/label&gt;
       &lt;label class=&quot;tsbl-control form-label&quot;&gt;
-        &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Canonical point Y range&lt;/span&gt;&lt;output id=&quot;tsbl-y-shift-value&quot;&gt;−40 — 10 px&lt;/output&gt;&lt;/span&gt;
+        &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Canonical point Y range&lt;/span&gt;&lt;output id=&quot;tsbl-y-shift-value&quot;&gt;−30 — 30 px&lt;/output&gt;&lt;/span&gt;
         &lt;span class=&quot;tsbl-dual-range&quot; id=&quot;tsbl-y-shift-range&quot;&gt;
-          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-y-shift-min&quot; type=&quot;range&quot; min=&quot;-160&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;-40&quot; aria-label=&quot;Minimum canonical point Y shift&quot;&gt;
-          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-y-shift-max&quot; type=&quot;range&quot; min=&quot;-160&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;10&quot; aria-label=&quot;Maximum canonical point Y shift&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-y-shift-min&quot; type=&quot;range&quot; min=&quot;-160&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;-30&quot; aria-label=&quot;Minimum canonical point Y shift&quot;&gt;
+          &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-y-shift-max&quot; type=&quot;range&quot; min=&quot;-160&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;30&quot; aria-label=&quot;Maximum canonical point Y shift&quot;&gt;
         &lt;/span&gt;
       &lt;/label&gt;
       &lt;div class=&quot;tsbl-serial-controls&quot;&gt;
         &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-serial-max-height&quot;&gt;
-          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial 9 maximum height&lt;/span&gt;&lt;output id=&quot;tsbl-serial-max-height-value&quot;&gt;72 px&lt;/output&gt;&lt;/span&gt;
-          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-serial-max-height&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;72&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial 9 maximum height&lt;/span&gt;&lt;output id=&quot;tsbl-serial-max-height-value&quot;&gt;40 px&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-serial-max-height&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;160&quot; step=&quot;1&quot; value=&quot;40&quot;&gt;
         &lt;/label&gt;
         &lt;label class=&quot;tsbl-control form-label&quot;&gt;
-          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial width weight range&lt;/span&gt;&lt;output id=&quot;tsbl-serial-width-weight-value&quot;&gt;0.6× — 1.4×&lt;/output&gt;&lt;/span&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial width weight range&lt;/span&gt;&lt;output id=&quot;tsbl-serial-width-weight-value&quot;&gt;0.2× — 1.0×&lt;/output&gt;&lt;/span&gt;
           &lt;span class=&quot;tsbl-dual-range&quot; id=&quot;tsbl-serial-width-weight-range&quot;&gt;
-            &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-serial-width-weight-min&quot; type=&quot;range&quot; min=&quot;0.1&quot; max=&quot;3&quot; step=&quot;0.1&quot; value=&quot;0.6&quot; aria-label=&quot;Minimum serial width weight&quot;&gt;
-            &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-serial-width-weight-max&quot; type=&quot;range&quot; min=&quot;0.1&quot; max=&quot;3&quot; step=&quot;0.1&quot; value=&quot;1.4&quot; aria-label=&quot;Maximum serial width weight&quot;&gt;
+            &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-min&quot; id=&quot;tsbl-serial-width-weight-min&quot; type=&quot;range&quot; min=&quot;0.1&quot; max=&quot;3&quot; step=&quot;0.1&quot; value=&quot;0.2&quot; aria-label=&quot;Minimum serial width weight&quot;&gt;
+            &lt;input class=&quot;form-range tsbl-dual-input tsbl-dual-max&quot; id=&quot;tsbl-serial-width-weight-max&quot; type=&quot;range&quot; min=&quot;0.1&quot; max=&quot;3&quot; step=&quot;0.1&quot; value=&quot;1&quot; aria-label=&quot;Maximum serial width weight&quot;&gt;
           &lt;/span&gt;
         &lt;/label&gt;
       &lt;/div&gt;
@@ -1154,46 +1163,42 @@ html&gt;body{padding:0}&lt;/style&gt;
           &lt;input class=&quot;form-range&quot; id=&quot;tsbl-text-weight&quot; type=&quot;range&quot; min=&quot;100&quot; max=&quot;900&quot; step=&quot;100&quot; value=&quot;200&quot;&gt;
         &lt;/label&gt;
         &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-weight&quot;&gt;
-          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Curve stroke weight&lt;/span&gt;&lt;output id=&quot;tsbl-weight-value&quot;&gt;5.0 px&lt;/output&gt;&lt;/span&gt;
-          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-weight&quot; type=&quot;range&quot; min=&quot;0.5&quot; max=&quot;50&quot; step=&quot;0.5&quot; value=&quot;5&quot;&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Curve stroke weight&lt;/span&gt;&lt;output id=&quot;tsbl-weight-value&quot;&gt;4.0 px&lt;/output&gt;&lt;/span&gt;
+          &lt;input class=&quot;form-range&quot; id=&quot;tsbl-weight&quot; type=&quot;range&quot; min=&quot;0.5&quot; max=&quot;50&quot; step=&quot;0.5&quot; value=&quot;4&quot;&gt;
         &lt;/label&gt;
       &lt;/div&gt;
       &lt;div class=&quot;tsbl-gr0k-controls&quot;&gt;
         &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-gr0k-raw&quot;&gt;
-          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;gr0k_raw seed&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-value&quot;&gt;512&lt;/output&gt;&lt;/span&gt;
+          &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;gr0k_raw seed · 001–100&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-value&quot;&gt;022&lt;/output&gt;&lt;/span&gt;
           &lt;span class=&quot;tsbl-gr0k-inputs&quot;&gt;
-            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-raw&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;1024&quot; step=&quot;1&quot; value=&quot;512&quot;&gt;
-            &lt;input class=&quot;form-control&quot; id=&quot;tsbl-gr0k-number&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;1024&quot; step=&quot;1&quot; value=&quot;512&quot; aria-label=&quot;gr0k raw seed integer&quot;&gt;
+            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-raw&quot; type=&quot;range&quot; min=&quot;1&quot; max=&quot;100&quot; step=&quot;1&quot; value=&quot;22&quot;&gt;
+            &lt;input class=&quot;form-control&quot; id=&quot;tsbl-gr0k-number&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;100&quot; step=&quot;1&quot; value=&quot;22&quot; aria-label=&quot;gr0k raw seed integer from 1 to 100&quot;&gt;
           &lt;/span&gt;
         &lt;/label&gt;
         &lt;div class=&quot;tsbl-gr0k-shifts&quot;&gt;
           &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-gr0k-rotation&quot;&gt;
-            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Rotation shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-rotation-value&quot;&gt;3°&lt;/output&gt;&lt;/span&gt;
-            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-rotation&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;30&quot; step=&quot;0.5&quot; value=&quot;3&quot;&gt;
+            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Rotation shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-rotation-value&quot;&gt;10°&lt;/output&gt;&lt;/span&gt;
+            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-rotation&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;30&quot; step=&quot;0.5&quot; value=&quot;10&quot;&gt;
           &lt;/label&gt;
           &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-gr0k-handle-length&quot;&gt;
-            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Handle length shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-handle-length-value&quot;&gt;5%&lt;/output&gt;&lt;/span&gt;
-            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-handle-length&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;50&quot; step=&quot;1&quot; value=&quot;5&quot;&gt;
+            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Handle length shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-handle-length-value&quot;&gt;20%&lt;/output&gt;&lt;/span&gt;
+            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-handle-length&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;50&quot; step=&quot;1&quot; value=&quot;20&quot;&gt;
           &lt;/label&gt;
           &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-gr0k-character-y&quot;&gt;
-            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Character Y shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-character-y-value&quot;&gt;3 px&lt;/output&gt;&lt;/span&gt;
-            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-character-y&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;15&quot; step=&quot;0.5&quot; value=&quot;3&quot;&gt;
+            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Point + serial Y shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-character-y-value&quot;&gt;5 px&lt;/output&gt;&lt;/span&gt;
+            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-character-y&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;15&quot; step=&quot;0.5&quot; value=&quot;5&quot;&gt;
           &lt;/label&gt;
           &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-gr0k-gap&quot;&gt;
-            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Gap shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-gap-value&quot;&gt;4%&lt;/output&gt;&lt;/span&gt;
-            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-gap&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;20&quot; step=&quot;1&quot; value=&quot;4&quot;&gt;
-          &lt;/label&gt;
-          &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-gr0k-serial-y&quot;&gt;
-            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial Y shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-serial-y-value&quot;&gt;3 px&lt;/output&gt;&lt;/span&gt;
-            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-serial-y&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;15&quot; step=&quot;0.5&quot; value=&quot;3&quot;&gt;
+            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Gap shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-gap-value&quot;&gt;50%&lt;/output&gt;&lt;/span&gt;
+            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-gap&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; step=&quot;1&quot; value=&quot;50&quot;&gt;
           &lt;/label&gt;
           &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-gr0k-serial-width&quot;&gt;
-            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial width shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-serial-width-value&quot;&gt;4%&lt;/output&gt;&lt;/span&gt;
-            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-serial-width&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;20&quot; step=&quot;1&quot; value=&quot;4&quot;&gt;
+            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial width shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-serial-width-value&quot;&gt;20%&lt;/output&gt;&lt;/span&gt;
+            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-serial-width&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;20&quot; step=&quot;1&quot; value=&quot;20&quot;&gt;
           &lt;/label&gt;
           &lt;label class=&quot;tsbl-control form-label&quot; for=&quot;tsbl-gr0k-serial-height&quot;&gt;
-            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial height shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-serial-height-value&quot;&gt;4%&lt;/output&gt;&lt;/span&gt;
-            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-serial-height&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;20&quot; step=&quot;1&quot; value=&quot;4&quot;&gt;
+            &lt;span class=&quot;tsbl-control-head&quot;&gt;&lt;span&gt;Serial height shift&lt;/span&gt;&lt;output id=&quot;tsbl-gr0k-serial-height-value&quot;&gt;20%&lt;/output&gt;&lt;/span&gt;
+            &lt;input class=&quot;form-range&quot; id=&quot;tsbl-gr0k-serial-height&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;20&quot; step=&quot;1&quot; value=&quot;20&quot;&gt;
           &lt;/label&gt;
         &lt;/div&gt;
       &lt;/div&gt;
@@ -1221,6 +1226,9 @@ html&gt;body{padding:0}&lt;/style&gt;
       const root = document.getElementById(&#x27;text-seeded-bezier-loop-presets&#x27;);
       const textInput = root.querySelector(&#x27;#tsbl-text&#x27;);
       const textError = root.querySelector(&#x27;#tsbl-text-error&#x27;);
+      const outputWidthInput = root.querySelector(&#x27;#tsbl-output-width&#x27;);
+      const outputHeightInput = root.querySelector(&#x27;#tsbl-output-height&#x27;);
+      const outputSizeOutput = root.querySelector(&#x27;#tsbl-output-size-value&#x27;);
       const distributionToggleButton = root.querySelector(&#x27;#tsbl-distribution-toggle&#x27;);
       const pathModeSelect = root.querySelector(&#x27;#tsbl-path-mode&#x27;);
       const weightInput = root.querySelector(&#x27;#tsbl-weight&#x27;);
@@ -1249,7 +1257,6 @@ html&gt;body{padding:0}&lt;/style&gt;
       const gr0kHandleLengthInput = root.querySelector(&#x27;#tsbl-gr0k-handle-length&#x27;);
       const gr0kCharacterYInput = root.querySelector(&#x27;#tsbl-gr0k-character-y&#x27;);
       const gr0kGapInput = root.querySelector(&#x27;#tsbl-gr0k-gap&#x27;);
-      const gr0kSerialYInput = root.querySelector(&#x27;#tsbl-gr0k-serial-y&#x27;);
       const gr0kSerialWidthInput = root.querySelector(&#x27;#tsbl-gr0k-serial-width&#x27;);
       const gr0kSerialHeightInput = root.querySelector(&#x27;#tsbl-gr0k-serial-height&#x27;);
       const copySvgButton = root.querySelector(&#x27;#tsbl-copy-svg&#x27;);
@@ -1268,7 +1275,6 @@ html&gt;body{padding:0}&lt;/style&gt;
       const gr0kHandleLengthOutput = root.querySelector(&#x27;#tsbl-gr0k-handle-length-value&#x27;);
       const gr0kCharacterYOutput = root.querySelector(&#x27;#tsbl-gr0k-character-y-value&#x27;);
       const gr0kGapOutput = root.querySelector(&#x27;#tsbl-gr0k-gap-value&#x27;);
-      const gr0kSerialYOutput = root.querySelector(&#x27;#tsbl-gr0k-serial-y-value&#x27;);
       const gr0kSerialWidthOutput = root.querySelector(&#x27;#tsbl-gr0k-serial-width-value&#x27;);
       const gr0kSerialHeightOutput = root.querySelector(&#x27;#tsbl-gr0k-serial-height-value&#x27;);
       const stateOutput = root.querySelector(&#x27;#tsbl-state&#x27;);
@@ -1277,7 +1283,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       const SVG_NS = &#x27;http://www.w3.org/2000/svg&#x27;;
       const canvasSize = 420;
       const center = canvasSize / 2;
-      const serialBaselineOffset = 12;
+      const serialBaselineHeightRatio = .5;
       const canvasTextX = center;
       const canvasTextY = canvasSize * (1 - .05);
       const handlePattern = /^[A-Za-z0-9_]{1,15}$/;
@@ -1421,7 +1427,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       }
 
       function variantSigned(scope, parameter, gr0kRaw) {
-        return 2 * hashToUnitFloat({ ...scope, gr0k_raw: gr0kRaw }, `gr0k/${parameter}-offset`) - 1;
+        return 2 * hashToUnitFloat({ ...scope, gr0k_raw: gr0kRaw }, `gr0k/${parameter}`) - 1;
       }
 
       function seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, gr0kRaw, variation) {
@@ -1435,7 +1441,7 @@ html&gt;body{padding:0}&lt;/style&gt;
             incomingLength: incomingLength * (1 + variantSigned(scope, &#x27;incoming-handle-length&#x27;, gr0kRaw) * variation.handleLengthRatio),
             outgoingLength: outgoingLength * (1 + variantSigned(scope, &#x27;outgoing-handle-length&#x27;, gr0kRaw) * variation.handleLengthRatio),
             canonicalYShift: mapRange(hashToUnitFloat(scope, &#x27;point-y-shift&#x27;), yShiftMin, yShiftMax),
-            gr0kYShift: variantSigned(scope, &#x27;point-y-shift&#x27;, gr0kRaw) * variation.characterYPx
+            gr0kYShift: variantSigned(scope, &#x27;point-y&#x27;, gr0kRaw) * variation.yPx
           };
         });
       }
@@ -1449,10 +1455,10 @@ html&gt;body{padding:0}&lt;/style&gt;
         const canonical = useRandomCanonical
           ? mapRange(hashToUnitFloat(scope, &#x27;point-gap-weight&#x27;), .2, 1.8)
           : 1;
-        return canonical * (1 + variantSigned(scope, &#x27;point-gap-weight&#x27;, gr0kRaw) * variation.gapRatio);
+        return canonical * (1 + variantSigned(scope, &#x27;point-gap&#x27;, gr0kRaw) * variation.gapRatio);
       }
 
-      function smoothedHandleAngles(raw) {
+      function smoothCanonicalAnglesWithNeighborWeights(raw) {
         const count = raw.length;
         return raw.map((value, index) =&gt; {
           const previous = raw[Math.max(0, index - 1)].angle;
@@ -1472,7 +1478,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         const serialDigitCount = serialFlags.filter(Boolean).length;
         const hasSerialDigits = serialDigitCount &gt; 0;
         const raw = seededValues(characters, rotationMin, rotationMax, handleLengthMin, handleLengthMax, yShiftMin, yShiftMax, gr0kRaw, variation);
-        const smoothedAngles = smoothedHandleAngles(raw);
+        const smoothedAngles = smoothCanonicalAnglesWithNeighborWeights(raw);
         const lineStart = 60;
         const lineEnd = 360;
         const lineSpan = lineEnd - lineStart;
@@ -1524,26 +1530,13 @@ html&gt;body{padding:0}&lt;/style&gt;
           return centerGeometry(characters.map((character, index) =&gt; identityPoint(character, index, positions[index])));
         }
 
-        const serialRunYShifts = new Map();
-        for (let index = 0; index &lt; count;) {
-          if (!serialFlags[index]) {
-            index++;
-            continue;
-          }
-          let endIndex = index + 1;
-          while (endIndex &lt; count &amp;&amp; serialFlags[endIndex]) endIndex++;
-          const runValue = characters.slice(index, endIndex).join(&#x27;&#x27;);
-          const runScope = { kind: &#x27;x-handle-serial-run&#x27;, value: runValue };
-          const canonicalRunShift = useRandomHeight
-            ? mapRange(hashToUnitFloat(runScope, &#x27;point-y-shift&#x27;), yShiftMin, yShiftMax)
-            : 0;
-          const runShift = canonicalRunShift
-            + variantSigned(runScope, &#x27;point-y-shift&#x27;, gr0kRaw) * variation.serialYPx;
-          for (let runIndex = index; runIndex &lt; endIndex; runIndex++) {
-            serialRunYShifts.set(runIndex, runShift);
-          }
-          index = endIndex;
-        }
+        const digitsValue = characters.filter(isSerialDigit).join(&#x27;&#x27;);
+        const digitsScope = { kind: &#x27;x-handle-digits&#x27;, value: digitsValue };
+        const canonicalDigitsYShift = useRandomHeight
+          ? mapRange(hashToUnitFloat(digitsScope, &#x27;point-y-shift&#x27;), yShiftMin, yShiftMax)
+          : 0;
+        const digitsYShift = canonicalDigitsYShift
+          + variantSigned(digitsScope, &#x27;point-y&#x27;, gr0kRaw) * variation.yPx;
 
         const serialPoint = (character, x, y, incomingHandle, outgoingHandle) =&gt; ({
           character,
@@ -1564,24 +1557,32 @@ html&gt;body{padding:0}&lt;/style&gt;
         const flexibleWeights = flexibleBoundaries.map(index =&gt; (
           pairGapWeight(characters[index], characters[index + 1], distribution !== &#x27;average&#x27;, gr0kRaw, variation)
         ));
-        const handleScope = { kind: &#x27;x-handle&#x27;, value: characters.join(&#x27;&#x27;) };
-        const serialWidthWeight = mapRange(
-          hashToUnitFloat(handleScope, &#x27;serial-width-weight&#x27;),
-          serialWidthWeightMin,
-          serialWidthWeightMax
-        ) * (1 + variantSigned(handleScope, &#x27;serial-width-weight&#x27;, gr0kRaw) * variation.serialWidthRatio);
+        const serialWidthWeights = new Map();
+        characters.forEach((character, index) =&gt; {
+          if (!serialFlags[index]) return;
+          const digitScope = { kind: &#x27;x-handle-character&#x27;, value: character };
+          const widthWeight = mapRange(
+            hashToUnitFloat(digitScope, &#x27;serial-width-weight&#x27;),
+            serialWidthWeightMin,
+            serialWidthWeightMax
+          ) * (1 + variantSigned(digitScope, &#x27;serial-width&#x27;, gr0kRaw) * variation.serialWidthRatio);
+          serialWidthWeights.set(index, widthWeight);
+        });
         const variantSerialMaxHeight = serialMaxHeight
-          * (1 + variantSigned(handleScope, &#x27;serial-pulse-height&#x27;, gr0kRaw) * variation.serialHeightRatio);
-        const transitionWeight = serialWidthWeight * .6;
+          * (1 + variantSigned(digitsScope, &#x27;serial-height&#x27;, gr0kRaw) * variation.serialHeightRatio);
+        const transitionWeights = new Map(transitionBoundaries.map(boundary =&gt; {
+          const digitIndex = serialFlags[boundary] ? boundary : boundary + 1;
+          return [boundary, serialWidthWeights.get(digitIndex) * .6];
+        }));
         const flexibleTotal = flexibleWeights.reduce((total, value) =&gt; total + value, 0);
-        const layoutWeightTotal = serialDigitCount * serialWidthWeight
-          + transitionBoundaries.length * transitionWeight
+        const layoutWeightTotal = Array.from(serialWidthWeights.values()).reduce((total, value) =&gt; total + value, 0)
+          + Array.from(transitionWeights.values()).reduce((total, value) =&gt; total + value, 0)
           + flexibleTotal;
         const layoutScale = layoutWeightTotal &gt; 0 ? targetSpan / layoutWeightTotal : 0;
-        const serialSpacing = serialDigitCount === count
-          ? targetSpan / serialDigitCount
-          : serialWidthWeight * layoutScale;
-        const transitionGap = transitionWeight * layoutScale;
+        const transitionAdvance = new Map(Array.from(transitionWeights, ([boundary, weight]) =&gt; [
+          boundary,
+          weight * layoutScale
+        ]));
         const flexibleAdvance = new Map(flexibleBoundaries.map((index, weightIndex) =&gt; [
           index,
           flexibleWeights[weightIndex] * layoutScale
@@ -1591,8 +1592,9 @@ html&gt;body{padding:0}&lt;/style&gt;
 
         characters.forEach((character, index) =&gt; {
           if (serialFlags[index]) {
+            const serialSpacing = serialWidthWeights.get(index) * layoutScale;
             const pulseHandle = serialSpacing * .28;
-            const serialRunBaselineY = center + serialBaselineOffset + serialRunYShifts.get(index);
+            const serialRunBaselineY = center + variantSerialMaxHeight * serialBaselineHeightRatio + digitsYShift;
             if (index === 0 || !serialFlags[index - 1]) {
               points.push(serialPoint(character, cursorX, serialRunBaselineY, pulseHandle, pulseHandle));
             }
@@ -1600,11 +1602,11 @@ html&gt;body{padding:0}&lt;/style&gt;
             points.push(serialPoint(character, cursorX + serialSpacing / 2, serialRunBaselineY - pulseHeight, pulseHandle, pulseHandle));
             cursorX += serialSpacing;
             points.push(serialPoint(character, cursorX, serialRunBaselineY, pulseHandle, pulseHandle));
-            if (index &lt; count - 1 &amp;&amp; !serialFlags[index + 1]) cursorX += transitionGap;
+            if (index &lt; count - 1 &amp;&amp; !serialFlags[index + 1]) cursorX += transitionAdvance.get(index);
           } else {
             points.push(identityPoint(character, index, cursorX));
             if (index &lt; count - 1) {
-              cursorX += serialFlags[index + 1] ? transitionGap : flexibleAdvance.get(index) || 0;
+              cursorX += serialFlags[index + 1] ? transitionAdvance.get(index) : flexibleAdvance.get(index) || 0;
             }
           }
         });
@@ -1834,9 +1836,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         svg.appendChild(label);
       }
 
-      function drawFinal(svg, points, weight, uppercaseExtra, renderMode, text, textSize, textWeight) {
-        svg.replaceChildren();
-        addBackground(svg);
+      function drawCanonicalCurve(svg, points, weight, uppercaseExtra, renderMode) {
         if (points.length &lt; 2) {
           addEmptyMessage(svg);
         } else if (renderMode === &#x27;pure-bezier&#x27;) {
@@ -1851,7 +1851,27 @@ html&gt;body{padding:0}&lt;/style&gt;
           const pathMode = renderMode === &#x27;outline-bezier&#x27; ? &#x27;bezier&#x27; : &#x27;sampled&#x27;;
           svg.appendChild(element(&#x27;path&#x27;, { class: &#x27;tsbl-variable&#x27;, d: variableWidthPath(centeredPoints, weight, uppercaseExtra, pathMode) }));
         }
-        drawCanvasText(svg, text, canvasTextX, canvasTextY, textSize, textWeight);
+      }
+
+      function drawFinal(svg, points, weight, uppercaseExtra, renderMode, text, textSize, textWeight, outputWidth, outputHeight) {
+        svg.replaceChildren();
+        const sameAspectRatio = Math.abs(outputWidth * canvasSize - outputHeight * canvasSize) &lt; 1e-9;
+        if (sameAspectRatio) {
+          svg.setAttribute(&#x27;viewBox&#x27;, `0 0 ${canvasSize} ${canvasSize}`);
+          addBackground(svg);
+          drawCanonicalCurve(svg, points, weight, uppercaseExtra, renderMode);
+          drawCanvasText(svg, text, canvasTextX, canvasTextY, textSize, textWeight);
+        } else {
+          const scale = Math.min(outputWidth / canvasSize, outputHeight / canvasSize);
+          const offsetX = (outputWidth - canvasSize * scale) / 2;
+          const offsetY = (outputHeight - canvasSize * scale) / 2;
+          svg.setAttribute(&#x27;viewBox&#x27;, `0 0 ${outputWidth} ${outputHeight}`);
+          svg.appendChild(element(&#x27;rect&#x27;, { class: &#x27;tsbl-egg&#x27;, x: 0, y: 0, width: outputWidth, height: outputHeight }));
+          const artwork = element(&#x27;g&#x27;, { transform: `translate(${offsetX} ${offsetY}) scale(${scale})` });
+          drawCanonicalCurve(artwork, points, weight, uppercaseExtra, renderMode);
+          svg.appendChild(artwork);
+          drawCanvasText(svg, text, outputWidth / 2, outputHeight * .95, textSize * scale, textWeight);
+        }
       }
 
       function currentSettings() {
@@ -1877,8 +1897,8 @@ html&gt;body{padding:0}&lt;/style&gt;
           canvas: {
             width: 420,
             height: 420,
-            background: &#x27;#f2ead6&#x27;,
-            ink: &#x27;#11110f&#x27;,
+            background: &#x27;#f4e7c7&#x27;,
+            ink: &#x27;#000000&#x27;,
             text: {
               x: 210,
               y: 399,
@@ -1904,11 +1924,13 @@ html&gt;body{padding:0}&lt;/style&gt;
           },
           serial: {
             nine_pulse_height_px: Number(serialMaxHeightInput.value),
-            baseline: &#x27;main_curve_center_plus_offset_plus_serial_run_y_shift&#x27;,
-            baseline_offset_px: serialBaselineOffset,
+            baseline: &#x27;main_curve_center_plus_half_variant_pulse_height_plus_digits_y_shift&#x27;,
+            baseline_height_ratio: serialBaselineHeightRatio,
             width_weight_range: [Number(serialWidthWeightMinInput.value), Number(serialWidthWeightMaxInput.value)],
-            width_weight_scope: &#x27;whole_handle&#x27;,
-            digit_spacing: &#x27;one_shared_normalized_spacing&#x27;,
+            width_weight_scope: &#x27;digit_character&#x27;,
+            y_scope: &#x27;x-handle-digits&#x27;,
+            height_scope: &#x27;x-handle-digits&#x27;,
+            digit_spacing: &#x27;per_digit_weight_normalized_spacing&#x27;,
             pulse_handle_spacing_factor: .28,
             transition_weight_factor: .6
           },
@@ -1916,9 +1938,8 @@ html&gt;body{padding:0}&lt;/style&gt;
             raw: Number(gr0kNumberInput.value),
             rotation_max_degrees: Number(gr0kRotationInput.value),
             handle_length_max_ratio: Number(gr0kHandleLengthInput.value) / 100,
-            character_y_max_px: Number(gr0kCharacterYInput.value),
+            y_max_px: Number(gr0kCharacterYInput.value),
             gap_weight_max_ratio: Number(gr0kGapInput.value) / 100,
-            serial_y_max_px: Number(gr0kSerialYInput.value),
             serial_width_max_ratio: Number(gr0kSerialWidthInput.value) / 100,
             serial_height_max_ratio: Number(gr0kSerialHeightInput.value) / 100
           },
@@ -1940,7 +1961,21 @@ html&gt;body{padding:0}&lt;/style&gt;
             preview_format: &#x27;png&#x27;,
             preview_width: 420,
             preview_height: 420,
-            preview_is_canonical: false
+            preview_is_canonical: false,
+            output_sizing: {
+              canonical_design_space: [420, 420],
+              default_size: [1080, 1080],
+              selected_size: [Number(outputWidthInput.value), Number(outputHeightInput.value)],
+              square_policy: &#x27;keep_canonical_viewbox_change_svg_dimensions&#x27;,
+              non_square_policy: &#x27;uniform_fit_center_on_full_background&#x27;,
+              scale_formula: &#x27;min(output_width / 420, output_height / 420)&#x27;,
+              offset_x_formula: &#x27;(output_width - 420 * scale) / 2&#x27;,
+              offset_y_formula: &#x27;(output_height - 420 * scale) / 2&#x27;,
+              handle_text_position: &#x27;output_center_x_and_95_percent_output_height&#x27;,
+              handle_text_size: &#x27;canonical_text_size_times_uniform_scale&#x27;,
+              recalculate_geometry: false,
+              allow_non_uniform_stretching: false
+            }
           }
         };
       }
@@ -1965,9 +2000,8 @@ html&gt;body{padding:0}&lt;/style&gt;
           {
             rotationDegrees: settings.gr0k.rotation_max_degrees,
             handleLengthRatio: settings.gr0k.handle_length_max_ratio,
-            characterYPx: settings.gr0k.character_y_max_px,
+            yPx: settings.gr0k.y_max_px,
             gapRatio: settings.gr0k.gap_weight_max_ratio,
-            serialYPx: settings.gr0k.serial_y_max_px,
             serialWidthRatio: settings.gr0k.serial_width_max_ratio,
             serialHeightRatio: settings.gr0k.serial_height_max_ratio
           }
@@ -1987,7 +2021,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         return Number.isInteger(Number(value)) ? String(Math.trunc(Number(value))) : String(Number(value));
       }
 
-      function canonicalSvgForText(sourceText, settings) {
+      function canonicalSvgForText(sourceText, settings, outputWidth, outputHeight) {
         const points = pointsForSettings(sourceText, settings);
         const mode = settings.path.mode;
         const weight = settings.stroke.base_weight_px;
@@ -2012,7 +2046,35 @@ html&gt;body{padding:0}&lt;/style&gt;
         const canvasText = canvas.text;
         const displayedHandle = settings.input.display_prefix + sourceText;
         const textElement = `&lt;text x=&quot;${xmlNumber(canvasText.x)}&quot; y=&quot;${xmlNumber(canvasText.y)}&quot; font-size=&quot;${xmlNumber(canvasText.size_px)}&quot; font-weight=&quot;${xmlNumber(canvasText.weight)}&quot; dominant-baseline=&quot;${canvasText.dominant_baseline}&quot; fill=&quot;${canvas.ink}&quot; text-anchor=&quot;${canvasText.anchor}&quot; font-family=&quot;${escapeXml(canvasText.font_family)}&quot;&gt;${escapeXml(displayedHandle)}&lt;/text&gt;`;
-        const svg = `&lt;svg viewBox=&quot;0 0 ${xmlNumber(canvas.width)} ${xmlNumber(canvas.height)}&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;${xmlNumber(canvas.width)}&quot; height=&quot;${xmlNumber(canvas.height)}&quot;&gt;&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;${xmlNumber(canvas.width)}&quot; height=&quot;${xmlNumber(canvas.height)}&quot; fill=&quot;${canvas.background}&quot;/&gt;${pathElement}${textElement}&lt;/svg&gt;`;
+        const selectedSize = settings.render.output_sizing.selected_size ?? [canvas.width, canvas.height];
+        const resolvedWidth = outputWidth ?? selectedSize[0];
+        const resolvedHeight = outputHeight ?? selectedSize[1];
+        if (!Number.isFinite(resolvedWidth) || !Number.isFinite(resolvedHeight) || resolvedWidth &lt;= 0 || resolvedHeight &lt;= 0) {
+          throw new RangeError(&#x27;Output width and height must be positive numbers.&#x27;);
+        }
+
+        const artwork = pathElement + textElement;
+        const sameAspectRatio = Math.abs(
+          resolvedWidth * canvas.height - resolvedHeight * canvas.width
+        ) &lt; 1e-9;
+        let svg;
+        let outputScale;
+        let outputOffsetX;
+        let outputOffsetY;
+
+        if (sameAspectRatio) {
+          outputScale = resolvedWidth / canvas.width;
+          outputOffsetX = 0;
+          outputOffsetY = 0;
+          svg = `&lt;svg viewBox=&quot;0 0 ${xmlNumber(canvas.width)} ${xmlNumber(canvas.height)}&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;${xmlNumber(resolvedWidth)}&quot; height=&quot;${xmlNumber(resolvedHeight)}&quot;&gt;&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;${xmlNumber(canvas.width)}&quot; height=&quot;${xmlNumber(canvas.height)}&quot; fill=&quot;${canvas.background}&quot;/&gt;${artwork}&lt;/svg&gt;`;
+        } else {
+          outputScale = Math.min(resolvedWidth / canvas.width, resolvedHeight / canvas.height);
+          outputOffsetX = (resolvedWidth - canvas.width * outputScale) / 2;
+          outputOffsetY = (resolvedHeight - canvas.height * outputScale) / 2;
+          const transform = `translate(${xmlNumber(outputOffsetX)} ${xmlNumber(outputOffsetY)}) scale(${xmlNumber(outputScale)})`;
+          const outputTextElement = `&lt;text x=&quot;${xmlNumber(resolvedWidth / 2)}&quot; y=&quot;${xmlNumber(resolvedHeight * .95)}&quot; font-size=&quot;${xmlNumber(canvasText.size_px * outputScale)}&quot; font-weight=&quot;${xmlNumber(canvasText.weight)}&quot; dominant-baseline=&quot;${canvasText.dominant_baseline}&quot; fill=&quot;${canvas.ink}&quot; text-anchor=&quot;${canvasText.anchor}&quot; font-family=&quot;${escapeXml(canvasText.font_family)}&quot;&gt;${escapeXml(displayedHandle)}&lt;/text&gt;`;
+          svg = `&lt;svg viewBox=&quot;0 0 ${xmlNumber(resolvedWidth)} ${xmlNumber(resolvedHeight)}&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;${xmlNumber(resolvedWidth)}&quot; height=&quot;${xmlNumber(resolvedHeight)}&quot;&gt;&lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;${xmlNumber(resolvedWidth)}&quot; height=&quot;${xmlNumber(resolvedHeight)}&quot; fill=&quot;${canvas.background}&quot;/&gt;&lt;g transform=&quot;${transform}&quot;&gt;${pathElement}&lt;/g&gt;${outputTextElement}&lt;/svg&gt;`;
+        }
         return {
           svg,
           metadata: {
@@ -2021,7 +2083,11 @@ html&gt;body{padding:0}&lt;/style&gt;
             character_count: graphemes(sourceText).length,
             anchor_count: centeredPoints.length,
             curve_count: centeredPoints.length - 1,
-            path_mode: mode
+            path_mode: mode,
+            canonical_design_space: [canvas.width, canvas.height],
+            output_size: [resolvedWidth, resolvedHeight],
+            output_scale: outputScale,
+            output_offset: [outputOffsetX, outputOffsetY]
           }
         };
       }
@@ -2091,6 +2157,10 @@ html&gt;body{padding:0}&lt;/style&gt;
         return `${value &lt; 0 ? &#x27;−&#x27; : &#x27;&#x27;}${Math.abs(value)}`;
       }
 
+      function formatGr0kRaw(value) {
+        return String(value).padStart(3, &#x27;0&#x27;);
+      }
+
       function draw() {
         const distribution = randomDistributionEnabled ? &#x27;random&#x27; : &#x27;average&#x27;;
         const renderMode = pathModeSelect.value;
@@ -2108,12 +2178,13 @@ html&gt;body{padding:0}&lt;/style&gt;
         const textSize = Number(textSizeInput.value);
         const textWeight = Number(textWeightInput.value);
         const gr0kRaw = Number(gr0kNumberInput.value);
+        const outputWidth = Math.max(1, Math.min(10000, Math.round(Number(outputWidthInput.value) || canvasSize)));
+        const outputHeight = Math.max(1, Math.min(10000, Math.round(Number(outputHeightInput.value) || canvasSize)));
         const variation = {
           rotationDegrees: Number(gr0kRotationInput.value),
           handleLengthRatio: Number(gr0kHandleLengthInput.value) / 100,
-          characterYPx: Number(gr0kCharacterYInput.value),
+          yPx: Number(gr0kCharacterYInput.value),
           gapRatio: Number(gr0kGapInput.value) / 100,
-          serialYPx: Number(gr0kSerialYInput.value),
           serialWidthRatio: Number(gr0kSerialWidthInput.value) / 100,
           serialHeightRatio: Number(gr0kSerialHeightInput.value) / 100
         };
@@ -2137,14 +2208,14 @@ html&gt;body{padding:0}&lt;/style&gt;
         textWeightOutput.value = `${textWeight}`;
         gr0kRawInput.value = String(gr0kRaw);
         gr0kNumberInput.value = String(gr0kRaw);
-        gr0kOutput.value = `${gr0kRaw}`;
+        gr0kOutput.value = formatGr0kRaw(gr0kRaw);
         gr0kRotationOutput.value = `${variation.rotationDegrees}°`;
         gr0kHandleLengthOutput.value = `${Math.round(variation.handleLengthRatio * 100)}%`;
-        gr0kCharacterYOutput.value = `${variation.characterYPx} px`;
+        gr0kCharacterYOutput.value = `${variation.yPx} px`;
         gr0kGapOutput.value = `${Math.round(variation.gapRatio * 100)}%`;
-        gr0kSerialYOutput.value = `${variation.serialYPx} px`;
         gr0kSerialWidthOutput.value = `${Math.round(variation.serialWidthRatio * 100)}%`;
         gr0kSerialHeightOutput.value = `${Math.round(variation.serialHeightRatio * 100)}%`;
+        outputSizeOutput.value = `${outputWidth} × ${outputHeight} px`;
         distributionToggleButton.textContent = randomDistributionEnabled ? &#x27;On&#x27; : &#x27;Off&#x27;;
         distributionToggleButton.setAttribute(&#x27;aria-pressed&#x27;, String(randomDistributionEnabled));
         heightToggleButton.textContent = randomHeightEnabled ? &#x27;On&#x27; : &#x27;Off&#x27;;
@@ -2152,19 +2223,19 @@ html&gt;body{padding:0}&lt;/style&gt;
         uppercaseWeightInput.disabled = renderMode === &#x27;pure-bezier&#x27;;
         const heightState = randomHeightEnabled
           ? `canonical PRNG Y ${formatSigned(yShiftMin)}—${formatSigned(yShiftMax)} px + gr0k Y`
-          : `centered Y + gr0k shift up to ${variation.characterYPx} px`;
+          : `centered Y + gr0k shift up to ${variation.yPx} px`;
         const modeState = renderMode === &#x27;pure-bezier&#x27;
           ? `pure cubic Bézier · uniform ${weight.toFixed(1)} px stroke`
           : renderMode === &#x27;outline-bezier&#x27;
             ? &#x27;variable-width Bézier outline&#x27;
             : &#x27;variable-width sampled outline&#x27;;
         stateOutput.textContent = firstPoints.length &lt; 2
-          ? `01: ${firstCharacters.length} characters / need at least 2 anchors · gr0k ${gr0kRaw}`
-          : `01: ${firstCharacters.length} characters / ${firstPoints.length} anchors / ${curveCount} curve${curveCount === 1 ? &#x27;&#x27; : &#x27;s&#x27;} · ${modeState} · ${heightState} · gr0k seed ${gr0kRaw} · independent shifts`;
+          ? `01: ${firstCharacters.length} characters / need at least 2 anchors · gr0k ${formatGr0kRaw(gr0kRaw)}`
+          : `01: ${firstCharacters.length} characters / ${firstPoints.length} anchors / ${curveCount} curve${curveCount === 1 ? &#x27;&#x27; : &#x27;s&#x27;} · ${outputWidth} × ${outputHeight} px · ${modeState} · ${heightState} · gr0k seed ${formatGr0kRaw(gr0kRaw)} · independent shifts`;
 
         caption.textContent = `@${currentText}`;
-        finalSvg.setAttribute(&#x27;aria-label&#x27;, `Black text-seeded open Bezier line for @${currentText} with gr0k seed ${gr0kRaw} on an eggshell background`);
-        drawFinal(finalSvg, firstPoints, weight, uppercaseExtra, renderMode, currentText, textSize, textWeight);
+        finalSvg.setAttribute(&#x27;aria-label&#x27;, `Black text-seeded open Bezier line for @${currentText} with gr0k seed ${formatGr0kRaw(gr0kRaw)} on an eggshell background`);
+        drawFinal(finalSvg, firstPoints, weight, uppercaseExtra, renderMode, currentText, textSize, textWeight, outputWidth, outputHeight);
       }
 
       textInput.addEventListener(&#x27;input&#x27;, () =&gt; {
@@ -2179,6 +2250,14 @@ html&gt;body{padding:0}&lt;/style&gt;
         }
         currentText = candidate;
         draw();
+      });
+      [outputWidthInput, outputHeightInput].forEach(control =&gt; {
+        control.addEventListener(&#x27;input&#x27;, () =&gt; {
+          if (control.value === &#x27;&#x27;) return;
+          const value = Math.max(1, Math.min(10000, Math.round(Number(control.value))));
+          control.value = String(value);
+          draw();
+        });
       });
       distributionToggleButton.addEventListener(&#x27;click&#x27;, () =&gt; {
         randomDistributionEnabled = !randomDistributionEnabled;
@@ -2203,7 +2282,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         let nextValue;
         do {
           crypto.getRandomValues(randomValue);
-          nextValue = randomValue[0] % 1025;
+          nextValue = randomValue[0] % 100 + 1;
         } while (nextValue === Number(gr0kNumberInput.value));
         gr0kNumberInput.value = String(nextValue);
         draw();
@@ -2214,7 +2293,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       });
       gr0kNumberInput.addEventListener(&#x27;input&#x27;, () =&gt; {
         if (gr0kNumberInput.value === &#x27;&#x27;) return;
-        const value = Math.max(0, Math.min(1024, Math.round(Number(gr0kNumberInput.value))));
+        const value = Math.max(1, Math.min(100, Math.round(Number(gr0kNumberInput.value))));
         gr0kNumberInput.value = String(value);
         draw();
       });
@@ -2223,7 +2302,6 @@ html&gt;body{padding:0}&lt;/style&gt;
         gr0kHandleLengthInput,
         gr0kCharacterYInput,
         gr0kGapInput,
-        gr0kSerialYInput,
         gr0kSerialWidthInput,
         gr0kSerialHeightInput
       ].forEach(control =&gt; control.addEventListener(&#x27;input&#x27;, draw));
