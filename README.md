@@ -1,37 +1,47 @@
 # Agent Art Signature Prototype
 
-An interactive design panel for developing a deterministic, text-seeded Bézier signature prototype.
+Signature v2.0.0 is a deterministic X-handle + MBTI generative-art system. It converts one X handle and one of the 16 MBTI types into a reproducible SVG signature curve.
 
-The panel converts an X handle and a `gr0k_raw` seed into a reproducible curve using SHA-256-labeled random values, character geometry, serial digit pulses, and selectable SVG path construction.
+## Signature v2.0.0 design panel
 
-## Prototype design panel
+The browser page is the prototype design panel for Signature v2.0.0. Its controls expose the fixed values and deterministic PRNG ranges frozen in the renderer. The canvas previews one preset X handle and one selected MBTI type, and it can also show all 16 MBTI results for the current handle.
 
-This page is a design panel for developing the Signature prototype. Every button, toggle, and slider selects a fixed value or a PRNG range for the final algorithm.
+MBTI controls four independent parts of the result:
 
-The single canvas previews one handle and one `gr0k_raw` seed at a time. Independent gr0k shift controls adjust rotation, handle length, character Y, gap spacing, serial Y, serial width, and serial pulse height while preserving the underlying canonical identity. The final generative process remains one X handle plus one gr0k seed as input and one deterministic SVG/PNG artwork as output.
+- E / I — light or dark field polarity
+- S / N — handle length, rotation, neighbor smoothing, handle balance, and digit pulse handles
+- T / F — sampled linear `L` outline or cubic Bézier `C` outline
+- J / P — ordered or randomized X rhythm and the point-Y distribution
+
+The SHA-256-labeled PRNG remains scoped by semantic parameter labels and X-handle content. MBTI selects the frozen ranges and rendering rules; it is not added to the hash payload.
 
 ## Files
 
-- `index.html` — standalone browser panel
-- `src/text-seeded-bezier-line.html` — editable visualization source
-- `algorithm/signature_algorithm_v1.py` — frozen Signature algorithm `1.0.0`
-- `algorithm/signature_algorithm_v1.json` — frozen settings and output rules
+- `index.html` — standalone Signature v2.0.0 browser panel
+- `src/signatures-mbti-panel.html` — editable Signature v2.0.0 panel source
+- `algorithm/signature_renderer_v2.0.0.py` — frozen Signature v2.0.0 Python renderer
+- `algorithm/signature_renderer_v2.0.0.json` — frozen v2.0.0 settings, inputs, and MBTI mapping
+- `algorithm/signature_algorithm_v1.py` and `.json` — preserved Signature v1.0.0 renderer and settings
 - `algorithm/SHA256SUMS` — release-file verification hashes
 
-## Use
+## Generate a Signature v2.0.0 SVG
 
-Open `index.html` in a browser. Adjust the selected parameters, change the gr0k seed, switch through preset handles, and copy the current SVG.
-
-The signature always originates in a fixed 420 × 420 canonical design space, while the default output is 1080 × 1080. The panel’s output-size fields may request any positive square or rectangular canvas. Square outputs retain the canonical `viewBox` and change only the SVG dimensions. Non-square outputs uniformly scale and center the unchanged canonical curve on a background that fills the requested canvas, so no geometry is stretched or regenerated. The displayed handle remains centered at 95% of the requested output height.
-
-The frozen Python generator accepts the same dimensions:
+The handle must contain 1–15 ASCII letters, digits, or underscores and must not include `@`. The MBTI type must match `^[EI][SN][TF][JP]$`.
 
 ```sh
-python3 algorithm/signature_algorithm_v1.py inshell_art --gr0k-raw 22 --width 1200 --height 800 --output signature.svg
+python3 algorithm/signature_renderer_v2.0.0.py inshell_art --mbti INFP --output signature.svg
 ```
 
-The canonical design space is 420 × 420 units. The default SVG output is 1080 × 1080 pixels and may be rendered to a PNG of the same requested output size.
+The default output is 1080 × 1080. A rectangular output can be requested without stretching or regenerating the canonical geometry:
 
-## Reusing the curve system for longer text
+```sh
+python3 algorithm/signature_renderer_v2.0.0.py inshell_art --mbti ENTJ --width 1200 --height 800 --output signature.svg
+```
 
-The Signature entry point remains strictly limited to an X handle of 1–15 characters. For a separate text-to-curve application, `reusable_text_curve_layout(character_count)` defines the required expansion policy. Above 15 characters, the reference segment width stays at `300 / 14` canonical units. The total curve span and canonical canvas width grow with the number of segments instead of compressing additional anchors into the Signature’s original 300-unit curve span.
+## Output sizing
+
+Every signature is constructed in a 420 × 420 canonical design space. Square outputs retain the canonical `viewBox` and change the SVG dimensions. Non-square outputs uniformly scale and center the unchanged canonical curve on a background that fills the requested canvas. The displayed handle remains centered at 95% of the requested output height.
+
+## Version verification
+
+Release hashes in `algorithm/SHA256SUMS` verify the frozen Python renderer, JSON settings, panel source, and deployed standalone panel. Git tag `v2.0.0` identifies this release; tag `v1.0.0` preserves the previous gr0k-based algorithm.

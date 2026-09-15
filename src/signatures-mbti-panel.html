@@ -1,0 +1,1429 @@
+<div id="text-seeded-bezier-loop-presets" data-theme="system">
+  <style>
+    html, body { margin: 0; min-height: 100%; }
+    body { background: #f7f6f2; }
+    html[data-tsbl-theme="dark"] body { background: #151514; }
+    html[data-tsbl-theme="light"] body { background: #f7f6f2; }
+    #text-seeded-bezier-loop-presets { --background: #f7f6f2; --foreground: #171715; --border: #d4d2ca; --muted-foreground: #68675f; --primary: #171715; --primary-foreground: #ffffff; --secondary: #ebe9e2; --secondary-foreground: #171715; --input: #d4d2ca; --ring: #67665f; --selection: #1769d2; --selection-foreground: #ffffff; background: var(--background); color: var(--foreground); color-scheme: light; min-height: 100vh; width: 100%; }
+    #text-seeded-bezier-loop-presets[data-theme="dark"] { --background: #151514; --foreground: #f1eee5; --border: #41403b; --muted-foreground: #aaa79d; --primary: #f1eee5; --primary-foreground: #151514; --secondary: #292825; --secondary-foreground: #f1eee5; --input: #41403b; --ring: #aaa79d; --selection: #8fc0ff; --selection-foreground: #0b1726; color-scheme: dark; }
+    @media (prefers-color-scheme: dark) {
+      body { background: #151514; }
+      html[data-tsbl-theme="light"] body { background: #f7f6f2; }
+      #text-seeded-bezier-loop-presets:not([data-theme="light"]) { --background: #151514; --foreground: #f1eee5; --border: #41403b; --muted-foreground: #aaa79d; --primary: #f1eee5; --primary-foreground: #151514; --secondary: #292825; --secondary-foreground: #f1eee5; --input: #41403b; --ring: #aaa79d; --selection: #8fc0ff; --selection-foreground: #0b1726; color-scheme: dark; }
+    }
+    #text-seeded-bezier-loop-presets * { box-sizing: border-box; }
+    #text-seeded-bezier-loop-presets h2 { margin: 0 0 .3rem; }
+    #text-seeded-bezier-loop-presets .tsbl-heading-row { align-items: end; display: flex; gap: .75rem; justify-content: space-between; }
+    #text-seeded-bezier-loop-presets .tsbl-theme-control { display: grid; gap: .08rem; grid-template-columns: auto 7rem; align-items: center; }
+    #text-seeded-bezier-loop-presets .tsbl-workspace { --preview-width: 420px; align-items: start; display: grid; gap: .35rem; grid-template-columns: minmax(360px, 1fr) .55rem minmax(260px, var(--preview-width)); }
+    #text-seeded-bezier-loop-presets .tsbl-control-column,
+    #text-seeded-bezier-loop-presets .tsbl-preview-column { min-width: 0; }
+    #text-seeded-bezier-loop-presets .tsbl-preview-column { position: sticky; top: .5rem; }
+    #text-seeded-bezier-loop-presets .tsbl-resizer { align-self: stretch; cursor: col-resize; min-height: 420px; position: relative; touch-action: none; }
+    #text-seeded-bezier-loop-presets .tsbl-resizer::before { background: var(--border); content: ""; inset: 0 auto 0 50%; position: absolute; transform: translateX(-50%); width: 2px; }
+    #text-seeded-bezier-loop-presets .tsbl-resizer:hover::before { background: var(--selection); }
+    #text-seeded-bezier-loop-presets .tsbl-controls { display: grid; gap: .25rem .55rem; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
+    #text-seeded-bezier-loop-presets .tsbl-text-control { grid-column: 1 / -1; }
+    #text-seeded-bezier-loop-presets .tsbl-style-controls { display: grid; gap: .25rem .55rem; grid-column: 1 / -1; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    #text-seeded-bezier-loop-presets .tsbl-mbti-selector { align-items: end; display: grid; gap: .25rem .45rem; grid-column: 1 / -1; grid-template-columns: repeat(4, minmax(4.5rem, 1fr)) 4.5rem; }
+    #text-seeded-bezier-loop-presets .tsbl-axis-options { display: grid; gap: .25rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #text-seeded-bezier-loop-presets .tsbl-type-output { font-size: 1.25rem; font-weight: 500; text-align: center; }
+    #text-seeded-bezier-loop-presets .tsbl-dimension { border-top: 1px solid var(--border); grid-column: 1 / -1; padding-top: .2rem; }
+    #text-seeded-bezier-loop-presets .tsbl-dimension-title { font-weight: 500; margin-bottom: .15rem; }
+    #text-seeded-bezier-loop-presets .tsbl-map-grid { display: grid; gap: .25rem .55rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #text-seeded-bezier-loop-presets .tsbl-pole { display: grid; gap: .22rem; }
+    #text-seeded-bezier-loop-presets .tsbl-pole-name { color: var(--muted-foreground); font-weight: 500; }
+    #text-seeded-bezier-loop-presets .tsbl-size-inputs { align-items: center; display: grid; gap: .35rem; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+    #text-seeded-bezier-loop-presets .tsbl-control { display: grid; gap: .08rem; grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); width: 100%; }
+    #text-seeded-bezier-loop-presets .tsbl-control-head { align-items: baseline; display: flex; gap: .4rem; justify-content: space-between; }
+    #text-seeded-bezier-loop-presets .tsbl-style-controls .tsbl-control-head,
+    #text-seeded-bezier-loop-presets .tsbl-dimension .tsbl-control-head { max-width: 12rem; width: 100%; }
+    #text-seeded-bezier-loop-presets .tsbl-control input[type="range"] { justify-self: start; max-width: 12rem; width: 100%; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-range { --range-start: 0%; --range-end: 100%; --range-mid: 50%; display: block; height: 1.2rem; max-width: 12rem; position: relative; width: 100%; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-range::before { background: linear-gradient(to right, var(--border) 0 var(--range-start), var(--foreground) var(--range-start) var(--range-end), var(--border) var(--range-end) 100%); content: ""; height: 2px; left: 0; position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+    #text-seeded-bezier-loop-presets .tsbl-dual-input { background: transparent; inset: 0; margin: 0; position: absolute; width: 100%; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-min { clip-path: inset(0 calc(100% - var(--range-mid)) 0 0); z-index: 2; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-max { clip-path: inset(0 0 0 var(--range-mid)); z-index: 3; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-input::-webkit-slider-runnable-track { background: transparent; box-shadow: none; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-input::-webkit-slider-thumb { pointer-events: all; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-input::-moz-range-track { background: transparent; }
+    #text-seeded-bezier-loop-presets .tsbl-dual-input::-moz-range-thumb { pointer-events: all; }
+    #text-seeded-bezier-loop-presets output { color: var(--foreground); text-align: end; }
+    #text-seeded-bezier-loop-presets .tsbl-state { border-top: 1px solid var(--border); color: var(--muted-foreground); margin-bottom: .25rem; padding-top: .25rem; }
+    #text-seeded-bezier-loop-presets .tsbl-grid { display: grid; }
+    #text-seeded-bezier-loop-presets .tsbl-all-grid { display: grid; gap: .35rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #text-seeded-bezier-loop-presets .tsbl-mini-type { background: transparent; border: 0; color: inherit; cursor: pointer; display: grid; gap: .2rem; padding: 0; text-align: start; }
+    #text-seeded-bezier-loop-presets .tsbl-mini-type strong { font-weight: 500; }
+    #text-seeded-bezier-loop-presets .tsbl-mini-svg { display: block; height: auto; width: 100%; }
+    #text-seeded-bezier-loop-presets figure { margin: 0; min-width: 0; }
+    #text-seeded-bezier-loop-presets figcaption { align-items: baseline; border-top: 1px solid var(--border); display: flex; gap: .4rem; justify-content: space-between; margin-bottom: .15rem; padding-top: .25rem; }
+    #text-seeded-bezier-loop-presets figcaption span { color: var(--muted-foreground); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #text-seeded-bezier-loop-presets .tsbl-svg { display: block; height: auto; margin: 0 auto; width: 100%; }
+    #text-seeded-bezier-loop-presets .tsbl-axis-options .btn[aria-pressed="true"] { background: var(--selection); border-color: var(--selection); color: var(--selection-foreground); }
+    #text-seeded-bezier-loop-presets .tsbl-variable { stroke: none; }
+    #text-seeded-bezier-loop-presets .tsbl-pure { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    #text-seeded-bezier-loop-presets .tsbl-canvas-text { text-anchor: middle; }
+    #text-seeded-bezier-loop-presets .tsbl-empty { font-size: 12px; text-anchor: middle; }
+    #text-seeded-bezier-loop-presets .tsbl-preview-toolbar { display: flex; justify-content: flex-end; margin-bottom: .2rem; }
+    #text-seeded-bezier-loop-presets .tsbl-actions { display: grid; gap: .25rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: .25rem; }
+    @media (max-width: 980px) {
+      #text-seeded-bezier-loop-presets .tsbl-workspace { grid-template-columns: minmax(0, 1fr); }
+      #text-seeded-bezier-loop-presets .tsbl-resizer { display: none; }
+      #text-seeded-bezier-loop-presets .tsbl-preview-column { position: static; }
+      #text-seeded-bezier-loop-presets .tsbl-all-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    @media (max-width: 700px) {
+      #text-seeded-bezier-loop-presets .tsbl-controls { grid-template-columns: 1fr; }
+      #text-seeded-bezier-loop-presets .tsbl-text-control { grid-column: auto; }
+      #text-seeded-bezier-loop-presets .tsbl-style-controls { grid-template-columns: 1fr; }
+      #text-seeded-bezier-loop-presets .tsbl-mbti-selector { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #text-seeded-bezier-loop-presets .tsbl-type-output { grid-column: 1 / -1; }
+      #text-seeded-bezier-loop-presets .tsbl-all-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #text-seeded-bezier-loop-presets .tsbl-actions { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <section aria-label="Signatures MBTI prototype design panel">
+    <div class="tsbl-heading-row">
+      <h2>Signatures-MBTI · Signature v2.0.0</h2>
+      <label class="tsbl-theme-control form-label" for="tsbl-theme-mode"><span>Panel theme</span><select class="form-control" id="tsbl-theme-mode"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+    </div>
+
+    <div class="tsbl-workspace">
+      <div class="tsbl-control-column">
+      <div class="tsbl-controls viz-controls">
+      <label class="tsbl-control tsbl-text-control form-label" for="tsbl-text">
+        <span class="tsbl-control-head"><span>Canvas 01 text</span><output id="tsbl-text-value">14 characters</output></span>
+        <input class="form-control" id="tsbl-text" type="text" minlength="1" maxlength="15" pattern="^[A-Za-z0-9_]{1,15}$" value="Personal_Field" aria-describedby="tsbl-text-error" required spellcheck="false">
+        <span class="text-small text-destructive" id="tsbl-text-error" role="alert" hidden>Use 1–15 letters, numbers, or underscores. Do not include @.</span>
+      </label>
+      <label class="tsbl-control form-label">
+        <span class="tsbl-control-head"><span>Output canvas size</span><output id="tsbl-output-size-value">1080 × 1080 px</output></span>
+        <span class="tsbl-size-inputs">
+          <input class="form-control" id="tsbl-output-width" type="number" min="1" max="10000" step="1" value="1080" aria-label="Output canvas width in pixels">
+          <span aria-hidden="true">×</span>
+          <input class="form-control" id="tsbl-output-height" type="number" min="1" max="10000" step="1" value="1080" aria-label="Output canvas height in pixels">
+        </span>
+      </label>
+      <div class="tsbl-style-controls">
+        <label class="tsbl-control form-label" for="tsbl-curve-span">
+          <span class="tsbl-control-head"><span>Curve span</span><output id="tsbl-curve-span-value">300 px</output></span>
+          <input class="form-range" id="tsbl-curve-span" type="range" min="180" max="360" step="1" value="300">
+        </label>
+        <label class="tsbl-control form-label" for="tsbl-stroke-weight">
+          <span class="tsbl-control-head"><span>Curve stroke</span><output id="tsbl-stroke-weight-value">5 px</output></span>
+          <input class="form-range" id="tsbl-stroke-weight" type="range" min="0.5" max="20" step="0.5" value="5">
+        </label>
+        <label class="tsbl-control form-label" for="tsbl-uppercase-weight">
+          <span class="tsbl-control-head"><span>Uppercase extra weight</span><output id="tsbl-uppercase-weight-value">10 px</output></span>
+          <input class="form-range" id="tsbl-uppercase-weight" type="range" min="0" max="50" step="1" value="10">
+        </label>
+        <label class="tsbl-control form-label" for="tsbl-text-size">
+          <span class="tsbl-control-head"><span>Canvas text size</span><output id="tsbl-text-size-value">10 px</output></span>
+          <input class="form-range" id="tsbl-text-size" type="range" min="0" max="72" step="1" value="10">
+        </label>
+        <label class="tsbl-control form-label" for="tsbl-text-weight">
+          <span class="tsbl-control-head"><span>Canvas text weight</span><output id="tsbl-text-weight-value">200</output></span>
+          <input class="form-range" id="tsbl-text-weight" type="range" min="100" max="900" step="100" value="200">
+        </label>
+        <label class="tsbl-control form-label" for="tsbl-serial-height">
+          <span class="tsbl-control-head"><span>Digit 9 height</span><output id="tsbl-serial-height-value">60 px</output></span>
+          <input class="form-range" id="tsbl-serial-height" type="range" min="0" max="120" step="1" value="60">
+        </label>
+        <label class="tsbl-control form-label" for="tsbl-serial-width">
+          <span class="tsbl-control-head"><span>Equal digit width</span><output id="tsbl-serial-width-value">1.00×</output></span>
+          <input class="form-range" id="tsbl-serial-width" type="range" min="0.1" max="2" step="0.05" value="1">
+        </label>
+        <label class="tsbl-control form-label">
+          <span class="tsbl-control-head"><span>_ width</span><output id="tsbl-underscore-width-value">1.00× — 2.00×</output></span>
+          <span class="tsbl-dual-range" id="tsbl-underscore-width-range"><input class="form-range tsbl-dual-input tsbl-dual-min" id="tsbl-underscore-width-min" type="range" min="0.1" max="2" step="0.05" value="1" aria-label="Minimum underscore width"><input class="form-range tsbl-dual-input tsbl-dual-max" id="tsbl-underscore-width-max" type="range" min="0.1" max="2" step="0.05" value="2" aria-label="Maximum underscore width"></span>
+        </label>
+        <label class="tsbl-control form-label">
+          <span class="tsbl-control-head"><span>_ point Y</span><output id="tsbl-underscore-y-value">0 — 50 px</output></span>
+          <span class="tsbl-dual-range" id="tsbl-underscore-y-range"><input class="form-range tsbl-dual-input tsbl-dual-min" id="tsbl-underscore-y-min" type="range" min="-100" max="100" step="1" value="0" aria-label="Minimum underscore point Y"><input class="form-range tsbl-dual-input tsbl-dual-max" id="tsbl-underscore-y-max" type="range" min="-100" max="100" step="1" value="50" aria-label="Maximum underscore point Y"></span>
+        </label>
+      </div>
+      <div class="tsbl-mbti-selector" aria-label="MBTI type">
+        <div class="tsbl-control"><span>Energy</span><div class="tsbl-axis-options"><button class="btn" type="button" data-axis="0" data-letter="E">E</button><button class="btn" type="button" data-axis="0" data-letter="I">I</button></div></div>
+        <div class="tsbl-control"><span>Information</span><div class="tsbl-axis-options"><button class="btn" type="button" data-axis="1" data-letter="S">S</button><button class="btn" type="button" data-axis="1" data-letter="N">N</button></div></div>
+        <div class="tsbl-control"><span>Decision</span><div class="tsbl-axis-options"><button class="btn" type="button" data-axis="2" data-letter="T">T</button><button class="btn" type="button" data-axis="2" data-letter="F">F</button></div></div>
+        <div class="tsbl-control"><span>Rhythm</span><div class="tsbl-axis-options"><button class="btn" type="button" data-axis="3" data-letter="J">J</button><button class="btn" type="button" data-axis="3" data-letter="P">P</button></div></div>
+        <output class="tsbl-type-output" id="tsbl-mbti-type">INFP</output>
+      </div>
+
+      <div class="tsbl-dimension"><div class="tsbl-dimension-title">E / I · field polarity</div><div class="tsbl-map-grid">
+        <div class="tsbl-pole"><span class="tsbl-pole-name">E · light field</span><span>Light background · black curve and handle text</span></div>
+        <div class="tsbl-pole"><span class="tsbl-pole-name">I · dark field</span><span>Black background · light curve and handle text</span></div>
+      </div></div>
+
+      <div class="tsbl-dimension"><div class="tsbl-dimension-title">S / N · handle geometry</div><div class="tsbl-map-grid">
+        <div class="tsbl-pole"><span class="tsbl-pole-name">S · restrained</span>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Rotation</span><output id="tsbl-s-angle-value">−180° — 180°</output></span><span class="tsbl-dual-range" id="tsbl-s-angle-range"><input class="form-range tsbl-dual-input tsbl-dual-min" id="tsbl-s-angle-min" type="range" min="-180" max="180" step="1" value="-180" aria-label="S minimum rotation"><input class="form-range tsbl-dual-input tsbl-dual-max" id="tsbl-s-angle-max" type="range" min="-180" max="180" step="1" value="180" aria-label="S maximum rotation"></span></label>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Handle length</span><output id="tsbl-s-length-value">10 — 40 px</output></span><span class="tsbl-dual-range" id="tsbl-s-length-range"><input class="form-range tsbl-dual-input tsbl-dual-min" id="tsbl-s-length-min" type="range" min="0" max="120" step="1" value="10" aria-label="S minimum handle length"><input class="form-range tsbl-dual-input tsbl-dual-max" id="tsbl-s-length-max" type="range" min="0" max="120" step="1" value="40" aria-label="S maximum handle length"></span></label>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Neighbor smoothing</span><output id="tsbl-s-smooth-value">0.10</output></span><input class="form-range" id="tsbl-s-smooth" type="range" min="0" max="1" step="0.05" value="0.1"></label>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Handle balance</span><output id="tsbl-s-balance-value">0.10</output></span><input class="form-range" id="tsbl-s-balance" type="range" min="0" max="1" step="0.05" value="0.1"></label>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Digit pulse handle</span><output id="tsbl-s-pulse-value">0.10×</output></span><input class="form-range" id="tsbl-s-pulse" type="range" min="0.05" max="0.5" step="0.01" value="0.1"></label>
+        </div>
+        <div class="tsbl-pole"><span class="tsbl-pole-name">N · expressive</span>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Rotation</span><output id="tsbl-n-angle-value">−180° — 180°</output></span><span class="tsbl-dual-range" id="tsbl-n-angle-range"><input class="form-range tsbl-dual-input tsbl-dual-min" id="tsbl-n-angle-min" type="range" min="-180" max="180" step="1" value="-180" aria-label="N minimum rotation"><input class="form-range tsbl-dual-input tsbl-dual-max" id="tsbl-n-angle-max" type="range" min="-180" max="180" step="1" value="180" aria-label="N maximum rotation"></span></label>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Handle length</span><output id="tsbl-n-length-value">10 — 120 px</output></span><span class="tsbl-dual-range" id="tsbl-n-length-range"><input class="form-range tsbl-dual-input tsbl-dual-min" id="tsbl-n-length-min" type="range" min="0" max="120" step="1" value="10" aria-label="N minimum handle length"><input class="form-range tsbl-dual-input tsbl-dual-max" id="tsbl-n-length-max" type="range" min="0" max="120" step="1" value="120" aria-label="N maximum handle length"></span></label>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Neighbor smoothing</span><output id="tsbl-n-smooth-value">0.50</output></span><input class="form-range" id="tsbl-n-smooth" type="range" min="0" max="1" step="0.05" value="0.5"></label>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Handle balance</span><output id="tsbl-n-balance-value">0.50</output></span><input class="form-range" id="tsbl-n-balance" type="range" min="0" max="1" step="0.05" value="0.5"></label>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Digit pulse handle</span><output id="tsbl-n-pulse-value">0.30×</output></span><input class="form-range" id="tsbl-n-pulse" type="range" min="0.05" max="0.5" step="0.01" value="0.3"></label>
+        </div>
+      </div></div>
+
+      <div class="tsbl-dimension"><div class="tsbl-dimension-title">T / F · outline construction</div><div class="tsbl-map-grid">
+        <div class="tsbl-pole"><span class="tsbl-pole-name">T · sampled outline</span>
+          <span>Linear sample segments · SVG <code>L</code></span>
+        </div>
+        <div class="tsbl-pole"><span class="tsbl-pole-name">F · Bézier outline</span>
+          <span>Cubic outline segments · SVG <code>C</code></span>
+        </div>
+      </div></div>
+
+      <div class="tsbl-dimension"><div class="tsbl-dimension-title">J / P · rhythm</div><div class="tsbl-map-grid">
+        <div class="tsbl-pole"><span class="tsbl-pole-name">J · ordered</span>
+          <span>Equal character X spacing</span>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Point Y</span><output id="tsbl-j-y-value">−20 — 20 px</output></span><span class="tsbl-dual-range" id="tsbl-j-y-range"><input class="form-range tsbl-dual-input tsbl-dual-min" id="tsbl-j-y-min" type="range" min="-100" max="100" step="1" value="-20" aria-label="J minimum point Y"><input class="form-range tsbl-dual-input tsbl-dual-max" id="tsbl-j-y-max" type="range" min="-100" max="100" step="1" value="20" aria-label="J maximum point Y"></span></label>
+        </div>
+        <div class="tsbl-pole"><span class="tsbl-pole-name">P · random X</span>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>X spacing weight</span><output id="tsbl-p-gap-value">0.45× — 1.55×</output></span><span class="tsbl-dual-range" id="tsbl-p-gap-range"><input class="form-range tsbl-dual-input tsbl-dual-min" id="tsbl-p-gap-min" type="range" min="0.1" max="2" step="0.05" value="0.45" aria-label="P minimum X spacing weight"><input class="form-range tsbl-dual-input tsbl-dual-max" id="tsbl-p-gap-max" type="range" min="0.1" max="2" step="0.05" value="1.55" aria-label="P maximum X spacing weight"></span></label>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Point Y maximum</span><output id="tsbl-p-y-extent-value">40 px</output></span><input class="form-range" id="tsbl-p-y-extent" type="range" min="0" max="100" step="1" value="40"></label>
+          <label class="tsbl-control form-label"><span class="tsbl-control-head"><span>Point Y contrast</span><output id="tsbl-p-y-contrast-value">3.00</output></span><input class="form-range" id="tsbl-p-y-contrast" type="range" min="1" max="5" step="0.1" value="3"></label>
+        </div>
+      </div></div>
+      </div>
+      </div>
+
+      <div class="tsbl-resizer" id="tsbl-resizer" role="separator" aria-label="Resize canvas preview" aria-orientation="vertical"></div>
+      <div class="tsbl-preview-column">
+      <div class="tsbl-preview-toolbar"><button class="btn tsbl-switch" id="tsbl-switch" type="button">Next handle</button></div>
+      <div class="tsbl-state text-small" id="tsbl-state" aria-live="polite">14 characters / 14 anchors / 14 curves</div>
+
+    <div class="tsbl-grid" id="tsbl-selected-view">
+      <figure>
+        <figcaption><strong id="tsbl-selected-title">INFP / Final line</strong><span class="text-small" id="tsbl-caption-0">@Personal_Field</span></figcaption>
+        <svg class="tsbl-svg tsbl-final" id="tsbl-final-0" viewBox="0 0 420 420" role="img" aria-label="Text-seeded Signature on the selected MBTI field background"></svg>
+      </figure>
+    </div>
+    <div class="tsbl-all-grid" id="tsbl-all-view" hidden></div>
+
+      <div class="tsbl-actions">
+        <button class="btn btn-block" id="tsbl-view-all" type="button" aria-pressed="false">View all 16</button>
+        <button class="btn btn-primary btn-block tsbl-copy" id="tsbl-copy-svg" type="button">Copy selected SVG</button>
+      </div>
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+    (() => {
+      const root = document.getElementById('text-seeded-bezier-loop-presets');
+      const textInput = root.querySelector('#tsbl-text');
+      const textError = root.querySelector('#tsbl-text-error');
+      const outputWidthInput = root.querySelector('#tsbl-output-width');
+      const outputHeightInput = root.querySelector('#tsbl-output-height');
+      const outputSizeOutput = root.querySelector('#tsbl-output-size-value');
+      const themeModeInput = root.querySelector('#tsbl-theme-mode');
+      const workspace = root.querySelector('.tsbl-workspace');
+      const resizer = root.querySelector('#tsbl-resizer');
+      const curveSpanInput = root.querySelector('#tsbl-curve-span');
+      const curveSpanOutput = root.querySelector('#tsbl-curve-span-value');
+      const strokeWeightInput = root.querySelector('#tsbl-stroke-weight');
+      const strokeWeightOutput = root.querySelector('#tsbl-stroke-weight-value');
+      const uppercaseWeightInput = root.querySelector('#tsbl-uppercase-weight');
+      const textSizeInput = root.querySelector('#tsbl-text-size');
+      const textWeightInput = root.querySelector('#tsbl-text-weight');
+      const serialHeightInput = root.querySelector('#tsbl-serial-height');
+      const serialWidthInput = root.querySelector('#tsbl-serial-width');
+      const underscoreWidthMinInput = root.querySelector('#tsbl-underscore-width-min');
+      const underscoreWidthMaxInput = root.querySelector('#tsbl-underscore-width-max');
+      const underscoreYMinInput = root.querySelector('#tsbl-underscore-y-min');
+      const underscoreYMaxInput = root.querySelector('#tsbl-underscore-y-max');
+      const switchButton = root.querySelector('#tsbl-switch');
+      const viewAllButton = root.querySelector('#tsbl-view-all');
+      const copySvgButton = root.querySelector('#tsbl-copy-svg');
+      const textOutput = root.querySelector('#tsbl-text-value');
+      const uppercaseWeightOutput = root.querySelector('#tsbl-uppercase-weight-value');
+      const textSizeOutput = root.querySelector('#tsbl-text-size-value');
+      const textWeightOutput = root.querySelector('#tsbl-text-weight-value');
+      const mbtiOutput = root.querySelector('#tsbl-mbti-type');
+      const axisButtons = Array.from(root.querySelectorAll('[data-axis][data-letter]'));
+      const mappingInputs = Array.from(root.querySelectorAll('.tsbl-dimension input'));
+      const stateOutput = root.querySelector('#tsbl-state');
+      const finalSvg = root.querySelector('#tsbl-final-0');
+      const caption = root.querySelector('#tsbl-caption-0');
+      const selectedTitle = root.querySelector('#tsbl-selected-title');
+      const selectedView = root.querySelector('#tsbl-selected-view');
+      const allView = root.querySelector('#tsbl-all-view');
+      const SVG_NS = 'http://www.w3.org/2000/svg';
+      const canvasSize = 420;
+      const center = canvasSize / 2;
+      const serialBaselineHeightRatio = .5;
+      const canvasTextX = center;
+      const canvasTextY = canvasSize * (1 - .05);
+      const handlePattern = /^[A-Za-z0-9_]{1,15}$/;
+      const specificationVersion = '2.0.0';
+      const randomScheme = 'sha256-labeled-u53';
+      const randomNamespace = 'signature-field';
+      const lightColor = '#f4e7c7';
+      const darkColor = '#000000';
+      const presets = [
+        'grok', 'erikswahn', 'yanlucasmigone', 'philmo_mu', 'MegaDeFi', 'starlight_ai', 'alexgrama', 'nptacek',
+        'Naminami89493534', 'RikOostenbroek', 'solisolsoli', 'menteprompt', 'TheChuckTone', 'tuukzs', 'arstechnoid', 'migumo27',
+        'jackbutcher', '92digitalArt', 'Otter805', 'tylerxhobbs', 'UnseenAspect', 'goodside', 'chilltulpa', 'gurbakshchahal',
+        'thesilvershed', 'Synth_Taxon', 'enigmatriz', 'musicalnetta', 'ALCrego_', 'whoslord', 'robottraphouse', 'Flexi23',
+        'unstonio', 'AlphaVerse', 'Zangetsu_Soul', 'Sneha_9090', 'Danielomo_', 'LodMbeki', 'CoinsH97044', 'Angel4u_786',
+        'Omme_82', 'laidoungleon', 'biology_toper', 'teorikeslesme', 'larsdegrauw', 'Tworun44', 'HUMU0Rn', 'leizhang48284509',
+        'iliyaskhanu', '0xCryptoWizzy', 'jeffersszn', 'Corpstoryhq', 'Ahmad_lambo', 'Aristide_REGAL', 'bitbull112', 'konkatouyaji',
+        'MinishibaKaiser', 'goxkingsley_', 'aa200063', 'bloomifyyy', 'flowersplanettt', 'WildTravele', 'Robinvg11', 'Sentient_Lumina',
+        'Damivox_', 'MdRifat298138', 'Lasgfix', 'IsraelMath88300', 'GistHubz', 'Mayadamjr', 'urhelen0', 'spenxer_sw',
+        '0xRiker', 'Cynics_Alpha', 'inshell_art', 'lqrmynwr', 'JunB17892531', 'AuraMetaX', 'Usamadeen_001', 'WaruPanofficial1'
+      ];
+      const validPresets = presets.filter(text => handlePattern.test(text));
+      const mbtiTypes = [
+        'ISTJ', 'ISFJ', 'INFJ', 'INTJ',
+        'ISTP', 'ISFP', 'INFP', 'INTP',
+        'ESTP', 'ESFP', 'ENFP', 'ENTP',
+        'ESTJ', 'ESFJ', 'ENFJ', 'ENTJ'
+      ];
+
+      let presetCursor = 0;
+      let currentText = 'Personal_Field';
+      let selectedMbti = 'INFP';
+      let showAllTypes = false;
+
+      function numberValue(id) {
+        return Number(root.querySelector(`#${id}`).value);
+      }
+
+      function profileForMbti(type) {
+        if (!/^[EI][SN][TF][JP]$/.test(type)) throw new RangeError('MBTI type must match ^[EI][SN][TF][JP]$.');
+        const energy = type[0].toLowerCase();
+        const information = type[1].toLowerCase();
+        const decision = type[2].toLowerCase();
+        const rhythm = type[3].toLowerCase();
+        const pointYExtent = rhythm === 'p' ? numberValue('tsbl-p-y-extent') : null;
+        return {
+          type,
+          curveSpan: Number(curveSpanInput.value),
+          handleLengthRange: [numberValue(`tsbl-${information}-length-min`), numberValue(`tsbl-${information}-length-max`)],
+          baseWeight: Number(strokeWeightInput.value),
+          background: energy === 'e' ? lightColor : darkColor,
+          ink: energy === 'e' ? darkColor : lightColor,
+          pathMode: decision === 't' ? 'outline-sampled' : 'outline-bezier',
+          rotationRange: [numberValue(`tsbl-${information}-angle-min`), numberValue(`tsbl-${information}-angle-max`)],
+          yRange: rhythm === 'p'
+            ? [-pointYExtent, pointYExtent]
+            : [numberValue('tsbl-j-y-min'), numberValue('tsbl-j-y-max')],
+          yContrast: rhythm === 'p' ? numberValue('tsbl-p-y-contrast') : 1,
+          serialMaxHeight: numberValue('tsbl-serial-height'),
+          neighborSmoothing: numberValue(`tsbl-${information}-smooth`),
+          handleBalance: numberValue(`tsbl-${information}-balance`),
+          serialPulseHandleFactor: numberValue(`tsbl-${information}-pulse`),
+          randomGapDistribution: rhythm === 'p',
+          gapRange: rhythm === 'p'
+            ? [numberValue('tsbl-p-gap-min'), numberValue('tsbl-p-gap-max')]
+            : [1, 1],
+          serialWidthBase: numberValue('tsbl-serial-width'),
+          underscoreWidthRange: [Number(underscoreWidthMinInput.value), Number(underscoreWidthMaxInput.value)],
+          underscoreYRange: [Number(underscoreYMinInput.value), Number(underscoreYMaxInput.value)]
+        };
+      }
+
+      function element(name, attributes = {}) {
+        const node = document.createElementNS(SVG_NS, name);
+        Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, value));
+        return node;
+      }
+
+      function graphemes(text) {
+        if (globalThis.Intl && Intl.Segmenter) {
+          const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
+          return Array.from(segmenter.segment(text.normalize('NFC')), item => item.segment);
+        }
+        return Array.from(text.normalize('NFC'));
+      }
+
+      const sha256Initial = new Uint32Array([
+        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+        0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+      ]);
+      const sha256Constants = new Uint32Array([
+        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+        0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+        0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+        0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+        0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+      ]);
+
+      function canonicalJson(value) {
+        if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+        if (value && typeof value === 'object') {
+          return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(',')}}`;
+        }
+        return JSON.stringify(value);
+      }
+
+      function rotateRight(value, shift) {
+        return value >>> shift | value << 32 - shift;
+      }
+
+      function sha256Bytes(text) {
+        const message = new TextEncoder().encode(text);
+        const bitLength = message.length * 8;
+        const paddedLength = Math.ceil((message.length + 9) / 64) * 64;
+        const padded = new Uint8Array(paddedLength);
+        padded.set(message);
+        padded[message.length] = 0x80;
+        const paddedView = new DataView(padded.buffer);
+        paddedView.setUint32(paddedLength - 8, Math.floor(bitLength / 4294967296), false);
+        paddedView.setUint32(paddedLength - 4, bitLength >>> 0, false);
+
+        const hash = new Uint32Array(sha256Initial);
+        const words = new Uint32Array(64);
+        for (let offset = 0; offset < paddedLength; offset += 64) {
+          for (let index = 0; index < 16; index++) words[index] = paddedView.getUint32(offset + index * 4, false);
+          for (let index = 16; index < 64; index++) {
+            const value15 = words[index - 15];
+            const value2 = words[index - 2];
+            const sigma0 = rotateRight(value15, 7) ^ rotateRight(value15, 18) ^ value15 >>> 3;
+            const sigma1 = rotateRight(value2, 17) ^ rotateRight(value2, 19) ^ value2 >>> 10;
+            words[index] = (words[index - 16] + sigma0 + words[index - 7] + sigma1) >>> 0;
+          }
+
+          let [a, b, c, d, e, f, g, h] = hash;
+          for (let index = 0; index < 64; index++) {
+            const sum1 = rotateRight(e, 6) ^ rotateRight(e, 11) ^ rotateRight(e, 25);
+            const choice = e & f ^ ~e & g;
+            const temporary1 = (h + sum1 + choice + sha256Constants[index] + words[index]) >>> 0;
+            const sum0 = rotateRight(a, 2) ^ rotateRight(a, 13) ^ rotateRight(a, 22);
+            const majority = a & b ^ a & c ^ b & c;
+            const temporary2 = (sum0 + majority) >>> 0;
+            h = g;
+            g = f;
+            f = e;
+            e = (d + temporary1) >>> 0;
+            d = c;
+            c = b;
+            b = a;
+            a = (temporary1 + temporary2) >>> 0;
+          }
+          hash[0] = (hash[0] + a) >>> 0;
+          hash[1] = (hash[1] + b) >>> 0;
+          hash[2] = (hash[2] + c) >>> 0;
+          hash[3] = (hash[3] + d) >>> 0;
+          hash[4] = (hash[4] + e) >>> 0;
+          hash[5] = (hash[5] + f) >>> 0;
+          hash[6] = (hash[6] + g) >>> 0;
+          hash[7] = (hash[7] + h) >>> 0;
+        }
+
+        const digest = new Uint8Array(32);
+        const digestView = new DataView(digest.buffer);
+        hash.forEach((value, index) => digestView.setUint32(index * 4, value, false));
+        return digest;
+      }
+
+      function hashToUnitFloat(scope, parameter) {
+        const digest = sha256Bytes(canonicalJson({
+          namespace: randomNamespace,
+          parameter,
+          scheme: randomScheme,
+          scope
+        }));
+        const view = new DataView(digest.buffer, digest.byteOffset, digest.byteLength);
+        const first53Bits = view.getUint32(0, false) * 2097152 + (view.getUint32(4, false) >>> 11);
+        return first53Bits / 9007199254740992;
+      }
+
+      function mapRange(unitValue, minimum, maximum) {
+        return minimum + unitValue * (maximum - minimum);
+      }
+
+      function mapPointY(unitValue, profile) {
+        if (profile.yContrast <= 1) return mapRange(unitValue, ...profile.yRange);
+        const signedUnit = unitValue * 2 - 1;
+        const magnitude = Math.abs(signedUnit);
+        const raisedMagnitude = magnitude ** profile.yContrast;
+        const raisedInverse = (1 - magnitude) ** profile.yContrast;
+        const contrastedMagnitude = raisedMagnitude / (raisedMagnitude + raisedInverse);
+        const extent = Math.max(Math.abs(profile.yRange[0]), Math.abs(profile.yRange[1]));
+        return Math.sign(signedUnit) * extent * contrastedMagnitude;
+      }
+
+      function isUppercase(character) {
+        return character >= 'A' && character <= 'Z';
+      }
+
+      function seededValues(characters, profile) {
+        return characters.map(character => {
+          const scope = { kind: 'x-handle-character', value: character };
+          const incomingRaw = mapRange(hashToUnitFloat(scope, 'incoming-handle-length'), ...profile.handleLengthRange);
+          const outgoingRaw = mapRange(hashToUnitFloat(scope, 'outgoing-handle-length'), ...profile.handleLengthRange);
+          const meanLength = (incomingRaw + outgoingRaw) / 2;
+          const underscoreScope = { kind: 'x-handle-underscore', value: '_' };
+          const canonicalYShift = character === '_'
+            ? mapRange(hashToUnitFloat(underscoreScope, 'point-y-shift'), ...profile.underscoreYRange)
+            : mapPointY(hashToUnitFloat(scope, 'point-y-shift'), profile);
+          return {
+            angle: mapRange(hashToUnitFloat(scope, 'handle-angle'), ...profile.rotationRange) * Math.PI / 180,
+            incomingLength: incomingRaw * (1 - profile.handleBalance) + meanLength * profile.handleBalance,
+            outgoingLength: outgoingRaw * (1 - profile.handleBalance) + meanLength * profile.handleBalance,
+            canonicalYShift
+          };
+        });
+      }
+
+      function underscoreWidthWeight(profile) {
+        const scope = { kind: 'x-handle-underscore', value: '_' };
+        return mapRange(hashToUnitFloat(scope, 'width-weight'), ...profile.underscoreWidthRange);
+      }
+
+      function pairGapWeight(leftCharacter, rightCharacter, profile) {
+        const scope = {
+          kind: 'ordered-x-handle-character-pair',
+          left: { kind: 'x-handle-character', value: leftCharacter },
+          right: { kind: 'x-handle-character', value: rightCharacter }
+        };
+        return mapRange(hashToUnitFloat(scope, 'point-gap-weight'), ...profile.gapRange);
+      }
+
+      function nonSerialGapWeight(leftCharacter, rightCharacter, profile) {
+        if (leftCharacter === '_' || rightCharacter === '_') return underscoreWidthWeight(profile);
+        return pairGapWeight(leftCharacter, rightCharacter, profile);
+      }
+
+      function smoothCanonicalAnglesWithNeighborWeights(raw, smoothing) {
+        const count = raw.length;
+        return raw.map((value, index) => {
+          const previous = raw[Math.max(0, index - 1)].angle;
+          const next = raw[Math.min(count - 1, index + 1)].angle;
+          const neighborAverage = (previous + next) / 2;
+          return value.angle * (1 - smoothing) + neighborAverage * smoothing;
+        });
+      }
+
+      function isSerialDigit(character) {
+        return /^\d$/.test(character);
+      }
+
+      function geometryFor(characters, profile) {
+        const count = characters.length;
+        if (count === 0) return [];
+        const serialFlags = characters.map(isSerialDigit);
+        const serialDigitCount = serialFlags.filter(Boolean).length;
+        const hasSerialDigits = serialDigitCount > 0;
+        const raw = seededValues(characters, profile);
+        const smoothedAngles = smoothCanonicalAnglesWithNeighborWeights(raw, profile.neighborSmoothing);
+        const lineSpan = profile.curveSpan;
+        const targetSpan = count <= 3 ? lineSpan * count / 4 : lineSpan;
+        const targetStart = center - targetSpan / 2;
+        const targetEnd = center + targetSpan / 2;
+
+        const identityPoint = (character, index, x) => {
+          const yShift = raw[index].canonicalYShift;
+          const anchor = [x, center + yShift];
+          const angle = smoothedAngles[index];
+          const direction = [Math.cos(angle), Math.sin(angle)];
+          return {
+            character,
+            uppercase: isUppercase(character),
+            serialTail: false,
+            anchor,
+            incoming: [anchor[0] - direction[0] * raw[index].incomingLength, anchor[1] - direction[1] * raw[index].incomingLength],
+            outgoing: [anchor[0] + direction[0] * raw[index].outgoingLength, anchor[1] + direction[1] * raw[index].outgoingLength]
+          };
+        };
+
+        const centerGeometry = points => {
+          const xValues = points.flatMap(point => [point.anchor[0], point.incoming[0], point.outgoing[0]]);
+          const geometryCenter = (Math.min(...xValues) + Math.max(...xValues)) / 2;
+          const shiftX = center - geometryCenter;
+          return points.map(point => ({
+            ...point,
+            anchor: [point.anchor[0] + shiftX, point.anchor[1]],
+            incoming: [point.incoming[0] + shiftX, point.incoming[1]],
+            outgoing: [point.outgoing[0] + shiftX, point.outgoing[1]]
+          }));
+        };
+
+        if (!hasSerialDigits) {
+          if (count === 1) {
+            return centerGeometry([
+              identityPoint(characters[0], 0, targetStart),
+              identityPoint(characters[0], 0, targetEnd)
+            ]);
+          }
+          const gapWeights = characters.slice(0, count - 1).map((character, index) => (
+            nonSerialGapWeight(character, characters[index + 1], profile)
+          ));
+          const gapTotal = gapWeights.reduce((total, value) => total + value, 0);
+          const gaps = gapWeights.map(value => targetSpan * value / gapTotal);
+          const positions = [targetStart];
+          gaps.forEach(gap => positions.push(positions[positions.length - 1] + gap));
+          return centerGeometry(characters.map((character, index) => identityPoint(character, index, positions[index])));
+        }
+
+        const digitsValue = characters.filter(isSerialDigit).join('');
+        const digitsScope = { kind: 'x-handle-digits', value: digitsValue };
+        const digitsYShift = mapPointY(hashToUnitFloat(digitsScope, 'point-y-shift'), profile);
+
+        const serialPoint = (character, x, y, incomingHandle, outgoingHandle) => ({
+          character,
+          uppercase: false,
+          serialTail: true,
+          anchor: [x, y],
+          incoming: [x - incomingHandle, y],
+          outgoing: [x + outgoingHandle, y]
+        });
+
+        const flexibleBoundaries = [];
+        const transitionBoundaries = [];
+        for (let index = 0; index < count - 1; index++) {
+          if (serialFlags[index] !== serialFlags[index + 1]) transitionBoundaries.push(index);
+          if (!serialFlags[index] && !serialFlags[index + 1]) flexibleBoundaries.push(index);
+        }
+
+        const flexibleWeights = flexibleBoundaries.map(index => (
+          nonSerialGapWeight(characters[index], characters[index + 1], profile)
+        ));
+        const serialWidthWeights = new Map();
+        characters.forEach((character, index) => {
+          if (!serialFlags[index]) return;
+          serialWidthWeights.set(index, profile.serialWidthBase);
+        });
+        const serialMaxHeight = profile.serialMaxHeight;
+        const transitionWeights = new Map(transitionBoundaries.map(boundary => {
+          const digitIndex = serialFlags[boundary] ? boundary : boundary + 1;
+          const nonDigitIndex = serialFlags[boundary] ? boundary + 1 : boundary;
+          const digitWeight = serialWidthWeights.get(digitIndex);
+          const transitionWeight = characters[nonDigitIndex] === '_'
+            ? (digitWeight + underscoreWidthWeight(profile)) / 2
+            : digitWeight;
+          return [boundary, transitionWeight * .6];
+        }));
+        const flexibleTotal = flexibleWeights.reduce((total, value) => total + value, 0);
+        const layoutWeightTotal = Array.from(serialWidthWeights.values()).reduce((total, value) => total + value, 0)
+          + Array.from(transitionWeights.values()).reduce((total, value) => total + value, 0)
+          + flexibleTotal;
+        const layoutScale = layoutWeightTotal > 0 ? targetSpan / layoutWeightTotal : 0;
+        const transitionAdvance = new Map(Array.from(transitionWeights, ([boundary, weight]) => [
+          boundary,
+          weight * layoutScale
+        ]));
+        const flexibleAdvance = new Map(flexibleBoundaries.map((index, weightIndex) => [
+          index,
+          flexibleWeights[weightIndex] * layoutScale
+        ]));
+        let cursorX = targetStart;
+        const points = [];
+
+        characters.forEach((character, index) => {
+          if (serialFlags[index]) {
+            const serialSpacing = serialWidthWeights.get(index) * layoutScale;
+            const pulseHandle = serialSpacing * profile.serialPulseHandleFactor;
+            const serialRunBaselineY = center + serialMaxHeight * serialBaselineHeightRatio + digitsYShift;
+            if (index === 0 || !serialFlags[index - 1]) {
+              points.push(serialPoint(character, cursorX, serialRunBaselineY, pulseHandle, pulseHandle));
+            }
+            const pulseHeight = Number(character) / 9 * serialMaxHeight;
+            points.push(serialPoint(character, cursorX + serialSpacing / 2, serialRunBaselineY - pulseHeight, pulseHandle, pulseHandle));
+            cursorX += serialSpacing;
+            points.push(serialPoint(character, cursorX, serialRunBaselineY, pulseHandle, pulseHandle));
+            if (index < count - 1 && !serialFlags[index + 1]) cursorX += transitionAdvance.get(index);
+          } else {
+            points.push(identityPoint(character, index, cursorX));
+            if (index < count - 1) {
+              cursorX += serialFlags[index + 1] ? transitionAdvance.get(index) : flexibleAdvance.get(index) || 0;
+            }
+          }
+        });
+
+        return centerGeometry(points);
+      }
+
+      function cubicPoint(p0, p1, p2, p3, t) {
+        const u = 1 - t;
+        const a = u * u * u;
+        const b = 3 * u * u * t;
+        const c = 3 * u * t * t;
+        const d = t * t * t;
+        return [
+          a * p0[0] + b * p1[0] + c * p2[0] + d * p3[0],
+          a * p0[1] + b * p1[1] + c * p2[1] + d * p3[1]
+        ];
+      }
+
+      function cubicDerivative(p0, p1, p2, p3, t) {
+        const u = 1 - t;
+        return [
+          3 * u * u * (p1[0] - p0[0]) + 6 * u * t * (p2[0] - p1[0]) + 3 * t * t * (p3[0] - p2[0]),
+          3 * u * u * (p1[1] - p0[1]) + 6 * u * t * (p2[1] - p1[1]) + 3 * t * t * (p3[1] - p2[1])
+        ];
+      }
+
+      function smoothstep(t) {
+        return t * t * (3 - 2 * t);
+      }
+
+      function weightAt(point, baseWeight, uppercaseExtra) {
+        if (point.character === '_') return 0;
+        if (point.serialTail || /^\d$/.test(point.character)) return baseWeight;
+        return baseWeight + (point.uppercase ? uppercaseExtra : 0);
+      }
+
+      function pair(point) {
+        const format = value => (Math.abs(value) < .005 ? 0 : value).toFixed(2);
+        return `${format(point[0])},${format(point[1])}`;
+      }
+
+      function widthBetween(current, next, t, baseWeight, uppercaseExtra) {
+        const startWeight = weightAt(current, baseWeight, uppercaseExtra);
+        const endWeight = weightAt(next, baseWeight, uppercaseExtra);
+        return startWeight + (endWeight - startWeight) * smoothstep(t);
+      }
+
+      function offsetPoint(current, next, t, side, baseWeight, uppercaseExtra) {
+        const position = cubicPoint(current.anchor, current.outgoing, next.incoming, next.anchor, t);
+        const derivative = cubicDerivative(current.anchor, current.outgoing, next.incoming, next.anchor, t);
+        const length = Math.hypot(derivative[0], derivative[1]) || 1;
+        const normal = [-derivative[1] / length, derivative[0] / length];
+        const halfWidth = widthBetween(current, next, t, baseWeight, uppercaseExtra) / 2;
+        return [
+          position[0] + normal[0] * halfWidth * side,
+          position[1] + normal[1] * halfWidth * side
+        ];
+      }
+
+      function centerPointsForOutline(points, baseWeight, uppercaseExtra) {
+        if (points.length < 2) return points;
+        let minimumX = Infinity;
+        let maximumX = -Infinity;
+        const samples = 64;
+
+        for (let index = 0; index < points.length - 1; index++) {
+          const current = points[index];
+          const next = points[index + 1];
+          for (let sample = 0; sample <= samples; sample++) {
+            const t = sample / samples;
+            const outer = offsetPoint(current, next, t, 1, baseWeight, uppercaseExtra);
+            const inner = offsetPoint(current, next, t, -1, baseWeight, uppercaseExtra);
+            minimumX = Math.min(minimumX, outer[0], inner[0]);
+            maximumX = Math.max(maximumX, outer[0], inner[0]);
+          }
+        }
+
+        const shiftX = center - (minimumX + maximumX) / 2;
+        return points.map(point => ({
+          ...point,
+          anchor: [point.anchor[0] + shiftX, point.anchor[1]],
+          incoming: [point.incoming[0] + shiftX, point.incoming[1]],
+          outgoing: [point.outgoing[0] + shiftX, point.outgoing[1]]
+        }));
+      }
+
+      function centerPointsForCenterline(points) {
+        if (points.length < 2) return points;
+        let minimumX = Infinity;
+        let maximumX = -Infinity;
+        const samples = 64;
+
+        for (let index = 0; index < points.length - 1; index++) {
+          const current = points[index];
+          const next = points[index + 1];
+          for (let sample = 0; sample <= samples; sample++) {
+            const position = cubicPoint(current.anchor, current.outgoing, next.incoming, next.anchor, sample / samples);
+            minimumX = Math.min(minimumX, position[0]);
+            maximumX = Math.max(maximumX, position[0]);
+          }
+        }
+
+        const shiftX = center - (minimumX + maximumX) / 2;
+        return points.map(point => ({
+          ...point,
+          anchor: [point.anchor[0] + shiftX, point.anchor[1]],
+          incoming: [point.incoming[0] + shiftX, point.incoming[1]],
+          outgoing: [point.outgoing[0] + shiftX, point.outgoing[1]]
+        }));
+      }
+
+      function sampledVariableWidthPath(points, baseWeight, uppercaseExtra) {
+        if (points.length < 2) return '';
+        const outer = [];
+        const inner = [];
+        const samplesPerSegment = Math.max(8, Math.min(32, Math.ceil(240 / points.length)));
+        const segmentCount = points.length - 1;
+
+        function sampleSegment(current, next, t, startWeight, endWeight) {
+          const position = cubicPoint(current.anchor, current.outgoing, next.incoming, next.anchor, t);
+          const derivative = cubicDerivative(current.anchor, current.outgoing, next.incoming, next.anchor, t);
+          const length = Math.hypot(derivative[0], derivative[1]) || 1;
+          const normal = [-derivative[1] / length, derivative[0] / length];
+          const width = startWeight + (endWeight - startWeight) * smoothstep(t);
+          const half = width / 2;
+          outer.push([position[0] + normal[0] * half, position[1] + normal[1] * half]);
+          inner.push([position[0] - normal[0] * half, position[1] - normal[1] * half]);
+        }
+
+        for (let index = 0; index < segmentCount; index++) {
+          const current = points[index];
+          const next = points[index + 1];
+          const startWeight = weightAt(current, baseWeight, uppercaseExtra);
+          const endWeight = weightAt(next, baseWeight, uppercaseExtra);
+
+          for (let sample = 0; sample < samplesPerSegment; sample++) {
+            sampleSegment(current, next, sample / samplesPerSegment, startWeight, endWeight);
+          }
+        }
+
+        const current = points[points.length - 2];
+        const next = points[points.length - 1];
+        sampleSegment(current, next, 1, weightAt(current, baseWeight, uppercaseExtra), weightAt(next, baseWeight, uppercaseExtra));
+        return `M${outer.map(pair).join('L')}L${inner.reverse().map(pair).join('L')}Z`;
+      }
+
+      function cubicThroughThirds(start, oneThird, twoThirds, end) {
+        const first = [
+          27 * oneThird[0] - 8 * start[0] - end[0],
+          27 * oneThird[1] - 8 * start[1] - end[1]
+        ];
+        const second = [
+          27 * twoThirds[0] - start[0] - 8 * end[0],
+          27 * twoThirds[1] - start[1] - 8 * end[1]
+        ];
+        return {
+          control1: [(2 * first[0] - second[0]) / 18, (2 * first[1] - second[1]) / 18],
+          control2: [(2 * second[0] - first[0]) / 18, (2 * second[1] - first[1]) / 18]
+        };
+      }
+
+      function bezierVariableWidthPath(points, baseWeight, uppercaseExtra) {
+        if (points.length < 2) return '';
+        const lastSegment = points.length - 2;
+        const firstOuter = offsetPoint(points[0], points[1], 0, 1, baseWeight, uppercaseExtra);
+        let path = `M${pair(firstOuter)}`;
+
+        for (let index = 0; index <= lastSegment; index++) {
+          const current = points[index];
+          const next = points[index + 1];
+          const start = offsetPoint(current, next, 0, 1, baseWeight, uppercaseExtra);
+          const oneThird = offsetPoint(current, next, 1 / 3, 1, baseWeight, uppercaseExtra);
+          const twoThirds = offsetPoint(current, next, 2 / 3, 1, baseWeight, uppercaseExtra);
+          const end = offsetPoint(current, next, 1, 1, baseWeight, uppercaseExtra);
+          const controls = cubicThroughThirds(start, oneThird, twoThirds, end);
+          path += `C${pair(controls.control1)} ${pair(controls.control2)} ${pair(end)}`;
+        }
+
+        const finalInner = offsetPoint(points[lastSegment], points[lastSegment + 1], 1, -1, baseWeight, uppercaseExtra);
+        path += `L${pair(finalInner)}`;
+
+        for (let index = lastSegment; index >= 0; index--) {
+          const current = points[index];
+          const next = points[index + 1];
+          const start = offsetPoint(current, next, 0, -1, baseWeight, uppercaseExtra);
+          const oneThird = offsetPoint(current, next, 1 / 3, -1, baseWeight, uppercaseExtra);
+          const twoThirds = offsetPoint(current, next, 2 / 3, -1, baseWeight, uppercaseExtra);
+          const end = offsetPoint(current, next, 1, -1, baseWeight, uppercaseExtra);
+          const controls = cubicThroughThirds(start, oneThird, twoThirds, end);
+          path += `C${pair(controls.control2)} ${pair(controls.control1)} ${pair(start)}`;
+        }
+
+        return `${path}Z`;
+      }
+
+      function variableWidthPath(points, baseWeight, uppercaseExtra, pathMode) {
+        return pathMode === 'bezier'
+          ? bezierVariableWidthPath(points, baseWeight, uppercaseExtra)
+          : sampledVariableWidthPath(points, baseWeight, uppercaseExtra);
+      }
+
+      function pureBezierPath(points) {
+        if (points.length < 2) return '';
+        let path = `M${pair(points[0].anchor)}`;
+        for (let index = 0; index < points.length - 1; index++) {
+          const current = points[index];
+          const next = points[index + 1];
+          path += `C${pair(current.outgoing)} ${pair(next.incoming)} ${pair(next.anchor)}`;
+        }
+        return path;
+      }
+
+      function addBackground(svg, background) {
+        svg.appendChild(element('rect', { class: 'tsbl-egg', x: 0, y: 0, width: 420, height: 420, fill: background }));
+      }
+
+      function addEmptyMessage(svg, ink) {
+        const message = element('text', { class: 'tsbl-empty', x: center, y: center, fill: ink });
+        message.textContent = 'Enter at least 2 characters';
+        svg.appendChild(message);
+      }
+
+      function drawCanvasText(svg, text, x, y, textSize, textWeight, ink) {
+        const label = element('text', { class: 'tsbl-canvas-text', x, y, 'font-size': textSize, 'font-weight': textWeight, 'dominant-baseline': 'middle', fill: ink });
+        label.textContent = `@${text}`;
+        svg.appendChild(label);
+      }
+
+      function drawCanonicalCurve(svg, points, weight, uppercaseExtra, renderMode, ink) {
+        if (points.length < 2) {
+          addEmptyMessage(svg, ink);
+        } else if (renderMode === 'pure-bezier') {
+          const centeredPoints = centerPointsForCenterline(points);
+          svg.appendChild(element('path', {
+            class: 'tsbl-pure',
+            d: pureBezierPath(centeredPoints),
+            stroke: ink,
+            'stroke-width': weight
+          }));
+        } else {
+          const centeredPoints = centerPointsForOutline(points, weight, uppercaseExtra);
+          const pathMode = renderMode === 'outline-bezier' ? 'bezier' : 'sampled';
+          svg.appendChild(element('path', { class: 'tsbl-variable', d: variableWidthPath(centeredPoints, weight, uppercaseExtra, pathMode), fill: ink }));
+        }
+      }
+
+      function drawFinal(svg, points, weight, uppercaseExtra, renderMode, text, textSize, textWeight, outputWidth, outputHeight, colors) {
+        svg.replaceChildren();
+        const sameAspectRatio = Math.abs(outputWidth * canvasSize - outputHeight * canvasSize) < 1e-9;
+        if (sameAspectRatio) {
+          svg.setAttribute('viewBox', `0 0 ${canvasSize} ${canvasSize}`);
+          addBackground(svg, colors.background);
+          drawCanonicalCurve(svg, points, weight, uppercaseExtra, renderMode, colors.ink);
+          drawCanvasText(svg, text, canvasTextX, canvasTextY, textSize, textWeight, colors.ink);
+        } else {
+          const scale = Math.min(outputWidth / canvasSize, outputHeight / canvasSize);
+          const offsetX = (outputWidth - canvasSize * scale) / 2;
+          const offsetY = (outputHeight - canvasSize * scale) / 2;
+          svg.setAttribute('viewBox', `0 0 ${outputWidth} ${outputHeight}`);
+          svg.appendChild(element('rect', { class: 'tsbl-egg', x: 0, y: 0, width: outputWidth, height: outputHeight, fill: colors.background }));
+          const artwork = element('g', { transform: `translate(${offsetX} ${offsetY}) scale(${scale})` });
+          drawCanonicalCurve(artwork, points, weight, uppercaseExtra, renderMode, colors.ink);
+          svg.appendChild(artwork);
+          drawCanvasText(svg, text, outputWidth / 2, outputHeight * .95, textSize * scale, textWeight, colors.ink);
+        }
+      }
+
+      function currentSettings(mbtiType = selectedMbti) {
+        const profile = profileForMbti(mbtiType);
+        const mode = profile.pathMode === 'outline-bezier'
+          ? 'variable_bezier_outline'
+          : 'variable_sampled_outline';
+        return {
+          schema: 'signature-renderer.settings.v2',
+          system: {
+            id: 'signatures-mbti',
+            version: specificationVersion,
+            random_scheme: randomScheme,
+            random_namespace: randomNamespace,
+            input_contract: 'ascii-x-handle-v1',
+            svg_serialization: 'signature-renderer-svg-v2',
+            mbti_is_not_hashed: true
+          },
+          input: {
+            pattern: '^[A-Za-z0-9_]{1,15}$',
+            display_prefix: '@',
+            mbti_pattern: '^[EI][SN][TF][JP]$',
+            mbti_type: mbtiType
+          },
+          canvas: {
+            width: 420,
+            height: 420,
+            background: profile.background,
+            ink: profile.ink,
+            text: {
+              x: 210,
+              y: 399,
+              size_px: Number(textSizeInput.value),
+              weight: Number(textWeightInput.value),
+              anchor: 'middle',
+              dominant_baseline: 'middle',
+              font_family: '-apple-system, system-ui, Segoe UI, sans-serif'
+            }
+          },
+          geometry: {
+            point_distribution: profile.randomGapDistribution ? 'random' : 'average',
+            random_point_height: true,
+            curve_span: profile.curveSpan,
+            short_text_span_denominator: 4,
+            gap_weight_range: profile.gapRange,
+            handle_rotation_degrees: profile.rotationRange,
+            handle_length_px: profile.handleLengthRange,
+            point_y_shift_px: profile.yRange,
+            point_y_contrast_exponent: profile.yContrast,
+            point_y_transform: profile.yContrast > 1 ? 'signed-logistic-power-contrast' : 'linear',
+            neighbor_smoothing: profile.neighborSmoothing,
+            handle_balance: profile.handleBalance,
+            centering_samples_per_segment: 64
+          },
+          serial: {
+            nine_pulse_height_px: profile.serialMaxHeight,
+            baseline: 'main_curve_center_plus_half_pulse_height_plus_digits_y_shift',
+            baseline_height_ratio: serialBaselineHeightRatio,
+            width_weight_base: profile.serialWidthBase,
+            width_mode: 'equal_for_every_digit',
+            y_scope: 'x-handle-digits',
+            height_scope: 'x-handle-digits',
+            digit_spacing: 'per_digit_weight_normalized_spacing',
+            pulse_handle_spacing_factor: profile.serialPulseHandleFactor,
+            transition_weight_factor: .6
+          },
+          mbti: {
+            type: mbtiType,
+            energy: {
+              pole: mbtiType[0],
+              background: profile.background,
+              ink: profile.ink
+            },
+            information: {
+              pole: mbtiType[1],
+              handle_rotation_degrees: profile.rotationRange,
+              handle_length_px: profile.handleLengthRange,
+              neighbor_smoothing: profile.neighborSmoothing,
+              handle_balance: profile.handleBalance,
+              pulse_handle_spacing_factor: profile.serialPulseHandleFactor
+            },
+            decision: {
+              pole: mbtiType[2],
+              outline_command: profile.pathMode === 'outline-bezier' ? 'C' : 'L',
+              path_mode: mode
+            },
+            rhythm: {
+              pole: mbtiType[3],
+              point_distribution: profile.randomGapDistribution ? 'random' : 'average',
+              point_y_shift_px: profile.yRange,
+              point_y_contrast_exponent: profile.yContrast,
+              gap_weight_range: profile.gapRange
+            }
+          },
+          underscore: {
+            stroke_weight_px: 0,
+            width_weight_range: profile.underscoreWidthRange,
+            point_y_shift_px: profile.underscoreYRange,
+            width_scope: 'x-handle-underscore',
+            y_scope: 'x-handle-underscore'
+          },
+          stroke: {
+            base_weight_px: profile.baseWeight,
+            uppercase_extra_weight_px: Number(uppercaseWeightInput.value),
+            underscore_weight_px: 0,
+            weight_easing: 'smoothstep'
+          },
+          path: {
+            mode,
+            coordinate_decimals: 2,
+            sampled_outline_target_samples: 240,
+            sampled_outline_min_samples_per_segment: 8,
+            sampled_outline_max_samples_per_segment: 32
+          },
+          render: {
+            canonical_format: 'svg',
+            preview_format: 'png',
+            preview_width: 420,
+            preview_height: 420,
+            preview_is_canonical: false,
+            output_sizing: {
+              canonical_design_space: [420, 420],
+              default_size: [1080, 1080],
+              selected_size: [Number(outputWidthInput.value), Number(outputHeightInput.value)],
+              square_policy: 'keep_canonical_viewbox_change_svg_dimensions',
+              non_square_policy: 'uniform_fit_center_on_full_background',
+              scale_formula: 'min(output_width / 420, output_height / 420)',
+              offset_x_formula: '(output_width - 420 * scale) / 2',
+              offset_y_formula: '(output_height - 420 * scale) / 2',
+              handle_text_position: 'output_center_x_and_95_percent_output_height',
+              handle_text_size: 'canonical_text_size_times_uniform_scale',
+              recalculate_geometry: false,
+              allow_non_uniform_stretching: false
+            }
+          }
+        };
+      }
+
+      function pointsForSettings(sourceText, settings) {
+        const profile = {
+          curveSpan: settings.geometry.curve_span,
+          handleLengthRange: settings.geometry.handle_length_px,
+          baseWeight: settings.stroke.base_weight_px,
+          rotationRange: settings.geometry.handle_rotation_degrees,
+          yRange: settings.geometry.point_y_shift_px,
+          yContrast: settings.geometry.point_y_contrast_exponent,
+          serialMaxHeight: settings.serial.nine_pulse_height_px,
+          neighborSmoothing: settings.geometry.neighbor_smoothing,
+          handleBalance: settings.geometry.handle_balance,
+          serialPulseHandleFactor: settings.serial.pulse_handle_spacing_factor,
+          gapRange: settings.geometry.gap_weight_range,
+          serialWidthBase: settings.serial.width_weight_base,
+          underscoreWidthRange: settings.underscore.width_weight_range,
+          underscoreYRange: settings.underscore.point_y_shift_px
+        };
+        return geometryFor(graphemes(sourceText), profile);
+      }
+
+      function escapeXml(value) {
+        return String(value)
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#x27;');
+      }
+
+      function xmlNumber(value) {
+        return Number.isInteger(Number(value)) ? String(Math.trunc(Number(value))) : String(Number(value));
+      }
+
+      function canonicalSvgForText(sourceText, settings, outputWidth, outputHeight) {
+        const points = pointsForSettings(sourceText, settings);
+        const mode = settings.path.mode;
+        const weight = settings.stroke.base_weight_px;
+        const uppercaseExtra = settings.stroke.uppercase_extra_weight_px;
+        let centeredPoints;
+        let pathData;
+        let pathElement;
+
+        if (mode === 'pure_cubic_bezier_stroke') {
+          centeredPoints = centerPointsForCenterline(points);
+          pathData = pureBezierPath(centeredPoints);
+          pathElement = `<path d="${pathData}" fill="none" stroke="${settings.canvas.ink}" stroke-width="${xmlNumber(weight)}" stroke-linecap="round" stroke-linejoin="round"/>`;
+        } else {
+          centeredPoints = centerPointsForOutline(points, weight, uppercaseExtra);
+          pathData = mode === 'variable_bezier_outline'
+            ? bezierVariableWidthPath(centeredPoints, weight, uppercaseExtra)
+            : sampledVariableWidthPath(centeredPoints, weight, uppercaseExtra);
+          pathElement = `<path d="${pathData}" fill="${settings.canvas.ink}" stroke="none"/>`;
+        }
+
+        const canvas = settings.canvas;
+        const canvasText = canvas.text;
+        const displayedHandle = settings.input.display_prefix + sourceText;
+        const textElement = `<text x="${xmlNumber(canvasText.x)}" y="${xmlNumber(canvasText.y)}" font-size="${xmlNumber(canvasText.size_px)}" font-weight="${xmlNumber(canvasText.weight)}" dominant-baseline="${canvasText.dominant_baseline}" fill="${canvas.ink}" text-anchor="${canvasText.anchor}" font-family="${escapeXml(canvasText.font_family)}">${escapeXml(displayedHandle)}</text>`;
+        const selectedSize = settings.render.output_sizing.selected_size ?? [canvas.width, canvas.height];
+        const resolvedWidth = outputWidth ?? selectedSize[0];
+        const resolvedHeight = outputHeight ?? selectedSize[1];
+        if (!Number.isFinite(resolvedWidth) || !Number.isFinite(resolvedHeight) || resolvedWidth <= 0 || resolvedHeight <= 0) {
+          throw new RangeError('Output width and height must be positive numbers.');
+        }
+
+        const artwork = pathElement + textElement;
+        const sameAspectRatio = Math.abs(
+          resolvedWidth * canvas.height - resolvedHeight * canvas.width
+        ) < 1e-9;
+        let svg;
+        let outputScale;
+        let outputOffsetX;
+        let outputOffsetY;
+
+        if (sameAspectRatio) {
+          outputScale = resolvedWidth / canvas.width;
+          outputOffsetX = 0;
+          outputOffsetY = 0;
+          svg = `<svg viewBox="0 0 ${xmlNumber(canvas.width)} ${xmlNumber(canvas.height)}" xmlns="http://www.w3.org/2000/svg" width="${xmlNumber(resolvedWidth)}" height="${xmlNumber(resolvedHeight)}"><rect x="0" y="0" width="${xmlNumber(canvas.width)}" height="${xmlNumber(canvas.height)}" fill="${canvas.background}"/>${artwork}</svg>`;
+        } else {
+          outputScale = Math.min(resolvedWidth / canvas.width, resolvedHeight / canvas.height);
+          outputOffsetX = (resolvedWidth - canvas.width * outputScale) / 2;
+          outputOffsetY = (resolvedHeight - canvas.height * outputScale) / 2;
+          const transform = `translate(${xmlNumber(outputOffsetX)} ${xmlNumber(outputOffsetY)}) scale(${xmlNumber(outputScale)})`;
+          const outputTextElement = `<text x="${xmlNumber(resolvedWidth / 2)}" y="${xmlNumber(resolvedHeight * .95)}" font-size="${xmlNumber(canvasText.size_px * outputScale)}" font-weight="${xmlNumber(canvasText.weight)}" dominant-baseline="${canvasText.dominant_baseline}" fill="${canvas.ink}" text-anchor="${canvasText.anchor}" font-family="${escapeXml(canvasText.font_family)}">${escapeXml(displayedHandle)}</text>`;
+          svg = `<svg viewBox="0 0 ${xmlNumber(resolvedWidth)} ${xmlNumber(resolvedHeight)}" xmlns="http://www.w3.org/2000/svg" width="${xmlNumber(resolvedWidth)}" height="${xmlNumber(resolvedHeight)}"><rect x="0" y="0" width="${xmlNumber(resolvedWidth)}" height="${xmlNumber(resolvedHeight)}" fill="${canvas.background}"/><g transform="${transform}">${pathElement}</g>${outputTextElement}</svg>`;
+        }
+        return {
+          svg,
+          metadata: {
+            handle: sourceText,
+            displayed_handle: displayedHandle,
+            mbti_type: settings.input.mbti_type,
+            character_count: graphemes(sourceText).length,
+            anchor_count: centeredPoints.length,
+            curve_count: centeredPoints.length - 1,
+            path_mode: mode,
+            canonical_design_space: [canvas.width, canvas.height],
+            output_size: [resolvedWidth, resolvedHeight],
+            output_scale: outputScale,
+            output_offset: [outputOffsetX, outputOffsetY]
+          }
+        };
+      }
+
+      function standaloneFinalSvg() {
+        return canonicalSvgForText(currentText, currentSettings()).svg;
+      }
+
+      function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        root.appendChild(textarea);
+        textarea.select();
+        const copied = document.execCommand('copy');
+        textarea.remove();
+        if (!copied) throw new Error('Copy command was rejected');
+      }
+
+      async function writeClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          fallbackCopy(text);
+        }
+      }
+
+      async function copyWithFeedback(button, text, successText, resetText) {
+        try {
+          await writeClipboard(text);
+          button.textContent = successText;
+        } catch (error) {
+          try {
+            fallbackCopy(text);
+            button.textContent = successText;
+          } catch (fallbackError) {
+            button.textContent = 'Copy failed';
+          }
+        }
+        window.setTimeout(() => {
+          button.textContent = resetText;
+        }, 1600);
+      }
+
+      async function copyFinalSvg() {
+        await copyWithFeedback(copySvgButton, standaloneFinalSvg(), 'Copied SVG code', 'Copy selected SVG');
+      }
+
+      function updateDualRange(track, minimumInput, maximumInput) {
+        const domainMinimum = Number(minimumInput.min);
+        const domainMaximum = Number(minimumInput.max);
+        const span = domainMaximum - domainMinimum;
+        const start = (Number(minimumInput.value) - domainMinimum) / span * 100;
+        const end = (Number(maximumInput.value) - domainMinimum) / span * 100;
+        track.style.setProperty('--range-start', `${start}%`);
+        track.style.setProperty('--range-end', `${end}%`);
+        track.style.setProperty('--range-mid', `${(start + end) / 2}%`);
+      }
+
+      function formatDegrees(value) {
+        return `${value < 0 ? '−' : ''}${Math.abs(value)}°`;
+      }
+
+      function formatSigned(value) {
+        return `${value < 0 ? '−' : ''}${Math.abs(value)}`;
+      }
+
+      function formatDecimal(value) {
+        return Number(value).toFixed(2);
+      }
+
+      const dualControls = [
+        { base: 'underscore-width', format: (minimum, maximum) => `${formatDecimal(minimum)}× — ${formatDecimal(maximum)}×` },
+        { base: 'underscore-y', format: (minimum, maximum) => `${formatSigned(minimum)} — ${formatSigned(maximum)} px` },
+        { base: 's-angle', format: (minimum, maximum) => `${formatDegrees(minimum)} — ${formatDegrees(maximum)}` },
+        { base: 'n-angle', format: (minimum, maximum) => `${formatDegrees(minimum)} — ${formatDegrees(maximum)}` },
+        { base: 's-length', format: (minimum, maximum) => `${minimum} — ${maximum} px` },
+        { base: 'n-length', format: (minimum, maximum) => `${minimum} — ${maximum} px` },
+        { base: 'j-y', format: (minimum, maximum) => `${formatSigned(minimum)} — ${formatSigned(maximum)} px` },
+        { base: 'p-gap', format: (minimum, maximum) => `${formatDecimal(minimum)}× — ${formatDecimal(maximum)}×` }
+      ];
+
+      function updateMappingReadouts() {
+        const singleValues = [
+          ['curve-span', value => `${value} px`],
+          ['stroke-weight', value => `${value} px`],
+          ['serial-height', value => `${value} px`],
+          ['serial-width', value => `${formatDecimal(value)}×`],
+          ['s-smooth', formatDecimal], ['n-smooth', formatDecimal],
+          ['s-balance', formatDecimal], ['n-balance', formatDecimal],
+          ['s-pulse', value => `${formatDecimal(value)}×`], ['n-pulse', value => `${formatDecimal(value)}×`],
+          ['p-y-extent', value => `${value} px`],
+          ['p-y-contrast', formatDecimal]
+        ];
+        singleValues.forEach(([base, formatter]) => {
+          root.querySelector(`#tsbl-${base}-value`).value = formatter(numberValue(`tsbl-${base}`));
+        });
+        dualControls.forEach(({ base, format }) => {
+          const minimumInput = root.querySelector(`#tsbl-${base}-min`);
+          const maximumInput = root.querySelector(`#tsbl-${base}-max`);
+          root.querySelector(`#tsbl-${base}-value`).value = format(Number(minimumInput.value), Number(maximumInput.value));
+          updateDualRange(root.querySelector(`#tsbl-${base}-range`), minimumInput, maximumInput);
+        });
+      }
+
+      function renderAllTypes(uppercaseExtra, textSize, textWeight) {
+        allView.replaceChildren();
+        mbtiTypes.forEach(type => {
+          const settings = currentSettings(type);
+          const profile = profileForMbti(type);
+          const points = pointsForSettings(currentText, settings);
+          const button = document.createElement('button');
+          button.className = 'tsbl-mini-type';
+          button.type = 'button';
+          button.setAttribute('aria-label', `Select ${type} for @${currentText}`);
+          button.setAttribute('aria-pressed', String(type === selectedMbti));
+          const label = document.createElement('strong');
+          label.textContent = type;
+          const svg = element('svg', {
+            class: 'tsbl-mini-svg',
+            viewBox: '0 0 420 420',
+            role: 'img',
+            'aria-label': `${type} Signature for @${currentText}`
+          });
+          drawFinal(svg, points, profile.baseWeight, uppercaseExtra, profile.pathMode, currentText, textSize, textWeight, 420, 420, profile);
+          button.append(label, svg);
+          button.addEventListener('click', () => {
+            selectedMbti = type;
+            showAllTypes = false;
+            draw();
+          });
+          allView.appendChild(button);
+        });
+      }
+
+      function draw() {
+        const profile = profileForMbti(selectedMbti);
+        const renderMode = profile.pathMode;
+        const uppercaseExtra = Number(uppercaseWeightInput.value);
+        const textSize = Number(textSizeInput.value);
+        const textWeight = Number(textWeightInput.value);
+        const outputWidth = Math.max(1, Math.min(10000, Math.round(Number(outputWidthInput.value) || canvasSize)));
+        const outputHeight = Math.max(1, Math.min(10000, Math.round(Number(outputHeightInput.value) || canvasSize)));
+        const firstCharacters = graphemes(currentText);
+        const firstPoints = geometryFor(firstCharacters, profile);
+        const curveCount = firstPoints.length < 2 ? 0 : firstPoints.length - 1;
+
+        textOutput.value = `${firstCharacters.length} character${firstCharacters.length === 1 ? '' : 's'}`;
+        uppercaseWeightOutput.value = `${uppercaseExtra} px`;
+        textSizeOutput.value = `${textSize} px`;
+        textWeightOutput.value = `${textWeight}`;
+        strokeWeightOutput.value = `${profile.baseWeight} px`;
+        outputSizeOutput.value = `${outputWidth} × ${outputHeight} px`;
+        mbtiOutput.value = selectedMbti;
+        axisButtons.forEach(button => {
+          const selected = selectedMbti[Number(button.dataset.axis)] === button.dataset.letter;
+          button.setAttribute('aria-pressed', String(selected));
+        });
+        updateMappingReadouts();
+        curveSpanOutput.value = `${profile.curveSpan} px`;
+        const modeState = renderMode === 'outline-bezier'
+          ? 'cubic Bézier C outline'
+          : 'sampled linear L outline';
+        stateOutput.textContent = firstPoints.length < 2
+          ? `${selectedMbti} · ${firstCharacters.length} character / need at least 2 anchors`
+          : `${selectedMbti} · ${selectedMbti[0] === 'E' ? 'light' : 'dark'} field · ${profile.randomGapDistribution ? 'random' : 'average'} X spacing · ${firstCharacters.length} characters / ${firstPoints.length} anchors / ${curveCount} curve${curveCount === 1 ? '' : 's'} · span ${profile.curveSpan} · ${modeState} · ${outputWidth} × ${outputHeight} px`;
+
+        selectedTitle.textContent = `${selectedMbti} / Final line`;
+        caption.textContent = `@${currentText}`;
+        finalSvg.setAttribute('aria-label', `${selectedMbti} text-seeded Signature for @${currentText} on a ${selectedMbti[0] === 'E' ? 'light' : 'dark'} field`);
+        drawFinal(finalSvg, firstPoints, profile.baseWeight, uppercaseExtra, renderMode, currentText, textSize, textWeight, outputWidth, outputHeight, profile);
+        selectedView.hidden = showAllTypes;
+        allView.hidden = !showAllTypes;
+        viewAllButton.textContent = showAllTypes ? 'View selected type' : 'View all 16';
+        viewAllButton.setAttribute('aria-pressed', String(showAllTypes));
+        if (showAllTypes) renderAllTypes(uppercaseExtra, textSize, textWeight);
+      }
+
+      textInput.addEventListener('input', () => {
+        const candidate = textInput.value;
+        const valid = handlePattern.test(candidate);
+        textInput.setCustomValidity(valid ? '' : 'Use 1–15 letters, numbers, or underscores. Do not include @.');
+        textInput.setAttribute('aria-invalid', String(!valid));
+        textError.hidden = valid;
+        if (!valid) {
+          textOutput.value = candidate.length === 0 ? '1–15 characters' : 'Invalid handle';
+          return;
+        }
+        currentText = candidate;
+        draw();
+      });
+      [outputWidthInput, outputHeightInput].forEach(control => {
+        control.addEventListener('input', () => {
+          if (control.value === '') return;
+          const value = Math.max(1, Math.min(10000, Math.round(Number(control.value))));
+          control.value = String(value);
+          draw();
+        });
+      });
+      function applyPanelTheme() {
+        root.dataset.theme = themeModeInput.value;
+        document.documentElement.dataset.tsblTheme = themeModeInput.value;
+      }
+      themeModeInput.addEventListener('change', applyPanelTheme);
+
+      let resizingPreview = false;
+      function resizePreview(clientX) {
+        const bounds = workspace.getBoundingClientRect();
+        const maximumWidth = Math.max(260, Math.min(720, bounds.width - 369));
+        const previewWidth = Math.max(260, Math.min(maximumWidth, bounds.right - clientX));
+        workspace.style.setProperty('--preview-width', `${previewWidth}px`);
+        resizer.setAttribute('aria-valuemin', '260');
+        resizer.setAttribute('aria-valuemax', String(Math.round(maximumWidth)));
+        resizer.setAttribute('aria-valuenow', String(Math.round(previewWidth)));
+      }
+      resizer.addEventListener('pointerdown', event => {
+        resizingPreview = true;
+        resizer.setPointerCapture?.(event.pointerId);
+        resizePreview(event.clientX);
+        event.preventDefault();
+      });
+      resizer.addEventListener('pointermove', event => {
+        if (resizingPreview) resizePreview(event.clientX);
+      });
+      ['pointerup', 'pointercancel'].forEach(eventName => resizer.addEventListener(eventName, event => {
+        resizingPreview = false;
+        if (resizer.hasPointerCapture?.(event.pointerId)) resizer.releasePointerCapture(event.pointerId);
+      }));
+      axisButtons.forEach(button => button.addEventListener('click', () => {
+        const letters = selectedMbti.split('');
+        letters[Number(button.dataset.axis)] = button.dataset.letter;
+        selectedMbti = letters.join('');
+        draw();
+      }));
+      viewAllButton.addEventListener('click', () => {
+        showAllTypes = !showAllTypes;
+        draw();
+      });
+      switchButton.addEventListener('click', () => {
+        currentText = validPresets[presetCursor % validPresets.length];
+        presetCursor = (presetCursor + 1) % validPresets.length;
+        textInput.value = currentText;
+        textInput.setCustomValidity('');
+        textInput.setAttribute('aria-invalid', 'false');
+        textError.hidden = true;
+        draw();
+      });
+      copySvgButton.addEventListener('click', copyFinalSvg);
+      const dualByInput = new Map();
+      dualControls.forEach(({ base }) => {
+        const minimum = root.querySelector(`#tsbl-${base}-min`);
+        const maximum = root.querySelector(`#tsbl-${base}-max`);
+        dualByInput.set(minimum, { role: 'minimum', minimum, maximum });
+        dualByInput.set(maximum, { role: 'maximum', minimum, maximum });
+      });
+      [...mappingInputs, curveSpanInput, strokeWeightInput, serialHeightInput, serialWidthInput, underscoreWidthMinInput, underscoreWidthMaxInput, underscoreYMinInput, underscoreYMaxInput].forEach(control => control.addEventListener('input', () => {
+        const pair = dualByInput.get(control);
+        if (pair && Number(pair.minimum.value) > Number(pair.maximum.value)) {
+          if (pair.role === 'minimum') pair.minimum.value = pair.maximum.value;
+          else pair.maximum.value = pair.minimum.value;
+        }
+        draw();
+      }));
+      [uppercaseWeightInput, textSizeInput, textWeightInput].forEach(control => control.addEventListener('input', draw));
+      const signaturesMbtiApi = {
+        canonicalSvgForText,
+        generateSvgForText: (sourceText, mbtiType = selectedMbti, outputWidth, outputHeight) => (
+          canonicalSvgForText(sourceText, currentSettings(mbtiType), outputWidth, outputHeight)
+        ),
+        currentSettings,
+        profileForMbti,
+        mbtiTypes: [...mbtiTypes]
+      };
+      root.__signaturesMbti = signaturesMbtiApi;
+      applyPanelTheme();
+      draw();
+    })();
+  </script>
+</div>
