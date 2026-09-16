@@ -1122,7 +1122,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   &lt;section aria-label=&quot;Signatures MBTI prototype design panel&quot;&gt;
     &lt;div class=&quot;tsbl-heading-row&quot;&gt;
-      &lt;h2&gt;Signatures-MBTI · Signature v2.0.0&lt;/h2&gt;
+      &lt;h2&gt;Signatures-MBTI · Signature v2.0.1&lt;/h2&gt;
       &lt;label class=&quot;tsbl-theme-control form-label&quot; for=&quot;tsbl-theme-mode&quot;&gt;&lt;span&gt;Panel theme&lt;/span&gt;&lt;select class=&quot;form-control&quot; id=&quot;tsbl-theme-mode&quot;&gt;&lt;option value=&quot;system&quot;&gt;System&lt;/option&gt;&lt;option value=&quot;light&quot;&gt;Light&lt;/option&gt;&lt;option value=&quot;dark&quot;&gt;Dark&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
     &lt;/div&gt;
 
@@ -1298,11 +1298,15 @@ html&gt;body{padding:0}&lt;/style&gt;
       const SVG_NS = &#x27;http://www.w3.org/2000/svg&#x27;;
       const canvasSize = 420;
       const center = canvasSize / 2;
+      const signatureCharacterLimit = 15;
+      const referenceCurveSpan = 300;
+      const referenceSegmentWidth = referenceCurveSpan / (signatureCharacterLimit - 1);
+      const referenceHorizontalMargin = (canvasSize - referenceCurveSpan) / 2;
       const serialBaselineHeightRatio = .5;
       const canvasTextX = center;
       const canvasTextY = canvasSize * (1 - .05);
       const handlePattern = /^[A-Za-z0-9_]{1,15}$/;
-      const specificationVersion = &#x27;2.0.0&#x27;;
+      const specificationVersion = &#x27;2.0.1&#x27;;
       const randomScheme = &#x27;sha256-labeled-u53&#x27;;
       const randomNamespace = &#x27;signature-field&#x27;;
       const lightColor = &#x27;#f4e7c7&#x27;;
@@ -1334,6 +1338,30 @@ html&gt;body{padding:0}&lt;/style&gt;
 
       function numberValue(id) {
         return Number(root.querySelector(`#${id}`).value);
+      }
+
+      function reusableTextCurveLayout(characterCount) {
+        if (!Number.isInteger(characterCount) || characterCount &lt; 1) {
+          throw new RangeError(&#x27;characterCount must be a positive integer.&#x27;);
+        }
+        const extended = characterCount &gt; signatureCharacterLimit;
+        const curveSpan = extended
+          ? referenceSegmentWidth * (characterCount - 1)
+          : referenceCurveSpan;
+        const canonicalWidth = extended
+          ? curveSpan + 2 * referenceHorizontalMargin
+          : canvasSize;
+        return {
+          extended,
+          character_count: characterCount,
+          reference_character_limit: signatureCharacterLimit,
+          segment_width: referenceSegmentWidth,
+          curve_span: curveSpan,
+          canonical_width: canonicalWidth,
+          canonical_height: canvasSize,
+          proportional_output_width: Math.round(1080 * canonicalWidth / canvasSize),
+          proportional_output_height: 1080
+        };
       }
 
       function profileForMbti(type) {
@@ -1968,6 +1996,19 @@ html&gt;body{padding:0}&lt;/style&gt;
             mbti_pattern: &#x27;^[EI][SN][TF][JP]$&#x27;,
             mbti_type: mbtiType
           },
+          external_text_curve_reuse: {
+            changes_signature_input_contract: false,
+            signature_character_limit: signatureCharacterLimit,
+            activation: &#x27;character_count &gt; 15&#x27;,
+            reference_curve_span: referenceCurveSpan,
+            reference_segment_width: referenceSegmentWidth,
+            extended_curve_span_formula: &#x27;reference_segment_width * (character_count - 1)&#x27;,
+            horizontal_margin_each_side: referenceHorizontalMargin,
+            extended_canonical_width_formula: &#x27;extended_curve_span + 120&#x27;,
+            canonical_height: canvasSize,
+            proportional_output_width_formula: &#x27;round(output_height * extended_canonical_width / 420)&#x27;,
+            required_behavior: &#x27;grow_curve_span_and_canvas_width_never_compress_extra_anchors&#x27;
+          },
           canvas: {
             width: 420,
             height: 420,
@@ -2116,6 +2157,9 @@ html&gt;body{padding:0}&lt;/style&gt;
       }
 
       function canonicalSvgForText(sourceText, settings, outputWidth, outputHeight) {
+        if (!handlePattern.test(sourceText)) {
+          throw new RangeError(&#x27;Signature input must use 1–15 letters, numbers, or underscores without @. Use reusableTextCurveLayout() for a separate longer-text renderer.&#x27;);
+        }
         const points = pointsForSettings(sourceText, settings);
         const mode = settings.path.mode;
         const weight = settings.stroke.base_weight_px;
@@ -2456,6 +2500,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         ),
         currentSettings,
         profileForMbti,
+        reusableTextCurveLayout,
         mbtiTypes: [...mbtiTypes]
       };
       root.__signaturesMbti = signaturesMbtiApi;

@@ -85,7 +85,7 @@
 
   <section aria-label="Signatures MBTI prototype design panel">
     <div class="tsbl-heading-row">
-      <h2>Signatures-MBTI · Signature v2.0.0</h2>
+      <h2>Signatures-MBTI · Signature v2.0.1</h2>
       <label class="tsbl-theme-control form-label" for="tsbl-theme-mode"><span>Panel theme</span><select class="form-control" id="tsbl-theme-mode"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
     </div>
 
@@ -261,11 +261,15 @@
       const SVG_NS = 'http://www.w3.org/2000/svg';
       const canvasSize = 420;
       const center = canvasSize / 2;
+      const signatureCharacterLimit = 15;
+      const referenceCurveSpan = 300;
+      const referenceSegmentWidth = referenceCurveSpan / (signatureCharacterLimit - 1);
+      const referenceHorizontalMargin = (canvasSize - referenceCurveSpan) / 2;
       const serialBaselineHeightRatio = .5;
       const canvasTextX = center;
       const canvasTextY = canvasSize * (1 - .05);
       const handlePattern = /^[A-Za-z0-9_]{1,15}$/;
-      const specificationVersion = '2.0.0';
+      const specificationVersion = '2.0.1';
       const randomScheme = 'sha256-labeled-u53';
       const randomNamespace = 'signature-field';
       const lightColor = '#f4e7c7';
@@ -297,6 +301,30 @@
 
       function numberValue(id) {
         return Number(root.querySelector(`#${id}`).value);
+      }
+
+      function reusableTextCurveLayout(characterCount) {
+        if (!Number.isInteger(characterCount) || characterCount < 1) {
+          throw new RangeError('characterCount must be a positive integer.');
+        }
+        const extended = characterCount > signatureCharacterLimit;
+        const curveSpan = extended
+          ? referenceSegmentWidth * (characterCount - 1)
+          : referenceCurveSpan;
+        const canonicalWidth = extended
+          ? curveSpan + 2 * referenceHorizontalMargin
+          : canvasSize;
+        return {
+          extended,
+          character_count: characterCount,
+          reference_character_limit: signatureCharacterLimit,
+          segment_width: referenceSegmentWidth,
+          curve_span: curveSpan,
+          canonical_width: canonicalWidth,
+          canonical_height: canvasSize,
+          proportional_output_width: Math.round(1080 * canonicalWidth / canvasSize),
+          proportional_output_height: 1080
+        };
       }
 
       function profileForMbti(type) {
@@ -931,6 +959,19 @@
             mbti_pattern: '^[EI][SN][TF][JP]$',
             mbti_type: mbtiType
           },
+          external_text_curve_reuse: {
+            changes_signature_input_contract: false,
+            signature_character_limit: signatureCharacterLimit,
+            activation: 'character_count > 15',
+            reference_curve_span: referenceCurveSpan,
+            reference_segment_width: referenceSegmentWidth,
+            extended_curve_span_formula: 'reference_segment_width * (character_count - 1)',
+            horizontal_margin_each_side: referenceHorizontalMargin,
+            extended_canonical_width_formula: 'extended_curve_span + 120',
+            canonical_height: canvasSize,
+            proportional_output_width_formula: 'round(output_height * extended_canonical_width / 420)',
+            required_behavior: 'grow_curve_span_and_canvas_width_never_compress_extra_anchors'
+          },
           canvas: {
             width: 420,
             height: 420,
@@ -1079,6 +1120,9 @@
       }
 
       function canonicalSvgForText(sourceText, settings, outputWidth, outputHeight) {
+        if (!handlePattern.test(sourceText)) {
+          throw new RangeError('Signature input must use 1–15 letters, numbers, or underscores without @. Use reusableTextCurveLayout() for a separate longer-text renderer.');
+        }
         const points = pointsForSettings(sourceText, settings);
         const mode = settings.path.mode;
         const weight = settings.stroke.base_weight_px;
@@ -1419,6 +1463,7 @@
         ),
         currentSettings,
         profileForMbti,
+        reusableTextCurveLayout,
         mbtiTypes: [...mbtiTypes]
       };
       root.__signaturesMbti = signaturesMbtiApi;
