@@ -1,0 +1,129 @@
+{
+  "work": {
+    "title": "Signatures",
+    "definitionVersion": "3.0",
+    "id": "signatures:3.0:point",
+    "reference": "https://chatgpt.com/space/page_eec983aa562c819189550ef353990e59",
+    "variant": "Point Version"
+  },
+  "canvas": {
+    "width": 420,
+    "height": 420
+  },
+  "glyphRules": {
+    "characterPitch": 20,
+    "strokeWidth": 1.5,
+    "letterY": [
+      195,
+      225
+    ],
+    "letterTangentDegrees": [
+      -100,
+      70
+    ],
+    "digitBaseline": 238,
+    "digitRise": "62 × digit / 9",
+    "underscoreY": 246,
+    "letterBezierHandleSumLimit": 64,
+    "anchorsPerCharacter": 1,
+    "digitHandleLength": 6
+  },
+  "controls": {
+    "targetSpan": {
+      "range": [
+        0.35,
+        0.8
+      ],
+      "unit": "fraction of canvas width"
+    },
+    "targetHeight": {
+      "range": [
+        0.1,
+        0.42
+      ],
+      "unit": "fraction of canvas height",
+      "meaning": "Scale the vertical extent of the signed centerline. An exactly level centerline has a fitted height of zero."
+    },
+    "anchorMoves": {
+      "format": {
+        "anchor": "offered anchor ID",
+        "dx": "relative horizontal offset",
+        "dy": "relative vertical offset"
+      },
+      "meaning": "Offsets use the offered glyph units. Positive x moves right and positive y moves down. Observe the given per-anchor ranges. For digit anchors, set dx to 0 and use digitHandleLength to shape all digits horizontally.",
+      "letterVerticalTrial": {
+        "usualRange": [
+          -16,
+          16
+        ],
+        "expandedRange": [
+          -28,
+          28
+        ],
+        "maxExpandedLetters": 1,
+        "meaning": "Choose at most one letter per signing to exceed the usual dy range. The expanded move is an offset before the overall fit."
+      }
+    },
+    "turns": {
+      "limit": 5,
+      "angleRange": [
+        -55,
+        55
+      ],
+      "lengthGainRange": [
+        0.45,
+        2.25
+      ],
+      "meaning": "At an eligible interior letter anchor, rotate the tangent relative to its offered angle. Positive rotates clockwise on the canvas. Scale each Bézier handle length independently.",
+      "corners": {
+        "field": "cornerDegrees",
+        "limit": 2,
+        "angleRanges": [
+          [
+            -105,
+            -75
+          ],
+          [
+            75,
+            105
+          ]
+        ],
+        "meaning": "Use a corner where a sudden change of direction serves your intention. A corner counts as one turn edit at an eligible interior letter anchor. The usual turn settings establish the incoming direction. Set cornerDegrees to the signed change from the incoming stroke to the outgoing stroke on the final canvas. Positive angles turn clockwise. Omit cornerDegrees for a smooth join."
+      }
+    },
+    "weightAtAnchors": {
+      "widthRange": [
+        0,
+        25
+      ],
+      "defaultWidth": 2,
+      "unit": "canvas units",
+      "meaning": "Assign width to existing anchors. Uppercase carries the artist's emphasis cue and underscore carries a very-light cue at its point. The Agent chooses the precise widths and expressive emphasis. Zero sets no pressure at the anchor. Omitted anchors use a signed width of 2 canvas units."
+    },
+    "gapShares": {
+      "format": "One percentage per boundary between characters, ordered from left to right",
+      "range": [
+        0,
+        100
+      ],
+      "total": 100,
+      "flexibleUnitsPerBoundary": 20,
+      "minimumCenterGap": 8,
+      "minimumAnchorClearance": 2,
+      "meaning": "Choose where the signature gathers, pauses, and picks up again across the whole handle, including digits and underscores. Each gap reserves clearance between its two anchors after fine horizontal edits, then gets its percentage of the flexible space. Zero uses only the minimum. For four characters, [0, 100, 0] places the flexible space between two tight pairs. Omit gapShares for the original 20-unit spacing before anchor moves."
+    },
+    "digitHandleLength": {
+      "range": [
+        4,
+        8
+      ],
+      "default": 6,
+      "unit": "glyph units before the overall fit",
+      "meaning": "When signing a curve with digits, choose one horizontal length shared by the incoming and outgoing Bézier handles of every digit anchor. Each digit has one anchor at its digit-specific glyph height. Use gapShares to place the digits and digitHandleLength to shape how the stroke meets them."
+    }
+  },
+  "renderingOrder": "Set the shared digit handle length and place anchors using gapShares. Apply fine anchor moves and ordinary turns. Fit the centerline to the requested width and height, keeping a level centerline flat, with any corner angles measured on that fitted canvas. Sweep a round brush along the fitted centerline using the interpolated anchor weights.",
+  "invitation": "Sign this exact unsigned glyph as your contribution to the curator's selected handle. Read the glyph and the offered public account material. Form a specific intention for the act of signing and express it through the curve's timing, shape or pressure. Use the handle's existing marks, including its digit heights and underscore if present. Draw from the artist's uppercase and underscore pressure cues. Say in the first person how a few visible choices carry your intention, and cite the offered IDs you used.",
+  "return": "Return targetSpan, targetHeight, anchorMoves, turns, weightAtAnchors, statedIntention under 200 words, and referencesUsed listing offered item IDs. Optionally return gapShares and, for a curve with digits, digitHandleLength. If you use a corner, explain what it does for the signature in your stated intention.",
+  "singleAnchorPolicy": "For a one-anchor glyph, keep the offered point as a dot. Choose pressure at that point or return an empty weightAtAnchors list for the default width of 2 canvas units. Return null for targetSpan and targetHeight and empty lists for anchorMoves and turns. Omit gapShares or return an empty list. Omit digitHandleLength."
+}
