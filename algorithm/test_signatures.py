@@ -34,7 +34,7 @@ class SignaturesTest(unittest.TestCase):
         self.assertEqual(definition["glyphRules"]["strokeWidth"], 1.5)
         weight = definition["controls"]["weightAtAnchors"]
         self.assertEqual(weight["widthRange"], [0, 25])
-        self.assertEqual(weight["defaultWidth"], 2)
+        self.assertEqual(weight["defaultWidth"], 1)
 
     def test_mixed_glyph_preserves_case_and_character_positions(self):
         offer = prepare_glyph(MIXED_HANDLE)
@@ -56,7 +56,10 @@ class SignaturesTest(unittest.TestCase):
         response = self.response(
             anchorMoves=[{"anchor": 2, "dx": 2, "dy": -8}, {"anchor": 4, "dx": -1, "dy": 1}],
             turns=[{"anchor": 2, "angleOffset": -15, "incomingGain": 0.9, "outgoingGain": 1.1}],
-            weightAtAnchors=[{"anchor": 1, "width": 25}, {"anchor": 3, "width": 0}, {"anchor": 5, "width": 4.5}],
+            weightAtAnchors=[
+                {"anchor": 1, "width": 25}, {"anchor": 2, "width": 2}, {"anchor": 3, "width": 0},
+                {"anchor": 4, "width": 2}, {"anchor": 5, "width": 4.5},
+            ],
             referencesUsed=["unsigned-glyph", "profile"],
             gapShares=[10, 20, 30, 40],
             digitHandleLength=7,
@@ -83,6 +86,12 @@ class SignaturesTest(unittest.TestCase):
         other_glyph = prepare_glyph("Aa0_9")["glyph"]["sha256"]
         with self.assertRaises(ValueError):
             render_signature(MIXED_HANDLE, self.response(), glyph_sha256=other_glyph)
+
+    def test_round_brush_uses_full_signed_width_range(self):
+        glyph_hash = prepare_glyph(MIXED_HANDLE)["glyph"]["sha256"]
+        response = self.response(weightAtAnchors=[{"anchor": 1, "width": 25}, {"anchor": 2, "width": 0}])
+        result = render_signature(MIXED_HANDLE, response, glyph_sha256=glyph_hash)
+        self.assertEqual(result["measurement"]["signedStrokeWidthRange"], [0, 25])
 
     def test_rejects_invalid_signing_controls(self):
         glyph_hash = prepare_glyph(MIXED_HANDLE)["glyph"]["sha256"]
@@ -118,7 +127,7 @@ class SignaturesTest(unittest.TestCase):
     def test_dot_uses_default_or_explicit_pressure(self):
         offer = prepare_glyph("Q")
         self.assertEqual(len(offer["anchors"]), 1)
-        for entries, width in (([], 2), ([{"anchor": 1, "width": 0}], 0), ([{"anchor": 1, "width": 25}], 25)):
+        for entries, width in (([], 1), ([{"anchor": 1, "width": 0}], 0), ([{"anchor": 1, "width": 25}], 25)):
             with self.subTest(width=width):
                 result = render_signature(
                     "Q", self.response(targetSpan=None, targetHeight=None, weightAtAnchors=entries),
@@ -140,7 +149,7 @@ class SignaturesTest(unittest.TestCase):
         measurement = result["measurement"]
         self.assertEqual(measurement["signedCenterline"]["height"], 0)
         self.assertAlmostEqual(measurement["signedCenterline"]["width"], 0.62)
-        self.assertEqual(measurement["signedStrokeWidthRange"], [2, 2])
+        self.assertEqual(measurement["signedStrokeWidthRange"], [1, 1])
 
     def assert_svg(self, artifact, expected_hash):
         self.assertEqual(artifact["mediaType"], "image/svg+xml")
