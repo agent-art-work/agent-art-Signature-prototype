@@ -32,9 +32,12 @@ class SignaturesTest(unittest.TestCase):
         self.assertEqual(definition["work"]["definitionVersion"], "3.0")
         self.assertEqual(definition["glyphRules"]["anchorsPerCharacter"], 1)
         self.assertEqual(definition["glyphRules"]["strokeWidth"], 1.5)
+        turns = definition["controls"]["turns"]
+        self.assertEqual(set(turns["format"]), {"anchor", "angleOffset", "incomingGain", "outgoingGain"})
         weight = definition["controls"]["weightAtAnchors"]
         self.assertEqual(weight["widthRange"], [0, 25])
         self.assertEqual(weight["defaultWidth"], 1)
+        self.assertEqual(weight["defaultWidthOptions"], [1, 2, 3, 4, 5])
 
     def test_mixed_glyph_preserves_case_and_character_positions(self):
         offer = prepare_glyph(MIXED_HANDLE)
@@ -93,10 +96,32 @@ class SignaturesTest(unittest.TestCase):
         result = render_signature(MIXED_HANDLE, response, glyph_sha256=glyph_hash)
         self.assertEqual(result["measurement"]["signedStrokeWidthRange"], [0, 25])
 
+    def test_agent_default_width_applies_to_unlisted_anchors(self):
+        glyph_hash = prepare_glyph(MIXED_HANDLE)["glyph"]["sha256"]
+        explicit = [
+            {"anchor": 1, "width": 25},
+            {"anchor": 3, "width": 0},
+            {"anchor": 4, "width": 2.5},
+        ]
+        for default in (1, 2, 3, 4, 5):
+            with self.subTest(default=default):
+                response = self.response(defaultWidth=default, weightAtAnchors=explicit)
+                result = render_signature(MIXED_HANDLE, response, glyph_sha256=glyph_hash)
+                measurement = result["measurement"]
+                widths = [knot["width"] for knot in measurement["resolvedAnchorWidths"]]
+                self.assertEqual(widths, [25, default, 0, 2.5, default])
+                self.assertEqual(measurement["signedStrokeWidthRange"], [0, 25])
+
     def test_rejects_invalid_signing_controls(self):
         glyph_hash = prepare_glyph(MIXED_HANDLE)["glyph"]["sha256"]
         invalid_controls = {
             "negative width": {"weightAtAnchors": [{"anchor": 1, "width": -0.01}]},
+            "default below minimum": {"defaultWidth": 0.99},
+            "default above maximum": {"defaultWidth": 6},
+            "fractional default": {"defaultWidth": 2.5},
+            "Boolean default": {"defaultWidth": True},
+            "non-finite default": {"defaultWidth": float("nan")},
+            "infinite default": {"defaultWidth": float("inf")},
             "width above maximum": {"weightAtAnchors": [{"anchor": 1, "width": 25.01}]},
             "Boolean width": {"weightAtAnchors": [{"anchor": 1, "width": True}]},
             "non-finite width": {"weightAtAnchors": [{"anchor": 1, "width": float("nan")}]},
@@ -105,6 +130,9 @@ class SignaturesTest(unittest.TestCase):
             "gap total": {"gapShares": [10, 20, 30, 30]},
             "digit handle length": {"digitHandleLength": 8.01},
             "digit x movement": {"anchorMoves": [{"anchor": 3, "dx": 1, "dy": 0}]},
+            "corner": {"turns": [
+                {"anchor": 2, "angleOffset": -15, "incomingGain": 0.9, "outgoingGain": 1.1, "cornerDegrees": 90},
+            ]},
             "unknown field": {"digitWidth": 16},
         }
         for case, control in invalid_controls.items():
@@ -127,12 +155,16 @@ class SignaturesTest(unittest.TestCase):
     def test_dot_uses_default_or_explicit_pressure(self):
         offer = prepare_glyph("Q")
         self.assertEqual(len(offer["anchors"]), 1)
-        for entries, width in (([], 1), ([{"anchor": 1, "width": 0}], 0), ([{"anchor": 1, "width": 25}], 25)):
-            with self.subTest(width=width):
-                result = render_signature(
-                    "Q", self.response(targetSpan=None, targetHeight=None, weightAtAnchors=entries),
-                    glyph_sha256=offer["glyph"]["sha256"],
-                )
+        cases = (
+            ({}, 1),
+            ({"defaultWidth": 5}, 5),
+            ({"defaultWidth": 5, "weightAtAnchors": [{"anchor": 1, "width": 0}]}, 0),
+            ({"weightAtAnchors": [{"anchor": 1, "width": 25}]}, 25),
+        )
+        for controls, width in cases:
+            with self.subTest(controls=controls):
+                response = self.response(targetSpan=None, targetHeight=None, **controls)
+                result = render_signature("Q", response, glyph_sha256=offer["glyph"]["sha256"])
                 measurement = result["measurement"]
                 self.assertIsNone(measurement["signedCenterline"])
                 self.assertEqual(measurement["signedStrokeWidthRange"], [width, width])

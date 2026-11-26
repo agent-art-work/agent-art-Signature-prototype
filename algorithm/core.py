@@ -18,7 +18,7 @@ from .geometry import (
     curve_extrema,
     describe_extents,
     filled_mark,
-    fit_corner_dimensions,
+    fit_dimensions,
     glyph_geometry,
     offered_anchors,
     specimen,
@@ -34,7 +34,7 @@ _REQUIRED_FIELDS = {
     "targetSpan", "targetHeight", "anchorMoves", "turns", "weightAtAnchors",
     "statedIntention", "referencesUsed",
 }
-_OPTIONAL_FIELDS = {"gapShares", "digitHandleLength"}
+_OPTIONAL_FIELDS = {"gapShares", "digitHandleLength", "defaultWidth"}
 
 
 def get_definition():
@@ -96,13 +96,12 @@ def _validate_response(response, reference_ids):
         raise ValueError("Cite the unsigned glyph and any offered references used, with no duplicate IDs.")
 
 
-def _anchor_edits(entries, anchor_count, required, label, optional=()):
+def _anchor_edits(entries, anchor_count, fields, label):
     if not isinstance(entries, list):
         raise ValueError(f"{label} must be a list.")
-    allowed = required.union(optional)
     indexed = {}
     for entry in entries:
-        if not isinstance(entry, dict) or not required <= entry.keys() <= allowed:
+        if not isinstance(entry, dict) or entry.keys() != fields:
             raise ValueError(f"Invalid {label.lower()} entry.")
         anchor = entry["anchor"]
         if type(anchor) is not int or not 1 <= anchor <= anchor_count or anchor in indexed:
@@ -133,7 +132,7 @@ def _edit_curve(points, anchors, response):
     moves = _anchor_edits(response["anchorMoves"], len(anchors), {"anchor", "dx", "dy"}, "Anchor moves")
     turns = _anchor_edits(
         response["turns"], len(anchors), {"anchor", "angleOffset", "incomingGain", "outgoingGain"},
-        "Turns", optional={"cornerDegrees"},
+        "Turns",
     )
     turn_control = _CONTROLS["turns"]
     if len(turns) > turn_control["limit"]:
@@ -166,8 +165,6 @@ def _edit_curve(points, anchors, response):
     if any(left["x"] >= right["x"] for left, right in zip(points, points[1:])):
         raise ValueError("Moved anchors must stay in their original horizontal order.")
 
-    corners = {}
-    corner_control = turn_control["corners"]
     for number, edit in turns.items():
         if not anchors[number - 1]["turnEligible"]:
             raise ValueError(f"Turn editing is unavailable at anchor {number}.")
@@ -176,13 +173,7 @@ def _edit_curve(points, anchors, response):
         point["angle"] += math.radians(angle)
         point["incoming"] *= checked_number(edit["incomingGain"], turn_control["lengthGainRange"], "Incoming gain")
         point["outgoing"] *= checked_number(edit["outgoingGain"], turn_control["lengthGainRange"], "Outgoing gain")
-        if "cornerDegrees" in edit:
-            corner = edit["cornerDegrees"]
-            limits = corner_control["angleRanges"][0 if isinstance(corner, (int, float)) and corner < 0 else 1]
-            corners[number] = checked_number(corner, limits, "Corner angle")
-    if len(corners) > corner_control["limit"]:
-        raise ValueError(f"Use at most {corner_control['limit']} corners.")
-    return _curves(points), corners
+    return _curves(points)
 
 
 def _render_dot(point, response, pressure, default_width):
@@ -210,7 +201,12 @@ def render_signature(handle, response, *, glyph_sha256, reference_ids=()):
     anchors = offer["anchors"]
     pressure = _anchor_edits(response["weightAtAnchors"], len(anchors), {"anchor", "width"}, "Anchor widths")
     width_control = _CONTROLS["weightAtAnchors"]
-    limits, default = tuple(width_control["widthRange"]), width_control["defaultWidth"]
+    limits = tuple(width_control["widthRange"])
+    default = response.get("defaultWidth", width_control["defaultWidth"])
+    options = width_control["defaultWidthOptions"]
+    if isinstance(default, bool) or not isinstance(default, (int, float)) or default not in options:
+        raise ValueError(f"Default stroke width must be one of {options}.")
+    default = int(default)
     if len(anchors) == 1:
         if pressure:
             checked_number(pressure[1]["width"], limits, "Dot width")
@@ -218,12 +214,11 @@ def render_signature(handle, response, *, glyph_sha256, reference_ids=()):
     else:
         span = checked_number(response["targetSpan"], _CONTROLS["targetSpan"]["range"], "Target span")
         height = checked_number(response["targetHeight"], _CONTROLS["targetHeight"]["range"], "Target height")
-        curves, corners = _edit_curve([dict(point) for point in points], anchors, response)
-        if not corners:
-            _, _, top, bottom = curve_extrema(curves)
-            if bottom - top < 1e-9:
-                height = 0
-        fitted = fit_corner_dimensions(curves, span, height, corners)
+        curves = _edit_curve([dict(point) for point in points], anchors, response)
+        _, _, top, bottom = curve_extrema(curves)
+        if bottom - top < 1e-9:
+            height = 0
+        fitted = fit_dimensions(curves, span, height)
         signed_extents = describe_extents(fitted)
         if not all(math.isclose(signed_extents[axis], size, abs_tol=1e-10, rel_tol=0)
                    for axis, size in (("width", span), ("height", height))):
@@ -231,7 +226,7 @@ def render_signature(handle, response, *, glyph_sha256, reference_ids=()):
         indices = []
         samples, progress = centerline_samples(fitted, anchor_indices=indices)
         widths, knots = anchor_widths(
-            width_control, anchors, points, response["weightAtAnchors"], progress, indices,
+            {**width_control, "defaultWidth": default}, anchors, points, response["weightAtAnchors"], progress, indices,
             width_limits=limits, default_width=default,
         )
         mark = filled_mark(samples, widths)
