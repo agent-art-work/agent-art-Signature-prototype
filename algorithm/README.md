@@ -17,6 +17,7 @@ response = {
     "targetHeight": 0.18,
     "anchorMoves": [],
     "turns": [],
+    "defaultWidth": 2,
     "weightAtAnchors": [
         {"anchor": 1, "width": 5},
         {"anchor": 3, "width": 0},
@@ -35,7 +36,11 @@ signed_svg = result["signedGlyph"]["svg"]
 - `prepare_glyph(handle)` returns `rendererVersion`, `handle`, `glyph`, `anchors`, and `unsignedDimensions`. The glyph includes its offered ID `unsigned-glyph`, media type, SHA-256, and SVG text. Dimensions describe the unsigned centerline.
 - `render_signature(handle, response, *, glyph_sha256, reference_ids=())` validates the return and its unsigned glyph digest. Use `reference_ids` for additional material IDs offered in the signing Context. The result includes `rendererVersion`, `handle`, `inputGlyphSha256`, `signedGlyph`, `measurement`, `statedIntention`, and `referencesUsed`. `signedGlyph` contains `mediaType`, `sha256`, and `svg`. `measurement` contains `unsignedCenterline`, `signedCenterline`, `signedStrokeWidthRange`, and `resolvedAnchorWidths`.
 
-The unsigned mark uses one anchor per character and 20-unit pitch. The required return fields are `targetSpan`, `targetHeight`, `anchorMoves`, `turns`, `weightAtAnchors`, `statedIntention` of 1–199 words, and `referencesUsed`. Add optional `gapShares` to distribute horizontal space and `digitHandleLength` to set the shared horizontal handles of a multi-character glyph’s digit anchors. See `get_definition()` and the offered anchors for ranges and eligibility. Signed widths are full brush diameters from 0 to 25 canvas units, with 2 units at unlisted anchors. A single-character glyph uses dot pressure with `null` dimensions and empty movement and turn lists. A flat multi-character centerline retains zero fitted height.
+The unsigned mark uses one anchor per character and 20-unit pitch. The required return fields are `targetSpan`, `targetHeight`, `anchorMoves`, `turns`, `weightAtAnchors`, `statedIntention` of 1–199 words, and `referencesUsed`. Each entry in `turns` uses `anchor`, `angleOffset`, `incomingGain`, and `outgoingGain`. Both Bézier handles follow the same tangent, with independently scaled lengths. Add optional `gapShares` to distribute horizontal space and `digitHandleLength` to set the shared horizontal handles of a multi-character glyph’s digit anchors. See `get_definition()` and the offered anchors for ranges and eligibility.
+
+The Round Brush uses full diameters from 0 to 25 canvas units. Choose an optional top-level `defaultWidth` of 1, 2, 3, 4, or 5 for unlisted anchors. Choose it alongside local accents, spacing, and curve rhythm to suit the intended style. The artist’s default is 1. Explicit anchor widths take precedence, including zero. Width transitions between anchors follow cubic easing along the sampled curve.
+
+A single-character glyph uses dot pressure with `null` dimensions and empty movement and turn lists. A level multi-character centerline retains zero fitted height.
 
 ## Command line
 

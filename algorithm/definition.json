@@ -65,6 +65,12 @@
       }
     },
     "turns": {
+      "format": {
+        "anchor": "One-based integer for an offered anchor with turnEligible set to true",
+        "angleOffset": "Relative rotation in degrees",
+        "incomingGain": "Multiplier for the incoming Bézier handle length",
+        "outgoingGain": "Multiplier for the outgoing Bézier handle length"
+      },
       "limit": 5,
       "angleRange": [
         -55,
@@ -74,31 +80,23 @@
         0.45,
         2.25
       ],
-      "meaning": "At an eligible interior letter anchor, rotate the tangent relative to its offered angle. Positive rotates clockwise on the canvas. Scale each Bézier handle length independently.",
-      "corners": {
-        "field": "cornerDegrees",
-        "limit": 2,
-        "angleRanges": [
-          [
-            -105,
-            -75
-          ],
-          [
-            75,
-            105
-          ]
-        ],
-        "meaning": "Use a corner where a sudden change of direction serves your intention. A corner counts as one turn edit at an eligible interior letter anchor. The usual turn settings establish the incoming direction. Set cornerDegrees to the signed change from the incoming stroke to the outgoing stroke on the final canvas. Positive angles turn clockwise. Omit cornerDegrees for a smooth join."
-      }
+      "meaning": "At an eligible interior letter anchor, rotate the shared tangent relative to its offered angle. Positive rotates clockwise on the canvas. Both Bézier handles lie on this tangent and their lengths can be scaled independently."
     },
     "weightAtAnchors": {
       "widthRange": [
         0,
         25
       ],
-      "defaultWidth": 2,
+      "defaultWidth": 1,
+      "defaultWidthOptions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
       "unit": "canvas units",
-      "meaning": "Assign width to existing anchors. Uppercase carries the artist's emphasis cue and underscore carries a very-light cue at its point. The Agent chooses the precise widths and expressive emphasis. Zero sets no pressure at the anchor. Omitted anchors use a signed width of 2 canvas units."
+      "meaning": "Choose defaultWidth as one of 1, 2, 3, 4, or 5 canvas units for unlisted anchors. Choose it together with local accents, spacing, and curve rhythm to suit the style you intend. A lighter default can give accents more contrast. A fuller default can give the stroke more presence through stretches of the curve. The artist's default is 1 canvas unit. Set explicit widths where the stroke should press or ease. Uppercase carries the artist's emphasis cue and underscore carries a very-light cue at its point. Explicit anchor widths take precedence, including 0 for no pressure at that anchor."
     },
     "gapShares": {
       "format": "One percentage per boundary between characters, ordered from left to right",
@@ -122,8 +120,8 @@
       "meaning": "When signing a curve with digits, choose one horizontal length shared by the incoming and outgoing Bézier handles of every digit anchor. Each digit has one anchor at its digit-specific glyph height. Use gapShares to place the digits and digitHandleLength to shape how the stroke meets them."
     }
   },
-  "renderingOrder": "Set the shared digit handle length and place anchors using gapShares. Apply fine anchor moves and ordinary turns. Fit the centerline to the requested width and height, keeping a level centerline flat, with any corner angles measured on that fitted canvas. Sweep a round brush along the fitted centerline using the interpolated anchor weights.",
-  "invitation": "Sign this exact unsigned glyph as your contribution to the curator's selected handle. Read the glyph and the offered public account material. Form a specific intention for the act of signing and express it through the curve's timing, shape or pressure. Use the handle's existing marks, including its digit heights and underscore if present. Draw from the artist's uppercase and underscore pressure cues. Say in the first person how a few visible choices carry your intention, and cite the offered IDs you used.",
-  "return": "Return targetSpan, targetHeight, anchorMoves, turns, weightAtAnchors, statedIntention under 200 words, and referencesUsed listing offered item IDs. Optionally return gapShares and, for a curve with digits, digitHandleLength. If you use a corner, explain what it does for the signature in your stated intention.",
-  "singleAnchorPolicy": "For a one-anchor glyph, keep the offered point as a dot. Choose pressure at that point or return an empty weightAtAnchors list for the default width of 2 canvas units. Return null for targetSpan and targetHeight and empty lists for anchorMoves and turns. Omit gapShares or return an empty list. Omit digitHandleLength."
+  "renderingOrder": "Set the shared digit handle length and place anchors using gapShares. Apply fine anchor moves and smooth turns. Fit the centerline to the requested width and height, keeping a level centerline at zero height. Sweep a round brush along the fitted centerline using the interpolated anchor weights.",
+  "invitation": "Sign this exact unsigned glyph as your contribution to the curator's selected handle. Read the glyph and the offered public account material. Form a specific intention for the act of signing. Consider how the overall stroke weight, local emphasis, spacing, and curve rhythm work together to express it. Use the handle's existing marks, including its digit heights and underscore if present. Draw from the artist's uppercase and underscore pressure cues. Say in the first person how a few visible choices carry your intention, and cite the offered IDs you used.",
+  "return": "Return targetSpan, targetHeight, anchorMoves, turns, weightAtAnchors, statedIntention under 200 words, and referencesUsed listing offered item IDs. Each turn uses anchor, angleOffset, incomingGain, and outgoingGain. Optionally return defaultWidth, gapShares and, for a curve with digits, digitHandleLength.",
+  "singleAnchorPolicy": "For a one-anchor glyph, keep the offered point as a dot. Choose pressure at that point or return an empty weightAtAnchors list to use defaultWidth. The artist's default is 1 canvas unit. Return null for targetSpan and targetHeight and empty lists for anchorMoves and turns. Omit gapShares or return an empty list. Omit digitHandleLength."
 }
